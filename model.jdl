@@ -1,0 +1,230 @@
+
+
+application {
+  config {
+	applicationType monolith
+    baseName wms
+    authenticationType jwt
+    packageName com.wms.uhfrfid
+    cacheProvider ehcache
+    prodDatabaseType postgresql
+    clientFramework angularX
+    clientTheme cosmo
+    clientThemeVariant primary
+  }
+  entities *
+  paginate * with infinite-scroll
+}
+
+entity Company {
+	name String required unique
+    address String
+    phone String
+    description String
+}
+
+//entity Role {
+//	name String required unique
+//    description String
+//}
+
+//entity User {
+//	name String required unique
+//    password String required
+//}
+
+entity CompanyUser {
+}
+
+entity Container {
+	name String required unique
+    description String
+}
+
+entity CompanyContainer {
+	rfidTag String
+    color String
+}
+
+entity UHFRFIDReader {
+	name String required unique
+	ip String required
+	port Integer required
+	status UHFRFIDReaderStatus required
+}
+
+enum UHFRFIDReaderStatus {
+	DISCONNECTED, CONNECTED
+}
+
+entity UHFRFIDAntenna {
+	name String required unique
+	outputPower Integer required
+	status UHFRFIDAntennaStatus required
+}
+
+enum UHFRFIDAntennaStatus {
+	AVAILABLE, IN_USE
+}
+
+/** Warehouse of the company */
+entity Warehouse {
+	name String required unique											
+	note String
+	phone String required
+	contactPerson String required
+}
+
+entity Area {
+	type AreaType required
+}
+
+entity Door {
+	 name String required unique
+}
+
+enum AreaType {
+	RECEIVING, SHIPPING
+}
+
+entity Location {
+	name String required unique
+	note String
+}
+
+entity WHRow {
+	name String required unique
+	note String
+}
+
+entity Bay {
+	name String required unique
+	note String
+}
+
+entity WHLevel {
+	name String required unique
+	note String
+}
+
+entity Position {
+	name String required unique
+	note String
+}
+
+/** Product sold by the Online store */
+entity Product {
+	name String required unique
+	description String
+	image ImageBlob
+}
+
+entity ProductCategory {
+	name String required unique
+	description String
+}
+
+entity CompanyProduct {
+	quantity BigDecimal required min(0)
+	sku String
+  	stockingRatio BigDecimal required min(0)
+}
+
+entity Customer {
+	firstName String required
+	lastName String required
+	gender Gender required
+	email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+	phone String required
+	addressLine1 String required
+	addressLine2 String
+	city String required
+	country String required
+}
+
+enum Gender {
+	MALE, FEMALE
+}
+
+entity DeliveryOrder {
+	doNumber String required unique
+	placedDate Instant required
+	status DeliveryOrderStatus required
+	code String required
+}
+
+enum DeliveryOrderStatus {
+	COMPLETED, PENDING, CANCELLED
+}
+
+entity DeliveryOrderItem {
+	unitQuantity BigDecimal required min(0)
+    containerQuantity BigDecimal required min(0)
+	status DeliveryOrderItemStatus required
+}
+
+enum DeliveryOrderItemStatus {
+	IN_PROGRESS, VERIFIED, LABELED, PARTIALLY_PLACED, FULLY_PLACED
+}
+
+entity DeliveryContainer {
+	supplierRFIDTag String
+}
+
+entity DeliveryItemProduct {
+	rfidTAG String required unique
+}
+
+entity DoorAntenna {
+	type DoorAntennaType required
+}
+
+enum DoorAntennaType {
+	INNER, OUTER
+}
+
+relationship OneToOne {
+//	User{role(name)} to Role
+	DeliveryOrderItem{compganyProduct(sku)} to CompanyProduct
+    
+    CompanyProduct{container(name)} to Container
+//	Door{uhfAndenna(name)} to UHFAntenna{door(name)}
+}
+
+relationship ManyToOne {
+//	CompanyUser{company(name)} to Company
+//    CompanyUser{user(name)} to User
+
+	CompanyContainer{company(name)} to Company
+    CompanyContainer{container(name)} to Container
+
+	Warehouse{company(name)} to Company
+
+	Position{whlevel(name)} to WHLevel
+	WHLevel{bay(name)} to Bay
+	Bay{whrow(name)} to WHRow
+	WHRow{location(name)} to Location
+	Location{warehouse(name)} to Warehouse
+	Area{warehouse(name)} to Warehouse
+	Door{area(type)} to Area
+
+	Product{productCategory(name)} to ProductCategory
+
+	CompanyProduct{company(name)} to Company
+    CompanyProduct{product(name)} to Product
+
+	DeliveryOrderItem{deliveryOrder(doNumber)} to DeliveryOrder
+    DeliveryContainer{deliveryOrderItem} to DeliveryOrderItem
+    DeliveryContainer{companyContainer} to CompanyContainer
+
+	DeliveryItemProduct{deliveryContainer} to DeliveryContainer
+//    DeliveryItemProduct{deliveryOrderItem} to DeliveryOrderItem
+
+	UHFRFIDAntenna{uhfReader(name)} to UHFRFIDReader
+
+	DoorAntenna{door(name)} to Door
+	DoorAntenna{uhfAntenna(name)} to UHFRFIDAntenna
+}
+
+service * with serviceClass
+paginate Warehouse, Area, Door, Location, WHRow, WHLevel, Position, Product, ProductCategory, Customer, DeliveryOrder, DeliveryOrderItem  with pagination

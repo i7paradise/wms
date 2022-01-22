@@ -1,0 +1,15 @@
+{
+  "name": "CompanyUser",
+  "fields": [],
+  "relationships": [],
+  "entityTableName": "company_user",
+  "dto": "no",
+  "pagination": "infinite-scroll",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["wms"],
+  "changelogDate": "20220122193301"
+}

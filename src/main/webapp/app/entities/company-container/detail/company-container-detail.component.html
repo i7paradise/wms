@@ -1,0 +1,48 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="companyContainer">
+      <h2 data-cy="companyContainerDetailsHeading"><span jhiTranslate="wmsApp.companyContainer.detail.title">Company Container</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ companyContainer.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.companyContainer.rfidTag">Rfid Tag</span></dt>
+        <dd>
+          <span>{{ companyContainer.rfidTag }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.companyContainer.color">Color</span></dt>
+        <dd>
+          <span>{{ companyContainer.color }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.companyContainer.company">Company</span></dt>
+        <dd>
+          <div *ngIf="companyContainer.company">
+            <a [routerLink]="['/company', companyContainer.company?.id, 'view']">{{ companyContainer.company?.name }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.companyContainer.container">Container</span></dt>
+        <dd>
+          <div *ngIf="companyContainer.container">
+            <a [routerLink]="['/container', companyContainer.container?.id, 'view']">{{ companyContainer.container?.name }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/company-container', companyContainer.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+{
+  "name": "CompanyContainer",
+  "fields": [
+    {
+      "fieldName": "rfidTag",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "color",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "company",
+      "otherEntityRelationshipName": "companyContainer",
+      "relationshipName": "company",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "container",
+      "otherEntityRelationshipName": "companyContainer",
+      "relationshipName": "container",
+      "otherEntityField": "name"
+    }
+  ],
+  "entityTableName": "company_container",
+  "dto": "no",
+  "pagination": "infinite-scroll",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["wms"],
+  "changelogDate": "20220122193501"
+}

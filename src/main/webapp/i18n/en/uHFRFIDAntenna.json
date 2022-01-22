@@ -1,0 +1,27 @@
+{
+  "wmsApp": {
+    "uHFRFIDAntenna": {
+      "home": {
+        "title": "UHFRFID Antennas",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new UHFRFID Antenna",
+        "createOrEditLabel": "Create or edit a UHFRFID Antenna",
+        "notFound": "No UHFRFID Antennas found"
+      },
+      "created": "A new UHFRFID Antenna is created with identifier {{ param }}",
+      "updated": "A UHFRFID Antenna is updated with identifier {{ param }}",
+      "deleted": "A UHFRFID Antenna is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete UHFRFID Antenna {{ id }}?"
+      },
+      "detail": {
+        "title": "UHFRFID Antenna"
+      },
+      "id": "ID",
+      "name": "Name",
+      "outputPower": "Output Power",
+      "status": "Status",
+      "uhfReader": "Uhf Reader"
+    }
+  }
+}

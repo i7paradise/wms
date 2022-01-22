@@ -1,0 +1,26 @@
+{
+  "wmsApp": {
+    "doorAntenna": {
+      "home": {
+        "title": "Door Antennas",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Door Antenna",
+        "createOrEditLabel": "Create or edit a Door Antenna",
+        "notFound": "No Door Antennas found"
+      },
+      "created": "A new Door Antenna is created with identifier {{ param }}",
+      "updated": "A Door Antenna is updated with identifier {{ param }}",
+      "deleted": "A Door Antenna is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Door Antenna {{ id }}?"
+      },
+      "detail": {
+        "title": "Door Antenna"
+      },
+      "id": "ID",
+      "type": "Type",
+      "door": "Door",
+      "uhfAntenna": "Uhf Antenna"
+    }
+  }
+}

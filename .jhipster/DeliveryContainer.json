@@ -1,0 +1,33 @@
+{
+  "name": "DeliveryContainer",
+  "fields": [
+    {
+      "fieldName": "supplierRFIDTag",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "deliveryOrderItem",
+      "otherEntityRelationshipName": "deliveryContainer",
+      "relationshipName": "deliveryOrderItem"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "companyContainer",
+      "otherEntityRelationshipName": "deliveryContainer",
+      "relationshipName": "companyContainer"
+    }
+  ],
+  "entityTableName": "delivery_container",
+  "dto": "no",
+  "pagination": "infinite-scroll",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["wms"],
+  "changelogDate": "20220122195201"
+}

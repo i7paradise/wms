@@ -1,0 +1,46 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="uHFRFIDAntenna">
+      <h2 data-cy="uHFRFIDAntennaDetailsHeading"><span jhiTranslate="wmsApp.uHFRFIDAntenna.detail.title">UHFRFID Antenna</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ uHFRFIDAntenna.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.uHFRFIDAntenna.name">Name</span></dt>
+        <dd>
+          <span>{{ uHFRFIDAntenna.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.uHFRFIDAntenna.outputPower">Output Power</span></dt>
+        <dd>
+          <span>{{ uHFRFIDAntenna.outputPower }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.uHFRFIDAntenna.status">Status</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'wmsApp.UHFRFIDAntennaStatus.' + uHFRFIDAntenna.status }}">{{ uHFRFIDAntenna.status }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.uHFRFIDAntenna.uhfReader">Uhf Reader</span></dt>
+        <dd>
+          <div *ngIf="uHFRFIDAntenna.uhfReader">
+            <a [routerLink]="['/uhfrfid-reader', uHFRFIDAntenna.uhfReader?.id, 'view']">{{ uHFRFIDAntenna.uhfReader?.name }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/uhfrfid-antenna', uHFRFIDAntenna.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

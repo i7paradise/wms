@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="wHLevel">
+      <h2 data-cy="wHLevelDetailsHeading"><span jhiTranslate="wmsApp.wHLevel.detail.title">WH Level</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ wHLevel.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.wHLevel.name">Name</span></dt>
+        <dd>
+          <span>{{ wHLevel.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.wHLevel.note">Note</span></dt>
+        <dd>
+          <span>{{ wHLevel.note }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.wHLevel.bay">Bay</span></dt>
+        <dd>
+          <div *ngIf="wHLevel.bay">
+            <a [routerLink]="['/bay', wHLevel.bay?.id, 'view']">{{ wHLevel.bay?.name }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/wh-level', wHLevel.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

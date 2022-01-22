@@ -1,0 +1,27 @@
+{
+  "wmsApp": {
+    "deliveryOrder": {
+      "home": {
+        "title": "Delivery Orders",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Delivery Order",
+        "createOrEditLabel": "Create or edit a Delivery Order",
+        "notFound": "No Delivery Orders found"
+      },
+      "created": "A new Delivery Order is created with identifier {{ param }}",
+      "updated": "A Delivery Order is updated with identifier {{ param }}",
+      "deleted": "A Delivery Order is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Delivery Order {{ id }}?"
+      },
+      "detail": {
+        "title": "Delivery Order"
+      },
+      "id": "ID",
+      "doNumber": "Do Number",
+      "placedDate": "Placed Date",
+      "status": "Status",
+      "code": "Code"
+    }
+  }
+}

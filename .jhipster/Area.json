@@ -1,0 +1,30 @@
+{
+  "name": "Area",
+  "fields": [
+    {
+      "fieldName": "type",
+      "fieldType": "AreaType",
+      "fieldValues": "RECEIVING,SHIPPING",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "warehouse",
+      "otherEntityRelationshipName": "area",
+      "relationshipName": "warehouse",
+      "otherEntityField": "name"
+    }
+  ],
+  "entityTableName": "area",
+  "dto": "no",
+  "pagination": "infinite-scroll",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["wms"],
+  "changelogDate": "20220122193901"
+}

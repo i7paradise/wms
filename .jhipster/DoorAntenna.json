@@ -1,0 +1,37 @@
+{
+  "name": "DoorAntenna",
+  "fields": [
+    {
+      "fieldName": "type",
+      "fieldType": "DoorAntennaType",
+      "fieldValues": "INNER,OUTER",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "door",
+      "otherEntityRelationshipName": "doorAntenna",
+      "relationshipName": "door",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "uHFRFIDAntenna",
+      "otherEntityRelationshipName": "doorAntenna",
+      "relationshipName": "uhfAntenna",
+      "otherEntityField": "name"
+    }
+  ],
+  "entityTableName": "door_antenna",
+  "dto": "no",
+  "pagination": "infinite-scroll",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["wms"],
+  "changelogDate": "20220122195401"
+}

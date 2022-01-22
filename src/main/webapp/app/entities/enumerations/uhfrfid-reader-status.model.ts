@@ -1,0 +1,5 @@
+export enum UHFRFIDReaderStatus {
+  DISCONNECTED = 'DISCONNECTED',
+
+  CONNECTED = 'CONNECTED',
+}

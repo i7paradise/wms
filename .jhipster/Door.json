@@ -1,0 +1,29 @@
+{
+  "name": "Door",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "area",
+      "otherEntityRelationshipName": "door",
+      "relationshipName": "area",
+      "otherEntityField": "type"
+    }
+  ],
+  "entityTableName": "door",
+  "dto": "no",
+  "pagination": "infinite-scroll",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["wms"],
+  "changelogDate": "20220122194001"
+}

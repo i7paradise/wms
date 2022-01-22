@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
+    <property name="clobType" value="longvarchar" dbms="h2"/>
+    <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
+    <property name="uuidType" value="uuid" dbms="h2, postgresql"/>
+    <property name="datetimeType" value="datetime(6)" dbms="mysql, mariadb"/>
+    <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
+
+    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122193201_added_entity_Company.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122193301_added_entity_CompanyUser.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122193401_added_entity_Container.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122193501_added_entity_CompanyContainer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122193601_added_entity_UHFRFIDReader.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122193701_added_entity_UHFRFIDAntenna.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122193801_added_entity_Warehouse.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122193901_added_entity_Area.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194001_added_entity_Door.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194101_added_entity_Location.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194201_added_entity_WHRow.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194301_added_entity_Bay.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194401_added_entity_WHLevel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194501_added_entity_Position.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194601_added_entity_Product.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194701_added_entity_ProductCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194801_added_entity_CompanyProduct.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194901_added_entity_Customer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122195001_added_entity_DeliveryOrder.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122195101_added_entity_DeliveryOrderItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122195201_added_entity_DeliveryContainer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122195301_added_entity_DeliveryItemProduct.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122195401_added_entity_DoorAntenna.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20220122193501_added_entity_constraints_CompanyContainer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122193701_added_entity_constraints_UHFRFIDAntenna.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122193801_added_entity_constraints_Warehouse.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122193901_added_entity_constraints_Area.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194001_added_entity_constraints_Door.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194101_added_entity_constraints_Location.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194201_added_entity_constraints_WHRow.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194301_added_entity_constraints_Bay.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194401_added_entity_constraints_WHLevel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194501_added_entity_constraints_Position.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194601_added_entity_constraints_Product.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122194801_added_entity_constraints_CompanyProduct.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122195101_added_entity_constraints_DeliveryOrderItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122195201_added_entity_constraints_DeliveryContainer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122195301_added_entity_constraints_DeliveryItemProduct.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220122195401_added_entity_constraints_DoorAntenna.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+</databaseChangeLog>

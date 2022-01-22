@@ -1,0 +1,50 @@
+{
+  "name": "DeliveryOrderItem",
+  "fields": [
+    {
+      "fieldName": "unitQuantity",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "containerQuantity",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "DeliveryOrderItemStatus",
+      "fieldValues": "IN_PROGRESS,VERIFIED,LABELED,PARTIALLY_PLACED,FULLY_PLACED",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "companyProduct",
+      "otherEntityRelationshipName": "deliveryOrderItem",
+      "relationshipName": "compganyProduct",
+      "otherEntityField": "sku",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "deliveryOrder",
+      "otherEntityRelationshipName": "deliveryOrderItem",
+      "relationshipName": "deliveryOrder",
+      "otherEntityField": "doNumber"
+    }
+  ],
+  "entityTableName": "delivery_order_item",
+  "dto": "no",
+  "pagination": "infinite-scroll",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["wms"],
+  "changelogDate": "20220122195101"
+}

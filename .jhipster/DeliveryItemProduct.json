@@ -1,0 +1,28 @@
+{
+  "name": "DeliveryItemProduct",
+  "fields": [
+    {
+      "fieldName": "rfidTAG",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "deliveryContainer",
+      "otherEntityRelationshipName": "deliveryItemProduct",
+      "relationshipName": "deliveryContainer"
+    }
+  ],
+  "entityTableName": "delivery_item_product",
+  "dto": "no",
+  "pagination": "infinite-scroll",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["wms"],
+  "changelogDate": "20220122195301"
+}

@@ -1,0 +1,26 @@
+{
+  "wmsApp": {
+    "bay": {
+      "home": {
+        "title": "Bays",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Bay",
+        "createOrEditLabel": "Create or edit a Bay",
+        "notFound": "No Bays found"
+      },
+      "created": "A new Bay is created with identifier {{ param }}",
+      "updated": "A Bay is updated with identifier {{ param }}",
+      "deleted": "A Bay is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Bay {{ id }}?"
+      },
+      "detail": {
+        "title": "Bay"
+      },
+      "id": "ID",
+      "name": "Name",
+      "note": "Note",
+      "whrow": "Whrow"
+    }
+  }
+}

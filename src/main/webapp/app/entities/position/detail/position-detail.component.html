@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="position">
+      <h2 data-cy="positionDetailsHeading"><span jhiTranslate="wmsApp.position.detail.title">Position</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ position.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.position.name">Name</span></dt>
+        <dd>
+          <span>{{ position.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.position.note">Note</span></dt>
+        <dd>
+          <span>{{ position.note }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.position.whlevel">Whlevel</span></dt>
+        <dd>
+          <div *ngIf="position.whlevel">
+            <a [routerLink]="['/wh-level', position.whlevel?.id, 'view']">{{ position.whlevel?.name }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/position', position.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

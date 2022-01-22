@@ -1,0 +1,153 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-company-product-heading"
+        data-cy="CompanyProductCreateUpdateHeading"
+        jhiTranslate="wmsApp.companyProduct.home.createOrEditLabel"
+      >
+        Create or edit a Company Product
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.companyProduct.quantity" for="field_quantity">Quantity</label>
+          <input type="number" class="form-control" name="quantity" id="field_quantity" data-cy="quantity" formControlName="quantity" />
+          <div *ngIf="editForm.get('quantity')!.invalid && (editForm.get('quantity')!.dirty || editForm.get('quantity')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('quantity')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('quantity')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 0 }"
+            >
+              This field should be at least 0.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('quantity')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.companyProduct.sku" for="field_sku">Sku</label>
+          <input type="text" class="form-control" name="sku" id="field_sku" data-cy="sku" formControlName="sku" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.companyProduct.stockingRatio" for="field_stockingRatio"
+            >Stocking Ratio</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="stockingRatio"
+            id="field_stockingRatio"
+            data-cy="stockingRatio"
+            formControlName="stockingRatio"
+          />
+          <div
+            *ngIf="
+              editForm.get('stockingRatio')!.invalid && (editForm.get('stockingRatio')!.dirty || editForm.get('stockingRatio')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('stockingRatio')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('stockingRatio')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 0 }"
+            >
+              This field should be at least 0.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('stockingRatio')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.companyProduct.container" for="field_container">Container</label>
+          <select class="form-control" id="field_container" data-cy="container" name="container" formControlName="container">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="containerOption.id === editForm.get('container')!.value?.id ? editForm.get('container')!.value : containerOption"
+              *ngFor="let containerOption of containersCollection; trackBy: trackContainerById"
+            >
+              {{ containerOption.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.companyProduct.company" for="field_company">Company</label>
+          <select class="form-control" id="field_company" data-cy="company" name="company" formControlName="company">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="companyOption.id === editForm.get('company')!.value?.id ? editForm.get('company')!.value : companyOption"
+              *ngFor="let companyOption of companiesSharedCollection; trackBy: trackCompanyById"
+            >
+              {{ companyOption.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.companyProduct.product" for="field_product">Product</label>
+          <select class="form-control" id="field_product" data-cy="product" name="product" formControlName="product">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="productOption.id === editForm.get('product')!.value?.id ? editForm.get('product')!.value : productOption"
+              *ngFor="let productOption of productsSharedCollection; trackBy: trackProductById"
+            >
+              {{ productOption.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

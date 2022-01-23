@@ -1,0 +1,74 @@
+<div>
+  <h2 id="page-heading" data-cy="DeliveryOrderHeading">
+    <span jhiTranslate="wmsApp.deliveryOrder.home.title">Reception</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="wmsApp.deliveryOrder.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-delivery-order"
+        [routerLink]="['/delivery-order/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="wmsApp.deliveryOrder.home.createLabel"> Create a new Delivery Order </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="deliveryOrders?.length === 0">
+    <span jhiTranslate="wmsApp.deliveryOrder.home.notFound">No deliveryOrders found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="deliveryOrders && deliveryOrders.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
+          <th scope="col" jhiSortBy="doNumber">
+            <span jhiTranslate="wmsApp.deliveryOrder.doNumber">Do Number</span>
+          </th>
+          <th scope="col" jhiSortBy="placedDate">
+            <span jhiTranslate="wmsApp.deliveryOrder.placedDate">Placed Date</span>
+          </th>
+          <th scope="col" jhiSortBy="code"><span jhiTranslate="wmsApp.deliveryOrder.code">Code</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+        <tr
+          *ngFor="let deliveryOrder of deliveryOrders; trackBy: trackId"
+          data-cy="entityTable"
+          [routerLink]="['/mgmt/reception', deliveryOrder.id]"
+        >
+          <td>{{ deliveryOrder.doNumber }}</td>
+          <td>{{ deliveryOrder.placedDate | formatMediumDatetime }}</td>
+          <td>{{ deliveryOrder.code }}</td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/delivery-order', deliveryOrder.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+              </button>
+
+              <button type="submit" (click)="delete(deliveryOrder)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

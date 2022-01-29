@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.Product;
 import com.wms.uhfrfid.repository.ProductRepository;
+import com.wms.uhfrfid.service.dto.ProductDTO;
+import com.wms.uhfrfid.service.mapper.ProductMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,49 +23,44 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    private final ProductMapper productMapper;
+
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
         this.productRepository = productRepository;
+        this.productMapper = productMapper;
     }
 
     /**
      * Save a product.
      *
-     * @param product the entity to save.
+     * @param productDTO the entity to save.
      * @return the persisted entity.
      */
-    public Product save(Product product) {
-        log.debug("Request to save Product : {}", product);
-        return productRepository.save(product);
+    public ProductDTO save(ProductDTO productDTO) {
+        log.debug("Request to save Product : {}", productDTO);
+        Product product = productMapper.toEntity(productDTO);
+        product = productRepository.save(product);
+        return productMapper.toDto(product);
     }
 
     /**
      * Partially update a product.
      *
-     * @param product the entity to update partially.
+     * @param productDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Product> partialUpdate(Product product) {
-        log.debug("Request to partially update Product : {}", product);
+    public Optional<ProductDTO> partialUpdate(ProductDTO productDTO) {
+        log.debug("Request to partially update Product : {}", productDTO);
 
         return productRepository
-            .findById(product.getId())
+            .findById(productDTO.getId())
             .map(existingProduct -> {
-                if (product.getName() != null) {
-                    existingProduct.setName(product.getName());
-                }
-                if (product.getDescription() != null) {
-                    existingProduct.setDescription(product.getDescription());
-                }
-                if (product.getImage() != null) {
-                    existingProduct.setImage(product.getImage());
-                }
-                if (product.getImageContentType() != null) {
-                    existingProduct.setImageContentType(product.getImageContentType());
-                }
+                productMapper.partialUpdate(existingProduct, productDTO);
 
                 return existingProduct;
             })
-            .map(productRepository::save);
+            .map(productRepository::save)
+            .map(productMapper::toDto);
     }
 
     /**
@@ -73,9 +70,9 @@ public class ProductService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Product> findAll(Pageable pageable) {
+    public Page<ProductDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Products");
-        return productRepository.findAll(pageable);
+        return productRepository.findAll(pageable).map(productMapper::toDto);
     }
 
     /**
@@ -85,9 +82,9 @@ public class ProductService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Product> findOne(Long id) {
+    public Optional<ProductDTO> findOne(Long id) {
         log.debug("Request to get Product : {}", id);
-        return productRepository.findById(id);
+        return productRepository.findById(id).map(productMapper::toDto);
     }
 
     /**

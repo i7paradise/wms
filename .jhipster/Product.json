@@ -27,7 +27,7 @@
   ],
   "javadoc": "Product sold by the Online store",
   "entityTableName": "product",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "infinite-scroll",
   "service": "serviceClass",
   "jpaMetamodelFiltering": false,

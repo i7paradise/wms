@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.UHFRFIDReader;
 import com.wms.uhfrfid.repository.UHFRFIDReaderRepository;
+import com.wms.uhfrfid.service.dto.UHFRFIDReaderDTO;
+import com.wms.uhfrfid.service.mapper.UHFRFIDReaderMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,49 +23,44 @@ public class UHFRFIDReaderService {
 
     private final UHFRFIDReaderRepository uHFRFIDReaderRepository;
 
-    public UHFRFIDReaderService(UHFRFIDReaderRepository uHFRFIDReaderRepository) {
+    private final UHFRFIDReaderMapper uHFRFIDReaderMapper;
+
+    public UHFRFIDReaderService(UHFRFIDReaderRepository uHFRFIDReaderRepository, UHFRFIDReaderMapper uHFRFIDReaderMapper) {
         this.uHFRFIDReaderRepository = uHFRFIDReaderRepository;
+        this.uHFRFIDReaderMapper = uHFRFIDReaderMapper;
     }
 
     /**
      * Save a uHFRFIDReader.
      *
-     * @param uHFRFIDReader the entity to save.
+     * @param uHFRFIDReaderDTO the entity to save.
      * @return the persisted entity.
      */
-    public UHFRFIDReader save(UHFRFIDReader uHFRFIDReader) {
-        log.debug("Request to save UHFRFIDReader : {}", uHFRFIDReader);
-        return uHFRFIDReaderRepository.save(uHFRFIDReader);
+    public UHFRFIDReaderDTO save(UHFRFIDReaderDTO uHFRFIDReaderDTO) {
+        log.debug("Request to save UHFRFIDReader : {}", uHFRFIDReaderDTO);
+        UHFRFIDReader uHFRFIDReader = uHFRFIDReaderMapper.toEntity(uHFRFIDReaderDTO);
+        uHFRFIDReader = uHFRFIDReaderRepository.save(uHFRFIDReader);
+        return uHFRFIDReaderMapper.toDto(uHFRFIDReader);
     }
 
     /**
      * Partially update a uHFRFIDReader.
      *
-     * @param uHFRFIDReader the entity to update partially.
+     * @param uHFRFIDReaderDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<UHFRFIDReader> partialUpdate(UHFRFIDReader uHFRFIDReader) {
-        log.debug("Request to partially update UHFRFIDReader : {}", uHFRFIDReader);
+    public Optional<UHFRFIDReaderDTO> partialUpdate(UHFRFIDReaderDTO uHFRFIDReaderDTO) {
+        log.debug("Request to partially update UHFRFIDReader : {}", uHFRFIDReaderDTO);
 
         return uHFRFIDReaderRepository
-            .findById(uHFRFIDReader.getId())
+            .findById(uHFRFIDReaderDTO.getId())
             .map(existingUHFRFIDReader -> {
-                if (uHFRFIDReader.getName() != null) {
-                    existingUHFRFIDReader.setName(uHFRFIDReader.getName());
-                }
-                if (uHFRFIDReader.getIp() != null) {
-                    existingUHFRFIDReader.setIp(uHFRFIDReader.getIp());
-                }
-                if (uHFRFIDReader.getPort() != null) {
-                    existingUHFRFIDReader.setPort(uHFRFIDReader.getPort());
-                }
-                if (uHFRFIDReader.getStatus() != null) {
-                    existingUHFRFIDReader.setStatus(uHFRFIDReader.getStatus());
-                }
+                uHFRFIDReaderMapper.partialUpdate(existingUHFRFIDReader, uHFRFIDReaderDTO);
 
                 return existingUHFRFIDReader;
             })
-            .map(uHFRFIDReaderRepository::save);
+            .map(uHFRFIDReaderRepository::save)
+            .map(uHFRFIDReaderMapper::toDto);
     }
 
     /**
@@ -73,9 +70,9 @@ public class UHFRFIDReaderService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<UHFRFIDReader> findAll(Pageable pageable) {
+    public Page<UHFRFIDReaderDTO> findAll(Pageable pageable) {
         log.debug("Request to get all UHFRFIDReaders");
-        return uHFRFIDReaderRepository.findAll(pageable);
+        return uHFRFIDReaderRepository.findAll(pageable).map(uHFRFIDReaderMapper::toDto);
     }
 
     /**
@@ -85,9 +82,9 @@ public class UHFRFIDReaderService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<UHFRFIDReader> findOne(Long id) {
+    public Optional<UHFRFIDReaderDTO> findOne(Long id) {
         log.debug("Request to get UHFRFIDReader : {}", id);
-        return uHFRFIDReaderRepository.findById(id);
+        return uHFRFIDReaderRepository.findById(id).map(uHFRFIDReaderMapper::toDto);
     }
 
     /**

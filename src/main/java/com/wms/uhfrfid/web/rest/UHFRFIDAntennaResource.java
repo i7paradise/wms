@@ -1,8 +1,8 @@
 package com.wms.uhfrfid.web.rest;
 
-import com.wms.uhfrfid.domain.UHFRFIDAntenna;
 import com.wms.uhfrfid.repository.UHFRFIDAntennaRepository;
 import com.wms.uhfrfid.service.UHFRFIDAntennaService;
+import com.wms.uhfrfid.service.dto.UHFRFIDAntennaDTO;
 import com.wms.uhfrfid.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,18 +51,18 @@ public class UHFRFIDAntennaResource {
     /**
      * {@code POST  /uhfrfid-antennas} : Create a new uHFRFIDAntenna.
      *
-     * @param uHFRFIDAntenna the uHFRFIDAntenna to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new uHFRFIDAntenna, or with status {@code 400 (Bad Request)} if the uHFRFIDAntenna has already an ID.
+     * @param uHFRFIDAntennaDTO the uHFRFIDAntennaDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new uHFRFIDAntennaDTO, or with status {@code 400 (Bad Request)} if the uHFRFIDAntenna has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/uhfrfid-antennas")
-    public ResponseEntity<UHFRFIDAntenna> createUHFRFIDAntenna(@Valid @RequestBody UHFRFIDAntenna uHFRFIDAntenna)
+    public ResponseEntity<UHFRFIDAntennaDTO> createUHFRFIDAntenna(@Valid @RequestBody UHFRFIDAntennaDTO uHFRFIDAntennaDTO)
         throws URISyntaxException {
-        log.debug("REST request to save UHFRFIDAntenna : {}", uHFRFIDAntenna);
-        if (uHFRFIDAntenna.getId() != null) {
+        log.debug("REST request to save UHFRFIDAntenna : {}", uHFRFIDAntennaDTO);
+        if (uHFRFIDAntennaDTO.getId() != null) {
             throw new BadRequestAlertException("A new uHFRFIDAntenna cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        UHFRFIDAntenna result = uHFRFIDAntennaService.save(uHFRFIDAntenna);
+        UHFRFIDAntennaDTO result = uHFRFIDAntennaService.save(uHFRFIDAntennaDTO);
         return ResponseEntity
             .created(new URI("/api/uhfrfid-antennas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -72,23 +72,23 @@ public class UHFRFIDAntennaResource {
     /**
      * {@code PUT  /uhfrfid-antennas/:id} : Updates an existing uHFRFIDAntenna.
      *
-     * @param id the id of the uHFRFIDAntenna to save.
-     * @param uHFRFIDAntenna the uHFRFIDAntenna to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated uHFRFIDAntenna,
-     * or with status {@code 400 (Bad Request)} if the uHFRFIDAntenna is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the uHFRFIDAntenna couldn't be updated.
+     * @param id the id of the uHFRFIDAntennaDTO to save.
+     * @param uHFRFIDAntennaDTO the uHFRFIDAntennaDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated uHFRFIDAntennaDTO,
+     * or with status {@code 400 (Bad Request)} if the uHFRFIDAntennaDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the uHFRFIDAntennaDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/uhfrfid-antennas/{id}")
-    public ResponseEntity<UHFRFIDAntenna> updateUHFRFIDAntenna(
+    public ResponseEntity<UHFRFIDAntennaDTO> updateUHFRFIDAntenna(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody UHFRFIDAntenna uHFRFIDAntenna
+        @Valid @RequestBody UHFRFIDAntennaDTO uHFRFIDAntennaDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update UHFRFIDAntenna : {}, {}", id, uHFRFIDAntenna);
-        if (uHFRFIDAntenna.getId() == null) {
+        log.debug("REST request to update UHFRFIDAntenna : {}, {}", id, uHFRFIDAntennaDTO);
+        if (uHFRFIDAntennaDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, uHFRFIDAntenna.getId())) {
+        if (!Objects.equals(id, uHFRFIDAntennaDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -96,34 +96,34 @@ public class UHFRFIDAntennaResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        UHFRFIDAntenna result = uHFRFIDAntennaService.save(uHFRFIDAntenna);
+        UHFRFIDAntennaDTO result = uHFRFIDAntennaService.save(uHFRFIDAntennaDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, uHFRFIDAntenna.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, uHFRFIDAntennaDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /uhfrfid-antennas/:id} : Partial updates given fields of an existing uHFRFIDAntenna, field will ignore if it is null
      *
-     * @param id the id of the uHFRFIDAntenna to save.
-     * @param uHFRFIDAntenna the uHFRFIDAntenna to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated uHFRFIDAntenna,
-     * or with status {@code 400 (Bad Request)} if the uHFRFIDAntenna is not valid,
-     * or with status {@code 404 (Not Found)} if the uHFRFIDAntenna is not found,
-     * or with status {@code 500 (Internal Server Error)} if the uHFRFIDAntenna couldn't be updated.
+     * @param id the id of the uHFRFIDAntennaDTO to save.
+     * @param uHFRFIDAntennaDTO the uHFRFIDAntennaDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated uHFRFIDAntennaDTO,
+     * or with status {@code 400 (Bad Request)} if the uHFRFIDAntennaDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the uHFRFIDAntennaDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the uHFRFIDAntennaDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/uhfrfid-antennas/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<UHFRFIDAntenna> partialUpdateUHFRFIDAntenna(
+    public ResponseEntity<UHFRFIDAntennaDTO> partialUpdateUHFRFIDAntenna(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody UHFRFIDAntenna uHFRFIDAntenna
+        @NotNull @RequestBody UHFRFIDAntennaDTO uHFRFIDAntennaDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update UHFRFIDAntenna partially : {}, {}", id, uHFRFIDAntenna);
-        if (uHFRFIDAntenna.getId() == null) {
+        log.debug("REST request to partial update UHFRFIDAntenna partially : {}, {}", id, uHFRFIDAntennaDTO);
+        if (uHFRFIDAntennaDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, uHFRFIDAntenna.getId())) {
+        if (!Objects.equals(id, uHFRFIDAntennaDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -131,11 +131,11 @@ public class UHFRFIDAntennaResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<UHFRFIDAntenna> result = uHFRFIDAntennaService.partialUpdate(uHFRFIDAntenna);
+        Optional<UHFRFIDAntennaDTO> result = uHFRFIDAntennaService.partialUpdate(uHFRFIDAntennaDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, uHFRFIDAntenna.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, uHFRFIDAntennaDTO.getId().toString())
         );
     }
 
@@ -146,9 +146,9 @@ public class UHFRFIDAntennaResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of uHFRFIDAntennas in body.
      */
     @GetMapping("/uhfrfid-antennas")
-    public ResponseEntity<List<UHFRFIDAntenna>> getAllUHFRFIDAntennas(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<UHFRFIDAntennaDTO>> getAllUHFRFIDAntennas(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of UHFRFIDAntennas");
-        Page<UHFRFIDAntenna> page = uHFRFIDAntennaService.findAll(pageable);
+        Page<UHFRFIDAntennaDTO> page = uHFRFIDAntennaService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -156,20 +156,20 @@ public class UHFRFIDAntennaResource {
     /**
      * {@code GET  /uhfrfid-antennas/:id} : get the "id" uHFRFIDAntenna.
      *
-     * @param id the id of the uHFRFIDAntenna to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the uHFRFIDAntenna, or with status {@code 404 (Not Found)}.
+     * @param id the id of the uHFRFIDAntennaDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the uHFRFIDAntennaDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/uhfrfid-antennas/{id}")
-    public ResponseEntity<UHFRFIDAntenna> getUHFRFIDAntenna(@PathVariable Long id) {
+    public ResponseEntity<UHFRFIDAntennaDTO> getUHFRFIDAntenna(@PathVariable Long id) {
         log.debug("REST request to get UHFRFIDAntenna : {}", id);
-        Optional<UHFRFIDAntenna> uHFRFIDAntenna = uHFRFIDAntennaService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(uHFRFIDAntenna);
+        Optional<UHFRFIDAntennaDTO> uHFRFIDAntennaDTO = uHFRFIDAntennaService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(uHFRFIDAntennaDTO);
     }
 
     /**
      * {@code DELETE  /uhfrfid-antennas/:id} : delete the "id" uHFRFIDAntenna.
      *
-     * @param id the id of the uHFRFIDAntenna to delete.
+     * @param id the id of the uHFRFIDAntennaDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/uhfrfid-antennas/{id}")

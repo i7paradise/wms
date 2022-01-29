@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.CompanyUser;
 import com.wms.uhfrfid.repository.CompanyUserRepository;
+import com.wms.uhfrfid.service.dto.CompanyUserDTO;
+import com.wms.uhfrfid.service.mapper.CompanyUserMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,36 +23,44 @@ public class CompanyUserService {
 
     private final CompanyUserRepository companyUserRepository;
 
-    public CompanyUserService(CompanyUserRepository companyUserRepository) {
+    private final CompanyUserMapper companyUserMapper;
+
+    public CompanyUserService(CompanyUserRepository companyUserRepository, CompanyUserMapper companyUserMapper) {
         this.companyUserRepository = companyUserRepository;
+        this.companyUserMapper = companyUserMapper;
     }
 
     /**
      * Save a companyUser.
      *
-     * @param companyUser the entity to save.
+     * @param companyUserDTO the entity to save.
      * @return the persisted entity.
      */
-    public CompanyUser save(CompanyUser companyUser) {
-        log.debug("Request to save CompanyUser : {}", companyUser);
-        return companyUserRepository.save(companyUser);
+    public CompanyUserDTO save(CompanyUserDTO companyUserDTO) {
+        log.debug("Request to save CompanyUser : {}", companyUserDTO);
+        CompanyUser companyUser = companyUserMapper.toEntity(companyUserDTO);
+        companyUser = companyUserRepository.save(companyUser);
+        return companyUserMapper.toDto(companyUser);
     }
 
     /**
      * Partially update a companyUser.
      *
-     * @param companyUser the entity to update partially.
+     * @param companyUserDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<CompanyUser> partialUpdate(CompanyUser companyUser) {
-        log.debug("Request to partially update CompanyUser : {}", companyUser);
+    public Optional<CompanyUserDTO> partialUpdate(CompanyUserDTO companyUserDTO) {
+        log.debug("Request to partially update CompanyUser : {}", companyUserDTO);
 
         return companyUserRepository
-            .findById(companyUser.getId())
+            .findById(companyUserDTO.getId())
             .map(existingCompanyUser -> {
+                companyUserMapper.partialUpdate(existingCompanyUser, companyUserDTO);
+
                 return existingCompanyUser;
             })
-            .map(companyUserRepository::save);
+            .map(companyUserRepository::save)
+            .map(companyUserMapper::toDto);
     }
 
     /**
@@ -60,9 +70,9 @@ public class CompanyUserService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<CompanyUser> findAll(Pageable pageable) {
+    public Page<CompanyUserDTO> findAll(Pageable pageable) {
         log.debug("Request to get all CompanyUsers");
-        return companyUserRepository.findAll(pageable);
+        return companyUserRepository.findAll(pageable).map(companyUserMapper::toDto);
     }
 
     /**
@@ -72,9 +82,9 @@ public class CompanyUserService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<CompanyUser> findOne(Long id) {
+    public Optional<CompanyUserDTO> findOne(Long id) {
         log.debug("Request to get CompanyUser : {}", id);
-        return companyUserRepository.findById(id);
+        return companyUserRepository.findById(id).map(companyUserMapper::toDto);
     }
 
     /**

@@ -9,6 +9,8 @@ import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.DoorAntenna;
 import com.wms.uhfrfid.domain.enumeration.DoorAntennaType;
 import com.wms.uhfrfid.repository.DoorAntennaRepository;
+import com.wms.uhfrfid.service.dto.DoorAntennaDTO;
+import com.wms.uhfrfid.service.mapper.DoorAntennaMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -41,6 +43,9 @@ class DoorAntennaResourceIT {
 
     @Autowired
     private DoorAntennaRepository doorAntennaRepository;
+
+    @Autowired
+    private DoorAntennaMapper doorAntennaMapper;
 
     @Autowired
     private EntityManager em;
@@ -82,8 +87,11 @@ class DoorAntennaResourceIT {
     void createDoorAntenna() throws Exception {
         int databaseSizeBeforeCreate = doorAntennaRepository.findAll().size();
         // Create the DoorAntenna
+        DoorAntennaDTO doorAntennaDTO = doorAntennaMapper.toDto(doorAntenna);
         restDoorAntennaMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(doorAntenna)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(doorAntennaDTO))
+            )
             .andExpect(status().isCreated());
 
         // Validate the DoorAntenna in the database
@@ -98,12 +106,15 @@ class DoorAntennaResourceIT {
     void createDoorAntennaWithExistingId() throws Exception {
         // Create the DoorAntenna with an existing ID
         doorAntenna.setId(1L);
+        DoorAntennaDTO doorAntennaDTO = doorAntennaMapper.toDto(doorAntenna);
 
         int databaseSizeBeforeCreate = doorAntennaRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDoorAntennaMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(doorAntenna)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(doorAntennaDTO))
+            )
             .andExpect(status().isBadRequest());
 
         // Validate the DoorAntenna in the database
@@ -119,9 +130,12 @@ class DoorAntennaResourceIT {
         doorAntenna.setType(null);
 
         // Create the DoorAntenna, which fails.
+        DoorAntennaDTO doorAntennaDTO = doorAntennaMapper.toDto(doorAntenna);
 
         restDoorAntennaMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(doorAntenna)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(doorAntennaDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<DoorAntenna> doorAntennaList = doorAntennaRepository.findAll();
@@ -178,12 +192,13 @@ class DoorAntennaResourceIT {
         // Disconnect from session so that the updates on updatedDoorAntenna are not directly saved in db
         em.detach(updatedDoorAntenna);
         updatedDoorAntenna.type(UPDATED_TYPE);
+        DoorAntennaDTO doorAntennaDTO = doorAntennaMapper.toDto(updatedDoorAntenna);
 
         restDoorAntennaMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedDoorAntenna.getId())
+                put(ENTITY_API_URL_ID, doorAntennaDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedDoorAntenna))
+                    .content(TestUtil.convertObjectToJsonBytes(doorAntennaDTO))
             )
             .andExpect(status().isOk());
 
@@ -200,12 +215,15 @@ class DoorAntennaResourceIT {
         int databaseSizeBeforeUpdate = doorAntennaRepository.findAll().size();
         doorAntenna.setId(count.incrementAndGet());
 
+        // Create the DoorAntenna
+        DoorAntennaDTO doorAntennaDTO = doorAntennaMapper.toDto(doorAntenna);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDoorAntennaMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, doorAntenna.getId())
+                put(ENTITY_API_URL_ID, doorAntennaDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(doorAntenna))
+                    .content(TestUtil.convertObjectToJsonBytes(doorAntennaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -220,12 +238,15 @@ class DoorAntennaResourceIT {
         int databaseSizeBeforeUpdate = doorAntennaRepository.findAll().size();
         doorAntenna.setId(count.incrementAndGet());
 
+        // Create the DoorAntenna
+        DoorAntennaDTO doorAntennaDTO = doorAntennaMapper.toDto(doorAntenna);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDoorAntennaMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(doorAntenna))
+                    .content(TestUtil.convertObjectToJsonBytes(doorAntennaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -240,9 +261,12 @@ class DoorAntennaResourceIT {
         int databaseSizeBeforeUpdate = doorAntennaRepository.findAll().size();
         doorAntenna.setId(count.incrementAndGet());
 
+        // Create the DoorAntenna
+        DoorAntennaDTO doorAntennaDTO = doorAntennaMapper.toDto(doorAntenna);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDoorAntennaMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(doorAntenna)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(doorAntennaDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the DoorAntenna in the database
@@ -314,12 +338,15 @@ class DoorAntennaResourceIT {
         int databaseSizeBeforeUpdate = doorAntennaRepository.findAll().size();
         doorAntenna.setId(count.incrementAndGet());
 
+        // Create the DoorAntenna
+        DoorAntennaDTO doorAntennaDTO = doorAntennaMapper.toDto(doorAntenna);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDoorAntennaMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, doorAntenna.getId())
+                patch(ENTITY_API_URL_ID, doorAntennaDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(doorAntenna))
+                    .content(TestUtil.convertObjectToJsonBytes(doorAntennaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -334,12 +361,15 @@ class DoorAntennaResourceIT {
         int databaseSizeBeforeUpdate = doorAntennaRepository.findAll().size();
         doorAntenna.setId(count.incrementAndGet());
 
+        // Create the DoorAntenna
+        DoorAntennaDTO doorAntennaDTO = doorAntennaMapper.toDto(doorAntenna);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDoorAntennaMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(doorAntenna))
+                    .content(TestUtil.convertObjectToJsonBytes(doorAntennaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -354,10 +384,13 @@ class DoorAntennaResourceIT {
         int databaseSizeBeforeUpdate = doorAntennaRepository.findAll().size();
         doorAntenna.setId(count.incrementAndGet());
 
+        // Create the DoorAntenna
+        DoorAntennaDTO doorAntennaDTO = doorAntennaMapper.toDto(doorAntenna);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDoorAntennaMockMvc
             .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(doorAntenna))
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(doorAntennaDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

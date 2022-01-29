@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.Location;
 import com.wms.uhfrfid.repository.LocationRepository;
+import com.wms.uhfrfid.service.dto.LocationDTO;
+import com.wms.uhfrfid.service.mapper.LocationMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,43 +23,44 @@ public class LocationService {
 
     private final LocationRepository locationRepository;
 
-    public LocationService(LocationRepository locationRepository) {
+    private final LocationMapper locationMapper;
+
+    public LocationService(LocationRepository locationRepository, LocationMapper locationMapper) {
         this.locationRepository = locationRepository;
+        this.locationMapper = locationMapper;
     }
 
     /**
      * Save a location.
      *
-     * @param location the entity to save.
+     * @param locationDTO the entity to save.
      * @return the persisted entity.
      */
-    public Location save(Location location) {
-        log.debug("Request to save Location : {}", location);
-        return locationRepository.save(location);
+    public LocationDTO save(LocationDTO locationDTO) {
+        log.debug("Request to save Location : {}", locationDTO);
+        Location location = locationMapper.toEntity(locationDTO);
+        location = locationRepository.save(location);
+        return locationMapper.toDto(location);
     }
 
     /**
      * Partially update a location.
      *
-     * @param location the entity to update partially.
+     * @param locationDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Location> partialUpdate(Location location) {
-        log.debug("Request to partially update Location : {}", location);
+    public Optional<LocationDTO> partialUpdate(LocationDTO locationDTO) {
+        log.debug("Request to partially update Location : {}", locationDTO);
 
         return locationRepository
-            .findById(location.getId())
+            .findById(locationDTO.getId())
             .map(existingLocation -> {
-                if (location.getName() != null) {
-                    existingLocation.setName(location.getName());
-                }
-                if (location.getNote() != null) {
-                    existingLocation.setNote(location.getNote());
-                }
+                locationMapper.partialUpdate(existingLocation, locationDTO);
 
                 return existingLocation;
             })
-            .map(locationRepository::save);
+            .map(locationRepository::save)
+            .map(locationMapper::toDto);
     }
 
     /**
@@ -67,9 +70,9 @@ public class LocationService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Location> findAll(Pageable pageable) {
+    public Page<LocationDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Locations");
-        return locationRepository.findAll(pageable);
+        return locationRepository.findAll(pageable).map(locationMapper::toDto);
     }
 
     /**
@@ -79,9 +82,9 @@ public class LocationService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Location> findOne(Long id) {
+    public Optional<LocationDTO> findOne(Long id) {
         log.debug("Request to get Location : {}", id);
-        return locationRepository.findById(id);
+        return locationRepository.findById(id).map(locationMapper::toDto);
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.wms.uhfrfid.web.rest;
 
-import com.wms.uhfrfid.domain.UHFRFIDReader;
 import com.wms.uhfrfid.repository.UHFRFIDReaderRepository;
 import com.wms.uhfrfid.service.UHFRFIDReaderService;
+import com.wms.uhfrfid.service.dto.UHFRFIDReaderDTO;
 import com.wms.uhfrfid.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,17 +51,18 @@ public class UHFRFIDReaderResource {
     /**
      * {@code POST  /uhfrfid-readers} : Create a new uHFRFIDReader.
      *
-     * @param uHFRFIDReader the uHFRFIDReader to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new uHFRFIDReader, or with status {@code 400 (Bad Request)} if the uHFRFIDReader has already an ID.
+     * @param uHFRFIDReaderDTO the uHFRFIDReaderDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new uHFRFIDReaderDTO, or with status {@code 400 (Bad Request)} if the uHFRFIDReader has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/uhfrfid-readers")
-    public ResponseEntity<UHFRFIDReader> createUHFRFIDReader(@Valid @RequestBody UHFRFIDReader uHFRFIDReader) throws URISyntaxException {
-        log.debug("REST request to save UHFRFIDReader : {}", uHFRFIDReader);
-        if (uHFRFIDReader.getId() != null) {
+    public ResponseEntity<UHFRFIDReaderDTO> createUHFRFIDReader(@Valid @RequestBody UHFRFIDReaderDTO uHFRFIDReaderDTO)
+        throws URISyntaxException {
+        log.debug("REST request to save UHFRFIDReader : {}", uHFRFIDReaderDTO);
+        if (uHFRFIDReaderDTO.getId() != null) {
             throw new BadRequestAlertException("A new uHFRFIDReader cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        UHFRFIDReader result = uHFRFIDReaderService.save(uHFRFIDReader);
+        UHFRFIDReaderDTO result = uHFRFIDReaderService.save(uHFRFIDReaderDTO);
         return ResponseEntity
             .created(new URI("/api/uhfrfid-readers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -71,23 +72,23 @@ public class UHFRFIDReaderResource {
     /**
      * {@code PUT  /uhfrfid-readers/:id} : Updates an existing uHFRFIDReader.
      *
-     * @param id the id of the uHFRFIDReader to save.
-     * @param uHFRFIDReader the uHFRFIDReader to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated uHFRFIDReader,
-     * or with status {@code 400 (Bad Request)} if the uHFRFIDReader is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the uHFRFIDReader couldn't be updated.
+     * @param id the id of the uHFRFIDReaderDTO to save.
+     * @param uHFRFIDReaderDTO the uHFRFIDReaderDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated uHFRFIDReaderDTO,
+     * or with status {@code 400 (Bad Request)} if the uHFRFIDReaderDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the uHFRFIDReaderDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/uhfrfid-readers/{id}")
-    public ResponseEntity<UHFRFIDReader> updateUHFRFIDReader(
+    public ResponseEntity<UHFRFIDReaderDTO> updateUHFRFIDReader(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody UHFRFIDReader uHFRFIDReader
+        @Valid @RequestBody UHFRFIDReaderDTO uHFRFIDReaderDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update UHFRFIDReader : {}, {}", id, uHFRFIDReader);
-        if (uHFRFIDReader.getId() == null) {
+        log.debug("REST request to update UHFRFIDReader : {}, {}", id, uHFRFIDReaderDTO);
+        if (uHFRFIDReaderDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, uHFRFIDReader.getId())) {
+        if (!Objects.equals(id, uHFRFIDReaderDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -95,34 +96,34 @@ public class UHFRFIDReaderResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        UHFRFIDReader result = uHFRFIDReaderService.save(uHFRFIDReader);
+        UHFRFIDReaderDTO result = uHFRFIDReaderService.save(uHFRFIDReaderDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, uHFRFIDReader.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, uHFRFIDReaderDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /uhfrfid-readers/:id} : Partial updates given fields of an existing uHFRFIDReader, field will ignore if it is null
      *
-     * @param id the id of the uHFRFIDReader to save.
-     * @param uHFRFIDReader the uHFRFIDReader to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated uHFRFIDReader,
-     * or with status {@code 400 (Bad Request)} if the uHFRFIDReader is not valid,
-     * or with status {@code 404 (Not Found)} if the uHFRFIDReader is not found,
-     * or with status {@code 500 (Internal Server Error)} if the uHFRFIDReader couldn't be updated.
+     * @param id the id of the uHFRFIDReaderDTO to save.
+     * @param uHFRFIDReaderDTO the uHFRFIDReaderDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated uHFRFIDReaderDTO,
+     * or with status {@code 400 (Bad Request)} if the uHFRFIDReaderDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the uHFRFIDReaderDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the uHFRFIDReaderDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/uhfrfid-readers/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<UHFRFIDReader> partialUpdateUHFRFIDReader(
+    public ResponseEntity<UHFRFIDReaderDTO> partialUpdateUHFRFIDReader(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody UHFRFIDReader uHFRFIDReader
+        @NotNull @RequestBody UHFRFIDReaderDTO uHFRFIDReaderDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update UHFRFIDReader partially : {}, {}", id, uHFRFIDReader);
-        if (uHFRFIDReader.getId() == null) {
+        log.debug("REST request to partial update UHFRFIDReader partially : {}, {}", id, uHFRFIDReaderDTO);
+        if (uHFRFIDReaderDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, uHFRFIDReader.getId())) {
+        if (!Objects.equals(id, uHFRFIDReaderDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -130,11 +131,11 @@ public class UHFRFIDReaderResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<UHFRFIDReader> result = uHFRFIDReaderService.partialUpdate(uHFRFIDReader);
+        Optional<UHFRFIDReaderDTO> result = uHFRFIDReaderService.partialUpdate(uHFRFIDReaderDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, uHFRFIDReader.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, uHFRFIDReaderDTO.getId().toString())
         );
     }
 
@@ -145,9 +146,9 @@ public class UHFRFIDReaderResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of uHFRFIDReaders in body.
      */
     @GetMapping("/uhfrfid-readers")
-    public ResponseEntity<List<UHFRFIDReader>> getAllUHFRFIDReaders(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<UHFRFIDReaderDTO>> getAllUHFRFIDReaders(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of UHFRFIDReaders");
-        Page<UHFRFIDReader> page = uHFRFIDReaderService.findAll(pageable);
+        Page<UHFRFIDReaderDTO> page = uHFRFIDReaderService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -155,20 +156,20 @@ public class UHFRFIDReaderResource {
     /**
      * {@code GET  /uhfrfid-readers/:id} : get the "id" uHFRFIDReader.
      *
-     * @param id the id of the uHFRFIDReader to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the uHFRFIDReader, or with status {@code 404 (Not Found)}.
+     * @param id the id of the uHFRFIDReaderDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the uHFRFIDReaderDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/uhfrfid-readers/{id}")
-    public ResponseEntity<UHFRFIDReader> getUHFRFIDReader(@PathVariable Long id) {
+    public ResponseEntity<UHFRFIDReaderDTO> getUHFRFIDReader(@PathVariable Long id) {
         log.debug("REST request to get UHFRFIDReader : {}", id);
-        Optional<UHFRFIDReader> uHFRFIDReader = uHFRFIDReaderService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(uHFRFIDReader);
+        Optional<UHFRFIDReaderDTO> uHFRFIDReaderDTO = uHFRFIDReaderService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(uHFRFIDReaderDTO);
     }
 
     /**
      * {@code DELETE  /uhfrfid-readers/:id} : delete the "id" uHFRFIDReader.
      *
-     * @param id the id of the uHFRFIDReader to delete.
+     * @param id the id of the uHFRFIDReaderDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/uhfrfid-readers/{id}")

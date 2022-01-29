@@ -1,8 +1,8 @@
 package com.wms.uhfrfid.web.rest;
 
-import com.wms.uhfrfid.domain.DeliveryItemProduct;
 import com.wms.uhfrfid.repository.DeliveryItemProductRepository;
 import com.wms.uhfrfid.service.DeliveryItemProductService;
+import com.wms.uhfrfid.service.dto.DeliveryItemProductDTO;
 import com.wms.uhfrfid.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -54,18 +54,19 @@ public class DeliveryItemProductResource {
     /**
      * {@code POST  /delivery-item-products} : Create a new deliveryItemProduct.
      *
-     * @param deliveryItemProduct the deliveryItemProduct to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new deliveryItemProduct, or with status {@code 400 (Bad Request)} if the deliveryItemProduct has already an ID.
+     * @param deliveryItemProductDTO the deliveryItemProductDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new deliveryItemProductDTO, or with status {@code 400 (Bad Request)} if the deliveryItemProduct has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/delivery-item-products")
-    public ResponseEntity<DeliveryItemProduct> createDeliveryItemProduct(@Valid @RequestBody DeliveryItemProduct deliveryItemProduct)
-        throws URISyntaxException {
-        log.debug("REST request to save DeliveryItemProduct : {}", deliveryItemProduct);
-        if (deliveryItemProduct.getId() != null) {
+    public ResponseEntity<DeliveryItemProductDTO> createDeliveryItemProduct(
+        @Valid @RequestBody DeliveryItemProductDTO deliveryItemProductDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to save DeliveryItemProduct : {}", deliveryItemProductDTO);
+        if (deliveryItemProductDTO.getId() != null) {
             throw new BadRequestAlertException("A new deliveryItemProduct cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        DeliveryItemProduct result = deliveryItemProductService.save(deliveryItemProduct);
+        DeliveryItemProductDTO result = deliveryItemProductService.save(deliveryItemProductDTO);
         return ResponseEntity
             .created(new URI("/api/delivery-item-products/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -75,23 +76,23 @@ public class DeliveryItemProductResource {
     /**
      * {@code PUT  /delivery-item-products/:id} : Updates an existing deliveryItemProduct.
      *
-     * @param id the id of the deliveryItemProduct to save.
-     * @param deliveryItemProduct the deliveryItemProduct to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated deliveryItemProduct,
-     * or with status {@code 400 (Bad Request)} if the deliveryItemProduct is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the deliveryItemProduct couldn't be updated.
+     * @param id the id of the deliveryItemProductDTO to save.
+     * @param deliveryItemProductDTO the deliveryItemProductDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated deliveryItemProductDTO,
+     * or with status {@code 400 (Bad Request)} if the deliveryItemProductDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the deliveryItemProductDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/delivery-item-products/{id}")
-    public ResponseEntity<DeliveryItemProduct> updateDeliveryItemProduct(
+    public ResponseEntity<DeliveryItemProductDTO> updateDeliveryItemProduct(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody DeliveryItemProduct deliveryItemProduct
+        @Valid @RequestBody DeliveryItemProductDTO deliveryItemProductDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update DeliveryItemProduct : {}, {}", id, deliveryItemProduct);
-        if (deliveryItemProduct.getId() == null) {
+        log.debug("REST request to update DeliveryItemProduct : {}, {}", id, deliveryItemProductDTO);
+        if (deliveryItemProductDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, deliveryItemProduct.getId())) {
+        if (!Objects.equals(id, deliveryItemProductDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -99,34 +100,34 @@ public class DeliveryItemProductResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        DeliveryItemProduct result = deliveryItemProductService.save(deliveryItemProduct);
+        DeliveryItemProductDTO result = deliveryItemProductService.save(deliveryItemProductDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, deliveryItemProduct.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, deliveryItemProductDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /delivery-item-products/:id} : Partial updates given fields of an existing deliveryItemProduct, field will ignore if it is null
      *
-     * @param id the id of the deliveryItemProduct to save.
-     * @param deliveryItemProduct the deliveryItemProduct to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated deliveryItemProduct,
-     * or with status {@code 400 (Bad Request)} if the deliveryItemProduct is not valid,
-     * or with status {@code 404 (Not Found)} if the deliveryItemProduct is not found,
-     * or with status {@code 500 (Internal Server Error)} if the deliveryItemProduct couldn't be updated.
+     * @param id the id of the deliveryItemProductDTO to save.
+     * @param deliveryItemProductDTO the deliveryItemProductDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated deliveryItemProductDTO,
+     * or with status {@code 400 (Bad Request)} if the deliveryItemProductDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the deliveryItemProductDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the deliveryItemProductDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/delivery-item-products/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<DeliveryItemProduct> partialUpdateDeliveryItemProduct(
+    public ResponseEntity<DeliveryItemProductDTO> partialUpdateDeliveryItemProduct(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody DeliveryItemProduct deliveryItemProduct
+        @NotNull @RequestBody DeliveryItemProductDTO deliveryItemProductDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update DeliveryItemProduct partially : {}, {}", id, deliveryItemProduct);
-        if (deliveryItemProduct.getId() == null) {
+        log.debug("REST request to partial update DeliveryItemProduct partially : {}, {}", id, deliveryItemProductDTO);
+        if (deliveryItemProductDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, deliveryItemProduct.getId())) {
+        if (!Objects.equals(id, deliveryItemProductDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -134,11 +135,11 @@ public class DeliveryItemProductResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<DeliveryItemProduct> result = deliveryItemProductService.partialUpdate(deliveryItemProduct);
+        Optional<DeliveryItemProductDTO> result = deliveryItemProductService.partialUpdate(deliveryItemProductDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, deliveryItemProduct.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, deliveryItemProductDTO.getId().toString())
         );
     }
 
@@ -149,11 +150,11 @@ public class DeliveryItemProductResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of deliveryItemProducts in body.
      */
     @GetMapping("/delivery-item-products")
-    public ResponseEntity<List<DeliveryItemProduct>> getAllDeliveryItemProducts(
+    public ResponseEntity<List<DeliveryItemProductDTO>> getAllDeliveryItemProducts(
         @org.springdoc.api.annotations.ParameterObject Pageable pageable
     ) {
         log.debug("REST request to get a page of DeliveryItemProducts");
-        Page<DeliveryItemProduct> page = deliveryItemProductService.findAll(pageable);
+        Page<DeliveryItemProductDTO> page = deliveryItemProductService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -161,20 +162,20 @@ public class DeliveryItemProductResource {
     /**
      * {@code GET  /delivery-item-products/:id} : get the "id" deliveryItemProduct.
      *
-     * @param id the id of the deliveryItemProduct to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the deliveryItemProduct, or with status {@code 404 (Not Found)}.
+     * @param id the id of the deliveryItemProductDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the deliveryItemProductDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/delivery-item-products/{id}")
-    public ResponseEntity<DeliveryItemProduct> getDeliveryItemProduct(@PathVariable Long id) {
+    public ResponseEntity<DeliveryItemProductDTO> getDeliveryItemProduct(@PathVariable Long id) {
         log.debug("REST request to get DeliveryItemProduct : {}", id);
-        Optional<DeliveryItemProduct> deliveryItemProduct = deliveryItemProductService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(deliveryItemProduct);
+        Optional<DeliveryItemProductDTO> deliveryItemProductDTO = deliveryItemProductService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(deliveryItemProductDTO);
     }
 
     /**
      * {@code DELETE  /delivery-item-products/:id} : delete the "id" deliveryItemProduct.
      *
-     * @param id the id of the deliveryItemProduct to delete.
+     * @param id the id of the deliveryItemProductDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/delivery-item-products/{id}")

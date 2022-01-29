@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.DeliveryItemProduct;
 import com.wms.uhfrfid.repository.DeliveryItemProductRepository;
+import com.wms.uhfrfid.service.dto.DeliveryItemProductDTO;
+import com.wms.uhfrfid.service.mapper.DeliveryItemProductMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,40 +23,47 @@ public class DeliveryItemProductService {
 
     private final DeliveryItemProductRepository deliveryItemProductRepository;
 
-    public DeliveryItemProductService(DeliveryItemProductRepository deliveryItemProductRepository) {
+    private final DeliveryItemProductMapper deliveryItemProductMapper;
+
+    public DeliveryItemProductService(
+        DeliveryItemProductRepository deliveryItemProductRepository,
+        DeliveryItemProductMapper deliveryItemProductMapper
+    ) {
         this.deliveryItemProductRepository = deliveryItemProductRepository;
+        this.deliveryItemProductMapper = deliveryItemProductMapper;
     }
 
     /**
      * Save a deliveryItemProduct.
      *
-     * @param deliveryItemProduct the entity to save.
+     * @param deliveryItemProductDTO the entity to save.
      * @return the persisted entity.
      */
-    public DeliveryItemProduct save(DeliveryItemProduct deliveryItemProduct) {
-        log.debug("Request to save DeliveryItemProduct : {}", deliveryItemProduct);
-        return deliveryItemProductRepository.save(deliveryItemProduct);
+    public DeliveryItemProductDTO save(DeliveryItemProductDTO deliveryItemProductDTO) {
+        log.debug("Request to save DeliveryItemProduct : {}", deliveryItemProductDTO);
+        DeliveryItemProduct deliveryItemProduct = deliveryItemProductMapper.toEntity(deliveryItemProductDTO);
+        deliveryItemProduct = deliveryItemProductRepository.save(deliveryItemProduct);
+        return deliveryItemProductMapper.toDto(deliveryItemProduct);
     }
 
     /**
      * Partially update a deliveryItemProduct.
      *
-     * @param deliveryItemProduct the entity to update partially.
+     * @param deliveryItemProductDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<DeliveryItemProduct> partialUpdate(DeliveryItemProduct deliveryItemProduct) {
-        log.debug("Request to partially update DeliveryItemProduct : {}", deliveryItemProduct);
+    public Optional<DeliveryItemProductDTO> partialUpdate(DeliveryItemProductDTO deliveryItemProductDTO) {
+        log.debug("Request to partially update DeliveryItemProduct : {}", deliveryItemProductDTO);
 
         return deliveryItemProductRepository
-            .findById(deliveryItemProduct.getId())
+            .findById(deliveryItemProductDTO.getId())
             .map(existingDeliveryItemProduct -> {
-                if (deliveryItemProduct.getRfidTAG() != null) {
-                    existingDeliveryItemProduct.setRfidTAG(deliveryItemProduct.getRfidTAG());
-                }
+                deliveryItemProductMapper.partialUpdate(existingDeliveryItemProduct, deliveryItemProductDTO);
 
                 return existingDeliveryItemProduct;
             })
-            .map(deliveryItemProductRepository::save);
+            .map(deliveryItemProductRepository::save)
+            .map(deliveryItemProductMapper::toDto);
     }
 
     /**
@@ -64,9 +73,9 @@ public class DeliveryItemProductService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<DeliveryItemProduct> findAll(Pageable pageable) {
+    public Page<DeliveryItemProductDTO> findAll(Pageable pageable) {
         log.debug("Request to get all DeliveryItemProducts");
-        return deliveryItemProductRepository.findAll(pageable);
+        return deliveryItemProductRepository.findAll(pageable).map(deliveryItemProductMapper::toDto);
     }
 
     /**
@@ -76,9 +85,9 @@ public class DeliveryItemProductService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<DeliveryItemProduct> findOne(Long id) {
+    public Optional<DeliveryItemProductDTO> findOne(Long id) {
         log.debug("Request to get DeliveryItemProduct : {}", id);
-        return deliveryItemProductRepository.findById(id);
+        return deliveryItemProductRepository.findById(id).map(deliveryItemProductMapper::toDto);
     }
 
     /**

@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.Container;
 import com.wms.uhfrfid.repository.ContainerRepository;
+import com.wms.uhfrfid.service.dto.ContainerDTO;
+import com.wms.uhfrfid.service.mapper.ContainerMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,43 +23,44 @@ public class ContainerService {
 
     private final ContainerRepository containerRepository;
 
-    public ContainerService(ContainerRepository containerRepository) {
+    private final ContainerMapper containerMapper;
+
+    public ContainerService(ContainerRepository containerRepository, ContainerMapper containerMapper) {
         this.containerRepository = containerRepository;
+        this.containerMapper = containerMapper;
     }
 
     /**
      * Save a container.
      *
-     * @param container the entity to save.
+     * @param containerDTO the entity to save.
      * @return the persisted entity.
      */
-    public Container save(Container container) {
-        log.debug("Request to save Container : {}", container);
-        return containerRepository.save(container);
+    public ContainerDTO save(ContainerDTO containerDTO) {
+        log.debug("Request to save Container : {}", containerDTO);
+        Container container = containerMapper.toEntity(containerDTO);
+        container = containerRepository.save(container);
+        return containerMapper.toDto(container);
     }
 
     /**
      * Partially update a container.
      *
-     * @param container the entity to update partially.
+     * @param containerDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Container> partialUpdate(Container container) {
-        log.debug("Request to partially update Container : {}", container);
+    public Optional<ContainerDTO> partialUpdate(ContainerDTO containerDTO) {
+        log.debug("Request to partially update Container : {}", containerDTO);
 
         return containerRepository
-            .findById(container.getId())
+            .findById(containerDTO.getId())
             .map(existingContainer -> {
-                if (container.getName() != null) {
-                    existingContainer.setName(container.getName());
-                }
-                if (container.getDescription() != null) {
-                    existingContainer.setDescription(container.getDescription());
-                }
+                containerMapper.partialUpdate(existingContainer, containerDTO);
 
                 return existingContainer;
             })
-            .map(containerRepository::save);
+            .map(containerRepository::save)
+            .map(containerMapper::toDto);
     }
 
     /**
@@ -67,9 +70,9 @@ public class ContainerService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Container> findAll(Pageable pageable) {
+    public Page<ContainerDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Containers");
-        return containerRepository.findAll(pageable);
+        return containerRepository.findAll(pageable).map(containerMapper::toDto);
     }
 
     /**
@@ -79,9 +82,9 @@ public class ContainerService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Container> findOne(Long id) {
+    public Optional<ContainerDTO> findOne(Long id) {
         log.debug("Request to get Container : {}", id);
-        return containerRepository.findById(id);
+        return containerRepository.findById(id).map(containerMapper::toDto);
     }
 
     /**

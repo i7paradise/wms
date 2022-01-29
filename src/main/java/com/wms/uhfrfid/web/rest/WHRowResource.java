@@ -1,8 +1,8 @@
 package com.wms.uhfrfid.web.rest;
 
-import com.wms.uhfrfid.domain.WHRow;
 import com.wms.uhfrfid.repository.WHRowRepository;
 import com.wms.uhfrfid.service.WHRowService;
+import com.wms.uhfrfid.service.dto.WHRowDTO;
 import com.wms.uhfrfid.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,17 +51,17 @@ public class WHRowResource {
     /**
      * {@code POST  /wh-rows} : Create a new wHRow.
      *
-     * @param wHRow the wHRow to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new wHRow, or with status {@code 400 (Bad Request)} if the wHRow has already an ID.
+     * @param wHRowDTO the wHRowDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new wHRowDTO, or with status {@code 400 (Bad Request)} if the wHRow has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/wh-rows")
-    public ResponseEntity<WHRow> createWHRow(@Valid @RequestBody WHRow wHRow) throws URISyntaxException {
-        log.debug("REST request to save WHRow : {}", wHRow);
-        if (wHRow.getId() != null) {
+    public ResponseEntity<WHRowDTO> createWHRow(@Valid @RequestBody WHRowDTO wHRowDTO) throws URISyntaxException {
+        log.debug("REST request to save WHRow : {}", wHRowDTO);
+        if (wHRowDTO.getId() != null) {
             throw new BadRequestAlertException("A new wHRow cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        WHRow result = wHRowService.save(wHRow);
+        WHRowDTO result = wHRowService.save(wHRowDTO);
         return ResponseEntity
             .created(new URI("/api/wh-rows/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -71,21 +71,23 @@ public class WHRowResource {
     /**
      * {@code PUT  /wh-rows/:id} : Updates an existing wHRow.
      *
-     * @param id the id of the wHRow to save.
-     * @param wHRow the wHRow to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated wHRow,
-     * or with status {@code 400 (Bad Request)} if the wHRow is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the wHRow couldn't be updated.
+     * @param id the id of the wHRowDTO to save.
+     * @param wHRowDTO the wHRowDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated wHRowDTO,
+     * or with status {@code 400 (Bad Request)} if the wHRowDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the wHRowDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/wh-rows/{id}")
-    public ResponseEntity<WHRow> updateWHRow(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody WHRow wHRow)
-        throws URISyntaxException {
-        log.debug("REST request to update WHRow : {}, {}", id, wHRow);
-        if (wHRow.getId() == null) {
+    public ResponseEntity<WHRowDTO> updateWHRow(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody WHRowDTO wHRowDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to update WHRow : {}, {}", id, wHRowDTO);
+        if (wHRowDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, wHRow.getId())) {
+        if (!Objects.equals(id, wHRowDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -93,34 +95,34 @@ public class WHRowResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        WHRow result = wHRowService.save(wHRow);
+        WHRowDTO result = wHRowService.save(wHRowDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, wHRow.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, wHRowDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /wh-rows/:id} : Partial updates given fields of an existing wHRow, field will ignore if it is null
      *
-     * @param id the id of the wHRow to save.
-     * @param wHRow the wHRow to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated wHRow,
-     * or with status {@code 400 (Bad Request)} if the wHRow is not valid,
-     * or with status {@code 404 (Not Found)} if the wHRow is not found,
-     * or with status {@code 500 (Internal Server Error)} if the wHRow couldn't be updated.
+     * @param id the id of the wHRowDTO to save.
+     * @param wHRowDTO the wHRowDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated wHRowDTO,
+     * or with status {@code 400 (Bad Request)} if the wHRowDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the wHRowDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the wHRowDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/wh-rows/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<WHRow> partialUpdateWHRow(
+    public ResponseEntity<WHRowDTO> partialUpdateWHRow(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody WHRow wHRow
+        @NotNull @RequestBody WHRowDTO wHRowDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update WHRow partially : {}, {}", id, wHRow);
-        if (wHRow.getId() == null) {
+        log.debug("REST request to partial update WHRow partially : {}, {}", id, wHRowDTO);
+        if (wHRowDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, wHRow.getId())) {
+        if (!Objects.equals(id, wHRowDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -128,11 +130,11 @@ public class WHRowResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<WHRow> result = wHRowService.partialUpdate(wHRow);
+        Optional<WHRowDTO> result = wHRowService.partialUpdate(wHRowDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, wHRow.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, wHRowDTO.getId().toString())
         );
     }
 
@@ -143,9 +145,9 @@ public class WHRowResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of wHRows in body.
      */
     @GetMapping("/wh-rows")
-    public ResponseEntity<List<WHRow>> getAllWHRows(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<WHRowDTO>> getAllWHRows(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of WHRows");
-        Page<WHRow> page = wHRowService.findAll(pageable);
+        Page<WHRowDTO> page = wHRowService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -153,20 +155,20 @@ public class WHRowResource {
     /**
      * {@code GET  /wh-rows/:id} : get the "id" wHRow.
      *
-     * @param id the id of the wHRow to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the wHRow, or with status {@code 404 (Not Found)}.
+     * @param id the id of the wHRowDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the wHRowDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/wh-rows/{id}")
-    public ResponseEntity<WHRow> getWHRow(@PathVariable Long id) {
+    public ResponseEntity<WHRowDTO> getWHRow(@PathVariable Long id) {
         log.debug("REST request to get WHRow : {}", id);
-        Optional<WHRow> wHRow = wHRowService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(wHRow);
+        Optional<WHRowDTO> wHRowDTO = wHRowService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(wHRowDTO);
     }
 
     /**
      * {@code DELETE  /wh-rows/:id} : delete the "id" wHRow.
      *
-     * @param id the id of the wHRow to delete.
+     * @param id the id of the wHRowDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/wh-rows/{id}")

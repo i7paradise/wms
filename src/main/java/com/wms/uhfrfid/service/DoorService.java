@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.Door;
 import com.wms.uhfrfid.repository.DoorRepository;
+import com.wms.uhfrfid.service.dto.DoorDTO;
+import com.wms.uhfrfid.service.mapper.DoorMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,40 +23,44 @@ public class DoorService {
 
     private final DoorRepository doorRepository;
 
-    public DoorService(DoorRepository doorRepository) {
+    private final DoorMapper doorMapper;
+
+    public DoorService(DoorRepository doorRepository, DoorMapper doorMapper) {
         this.doorRepository = doorRepository;
+        this.doorMapper = doorMapper;
     }
 
     /**
      * Save a door.
      *
-     * @param door the entity to save.
+     * @param doorDTO the entity to save.
      * @return the persisted entity.
      */
-    public Door save(Door door) {
-        log.debug("Request to save Door : {}", door);
-        return doorRepository.save(door);
+    public DoorDTO save(DoorDTO doorDTO) {
+        log.debug("Request to save Door : {}", doorDTO);
+        Door door = doorMapper.toEntity(doorDTO);
+        door = doorRepository.save(door);
+        return doorMapper.toDto(door);
     }
 
     /**
      * Partially update a door.
      *
-     * @param door the entity to update partially.
+     * @param doorDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Door> partialUpdate(Door door) {
-        log.debug("Request to partially update Door : {}", door);
+    public Optional<DoorDTO> partialUpdate(DoorDTO doorDTO) {
+        log.debug("Request to partially update Door : {}", doorDTO);
 
         return doorRepository
-            .findById(door.getId())
+            .findById(doorDTO.getId())
             .map(existingDoor -> {
-                if (door.getName() != null) {
-                    existingDoor.setName(door.getName());
-                }
+                doorMapper.partialUpdate(existingDoor, doorDTO);
 
                 return existingDoor;
             })
-            .map(doorRepository::save);
+            .map(doorRepository::save)
+            .map(doorMapper::toDto);
     }
 
     /**
@@ -64,9 +70,9 @@ public class DoorService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Door> findAll(Pageable pageable) {
+    public Page<DoorDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Doors");
-        return doorRepository.findAll(pageable);
+        return doorRepository.findAll(pageable).map(doorMapper::toDto);
     }
 
     /**
@@ -76,9 +82,9 @@ public class DoorService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Door> findOne(Long id) {
+    public Optional<DoorDTO> findOne(Long id) {
         log.debug("Request to get Door : {}", id);
-        return doorRepository.findById(id);
+        return doorRepository.findById(id).map(doorMapper::toDto);
     }
 
     /**

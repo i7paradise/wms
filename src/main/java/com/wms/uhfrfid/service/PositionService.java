@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.Position;
 import com.wms.uhfrfid.repository.PositionRepository;
+import com.wms.uhfrfid.service.dto.PositionDTO;
+import com.wms.uhfrfid.service.mapper.PositionMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,43 +23,44 @@ public class PositionService {
 
     private final PositionRepository positionRepository;
 
-    public PositionService(PositionRepository positionRepository) {
+    private final PositionMapper positionMapper;
+
+    public PositionService(PositionRepository positionRepository, PositionMapper positionMapper) {
         this.positionRepository = positionRepository;
+        this.positionMapper = positionMapper;
     }
 
     /**
      * Save a position.
      *
-     * @param position the entity to save.
+     * @param positionDTO the entity to save.
      * @return the persisted entity.
      */
-    public Position save(Position position) {
-        log.debug("Request to save Position : {}", position);
-        return positionRepository.save(position);
+    public PositionDTO save(PositionDTO positionDTO) {
+        log.debug("Request to save Position : {}", positionDTO);
+        Position position = positionMapper.toEntity(positionDTO);
+        position = positionRepository.save(position);
+        return positionMapper.toDto(position);
     }
 
     /**
      * Partially update a position.
      *
-     * @param position the entity to update partially.
+     * @param positionDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Position> partialUpdate(Position position) {
-        log.debug("Request to partially update Position : {}", position);
+    public Optional<PositionDTO> partialUpdate(PositionDTO positionDTO) {
+        log.debug("Request to partially update Position : {}", positionDTO);
 
         return positionRepository
-            .findById(position.getId())
+            .findById(positionDTO.getId())
             .map(existingPosition -> {
-                if (position.getName() != null) {
-                    existingPosition.setName(position.getName());
-                }
-                if (position.getNote() != null) {
-                    existingPosition.setNote(position.getNote());
-                }
+                positionMapper.partialUpdate(existingPosition, positionDTO);
 
                 return existingPosition;
             })
-            .map(positionRepository::save);
+            .map(positionRepository::save)
+            .map(positionMapper::toDto);
     }
 
     /**
@@ -67,9 +70,9 @@ public class PositionService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Position> findAll(Pageable pageable) {
+    public Page<PositionDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Positions");
-        return positionRepository.findAll(pageable);
+        return positionRepository.findAll(pageable).map(positionMapper::toDto);
     }
 
     /**
@@ -79,9 +82,9 @@ public class PositionService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Position> findOne(Long id) {
+    public Optional<PositionDTO> findOne(Long id) {
         log.debug("Request to get Position : {}", id);
-        return positionRepository.findById(id);
+        return positionRepository.findById(id).map(positionMapper::toDto);
     }
 
     /**

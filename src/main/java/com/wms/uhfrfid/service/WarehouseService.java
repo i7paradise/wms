@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.Warehouse;
 import com.wms.uhfrfid.repository.WarehouseRepository;
+import com.wms.uhfrfid.service.dto.WarehouseDTO;
+import com.wms.uhfrfid.service.mapper.WarehouseMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,49 +23,44 @@ public class WarehouseService {
 
     private final WarehouseRepository warehouseRepository;
 
-    public WarehouseService(WarehouseRepository warehouseRepository) {
+    private final WarehouseMapper warehouseMapper;
+
+    public WarehouseService(WarehouseRepository warehouseRepository, WarehouseMapper warehouseMapper) {
         this.warehouseRepository = warehouseRepository;
+        this.warehouseMapper = warehouseMapper;
     }
 
     /**
      * Save a warehouse.
      *
-     * @param warehouse the entity to save.
+     * @param warehouseDTO the entity to save.
      * @return the persisted entity.
      */
-    public Warehouse save(Warehouse warehouse) {
-        log.debug("Request to save Warehouse : {}", warehouse);
-        return warehouseRepository.save(warehouse);
+    public WarehouseDTO save(WarehouseDTO warehouseDTO) {
+        log.debug("Request to save Warehouse : {}", warehouseDTO);
+        Warehouse warehouse = warehouseMapper.toEntity(warehouseDTO);
+        warehouse = warehouseRepository.save(warehouse);
+        return warehouseMapper.toDto(warehouse);
     }
 
     /**
      * Partially update a warehouse.
      *
-     * @param warehouse the entity to update partially.
+     * @param warehouseDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Warehouse> partialUpdate(Warehouse warehouse) {
-        log.debug("Request to partially update Warehouse : {}", warehouse);
+    public Optional<WarehouseDTO> partialUpdate(WarehouseDTO warehouseDTO) {
+        log.debug("Request to partially update Warehouse : {}", warehouseDTO);
 
         return warehouseRepository
-            .findById(warehouse.getId())
+            .findById(warehouseDTO.getId())
             .map(existingWarehouse -> {
-                if (warehouse.getName() != null) {
-                    existingWarehouse.setName(warehouse.getName());
-                }
-                if (warehouse.getNote() != null) {
-                    existingWarehouse.setNote(warehouse.getNote());
-                }
-                if (warehouse.getPhone() != null) {
-                    existingWarehouse.setPhone(warehouse.getPhone());
-                }
-                if (warehouse.getContactPerson() != null) {
-                    existingWarehouse.setContactPerson(warehouse.getContactPerson());
-                }
+                warehouseMapper.partialUpdate(existingWarehouse, warehouseDTO);
 
                 return existingWarehouse;
             })
-            .map(warehouseRepository::save);
+            .map(warehouseRepository::save)
+            .map(warehouseMapper::toDto);
     }
 
     /**
@@ -73,9 +70,9 @@ public class WarehouseService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Warehouse> findAll(Pageable pageable) {
+    public Page<WarehouseDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Warehouses");
-        return warehouseRepository.findAll(pageable);
+        return warehouseRepository.findAll(pageable).map(warehouseMapper::toDto);
     }
 
     /**
@@ -85,9 +82,9 @@ public class WarehouseService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Warehouse> findOne(Long id) {
+    public Optional<WarehouseDTO> findOne(Long id) {
         log.debug("Request to get Warehouse : {}", id);
-        return warehouseRepository.findById(id);
+        return warehouseRepository.findById(id).map(warehouseMapper::toDto);
     }
 
     /**

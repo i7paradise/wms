@@ -227,4 +227,5 @@ relationship ManyToOne {
 }
 
 service * with serviceClass
+dto * with mapstruct
 paginate Warehouse, Area, Door, Location, WHRow, WHLevel, Position, Product, ProductCategory, Customer, DeliveryOrder, DeliveryOrderItem  with pagination

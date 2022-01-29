@@ -50,7 +50,7 @@
   ],
   "relationships": [],
   "entityTableName": "customer",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "infinite-scroll",
   "service": "serviceClass",
   "jpaMetamodelFiltering": false,

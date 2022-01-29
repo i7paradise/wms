@@ -3,7 +3,7 @@
   "fields": [],
   "relationships": [],
   "entityTableName": "company_user",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "infinite-scroll",
   "service": "serviceClass",
   "jpaMetamodelFiltering": false,

@@ -1,8 +1,8 @@
 package com.wms.uhfrfid.web.rest;
 
-import com.wms.uhfrfid.domain.Bay;
 import com.wms.uhfrfid.repository.BayRepository;
 import com.wms.uhfrfid.service.BayService;
+import com.wms.uhfrfid.service.dto.BayDTO;
 import com.wms.uhfrfid.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,17 +51,17 @@ public class BayResource {
     /**
      * {@code POST  /bays} : Create a new bay.
      *
-     * @param bay the bay to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new bay, or with status {@code 400 (Bad Request)} if the bay has already an ID.
+     * @param bayDTO the bayDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new bayDTO, or with status {@code 400 (Bad Request)} if the bay has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/bays")
-    public ResponseEntity<Bay> createBay(@Valid @RequestBody Bay bay) throws URISyntaxException {
-        log.debug("REST request to save Bay : {}", bay);
-        if (bay.getId() != null) {
+    public ResponseEntity<BayDTO> createBay(@Valid @RequestBody BayDTO bayDTO) throws URISyntaxException {
+        log.debug("REST request to save Bay : {}", bayDTO);
+        if (bayDTO.getId() != null) {
             throw new BadRequestAlertException("A new bay cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Bay result = bayService.save(bay);
+        BayDTO result = bayService.save(bayDTO);
         return ResponseEntity
             .created(new URI("/api/bays/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -71,21 +71,21 @@ public class BayResource {
     /**
      * {@code PUT  /bays/:id} : Updates an existing bay.
      *
-     * @param id the id of the bay to save.
-     * @param bay the bay to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated bay,
-     * or with status {@code 400 (Bad Request)} if the bay is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the bay couldn't be updated.
+     * @param id the id of the bayDTO to save.
+     * @param bayDTO the bayDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated bayDTO,
+     * or with status {@code 400 (Bad Request)} if the bayDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the bayDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/bays/{id}")
-    public ResponseEntity<Bay> updateBay(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Bay bay)
+    public ResponseEntity<BayDTO> updateBay(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody BayDTO bayDTO)
         throws URISyntaxException {
-        log.debug("REST request to update Bay : {}, {}", id, bay);
-        if (bay.getId() == null) {
+        log.debug("REST request to update Bay : {}, {}", id, bayDTO);
+        if (bayDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, bay.getId())) {
+        if (!Objects.equals(id, bayDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -93,32 +93,34 @@ public class BayResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Bay result = bayService.save(bay);
+        BayDTO result = bayService.save(bayDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bay.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bayDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /bays/:id} : Partial updates given fields of an existing bay, field will ignore if it is null
      *
-     * @param id the id of the bay to save.
-     * @param bay the bay to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated bay,
-     * or with status {@code 400 (Bad Request)} if the bay is not valid,
-     * or with status {@code 404 (Not Found)} if the bay is not found,
-     * or with status {@code 500 (Internal Server Error)} if the bay couldn't be updated.
+     * @param id the id of the bayDTO to save.
+     * @param bayDTO the bayDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated bayDTO,
+     * or with status {@code 400 (Bad Request)} if the bayDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the bayDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the bayDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/bays/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<Bay> partialUpdateBay(@PathVariable(value = "id", required = false) final Long id, @NotNull @RequestBody Bay bay)
-        throws URISyntaxException {
-        log.debug("REST request to partial update Bay partially : {}, {}", id, bay);
-        if (bay.getId() == null) {
+    public ResponseEntity<BayDTO> partialUpdateBay(
+        @PathVariable(value = "id", required = false) final Long id,
+        @NotNull @RequestBody BayDTO bayDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to partial update Bay partially : {}, {}", id, bayDTO);
+        if (bayDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, bay.getId())) {
+        if (!Objects.equals(id, bayDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -126,11 +128,11 @@ public class BayResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Bay> result = bayService.partialUpdate(bay);
+        Optional<BayDTO> result = bayService.partialUpdate(bayDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bay.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bayDTO.getId().toString())
         );
     }
 
@@ -141,9 +143,9 @@ public class BayResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of bays in body.
      */
     @GetMapping("/bays")
-    public ResponseEntity<List<Bay>> getAllBays(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<BayDTO>> getAllBays(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Bays");
-        Page<Bay> page = bayService.findAll(pageable);
+        Page<BayDTO> page = bayService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -151,20 +153,20 @@ public class BayResource {
     /**
      * {@code GET  /bays/:id} : get the "id" bay.
      *
-     * @param id the id of the bay to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the bay, or with status {@code 404 (Not Found)}.
+     * @param id the id of the bayDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the bayDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/bays/{id}")
-    public ResponseEntity<Bay> getBay(@PathVariable Long id) {
+    public ResponseEntity<BayDTO> getBay(@PathVariable Long id) {
         log.debug("REST request to get Bay : {}", id);
-        Optional<Bay> bay = bayService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(bay);
+        Optional<BayDTO> bayDTO = bayService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(bayDTO);
     }
 
     /**
      * {@code DELETE  /bays/:id} : delete the "id" bay.
      *
-     * @param id the id of the bay to delete.
+     * @param id the id of the bayDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/bays/{id}")

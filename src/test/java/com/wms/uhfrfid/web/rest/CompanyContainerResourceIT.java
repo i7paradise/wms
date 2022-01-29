@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.CompanyContainer;
 import com.wms.uhfrfid.repository.CompanyContainerRepository;
+import com.wms.uhfrfid.service.dto.CompanyContainerDTO;
+import com.wms.uhfrfid.service.mapper.CompanyContainerMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -43,6 +45,9 @@ class CompanyContainerResourceIT {
 
     @Autowired
     private CompanyContainerRepository companyContainerRepository;
+
+    @Autowired
+    private CompanyContainerMapper companyContainerMapper;
 
     @Autowired
     private EntityManager em;
@@ -84,9 +89,10 @@ class CompanyContainerResourceIT {
     void createCompanyContainer() throws Exception {
         int databaseSizeBeforeCreate = companyContainerRepository.findAll().size();
         // Create the CompanyContainer
+        CompanyContainerDTO companyContainerDTO = companyContainerMapper.toDto(companyContainer);
         restCompanyContainerMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyContainer))
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyContainerDTO))
             )
             .andExpect(status().isCreated());
 
@@ -103,13 +109,14 @@ class CompanyContainerResourceIT {
     void createCompanyContainerWithExistingId() throws Exception {
         // Create the CompanyContainer with an existing ID
         companyContainer.setId(1L);
+        CompanyContainerDTO companyContainerDTO = companyContainerMapper.toDto(companyContainer);
 
         int databaseSizeBeforeCreate = companyContainerRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restCompanyContainerMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyContainer))
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyContainerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -170,12 +177,13 @@ class CompanyContainerResourceIT {
         // Disconnect from session so that the updates on updatedCompanyContainer are not directly saved in db
         em.detach(updatedCompanyContainer);
         updatedCompanyContainer.rfidTag(UPDATED_RFID_TAG).color(UPDATED_COLOR);
+        CompanyContainerDTO companyContainerDTO = companyContainerMapper.toDto(updatedCompanyContainer);
 
         restCompanyContainerMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedCompanyContainer.getId())
+                put(ENTITY_API_URL_ID, companyContainerDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedCompanyContainer))
+                    .content(TestUtil.convertObjectToJsonBytes(companyContainerDTO))
             )
             .andExpect(status().isOk());
 
@@ -193,12 +201,15 @@ class CompanyContainerResourceIT {
         int databaseSizeBeforeUpdate = companyContainerRepository.findAll().size();
         companyContainer.setId(count.incrementAndGet());
 
+        // Create the CompanyContainer
+        CompanyContainerDTO companyContainerDTO = companyContainerMapper.toDto(companyContainer);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCompanyContainerMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, companyContainer.getId())
+                put(ENTITY_API_URL_ID, companyContainerDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(companyContainer))
+                    .content(TestUtil.convertObjectToJsonBytes(companyContainerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -213,12 +224,15 @@ class CompanyContainerResourceIT {
         int databaseSizeBeforeUpdate = companyContainerRepository.findAll().size();
         companyContainer.setId(count.incrementAndGet());
 
+        // Create the CompanyContainer
+        CompanyContainerDTO companyContainerDTO = companyContainerMapper.toDto(companyContainer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCompanyContainerMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(companyContainer))
+                    .content(TestUtil.convertObjectToJsonBytes(companyContainerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -233,10 +247,13 @@ class CompanyContainerResourceIT {
         int databaseSizeBeforeUpdate = companyContainerRepository.findAll().size();
         companyContainer.setId(count.incrementAndGet());
 
+        // Create the CompanyContainer
+        CompanyContainerDTO companyContainerDTO = companyContainerMapper.toDto(companyContainer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCompanyContainerMockMvc
             .perform(
-                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyContainer))
+                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyContainerDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 
@@ -309,12 +326,15 @@ class CompanyContainerResourceIT {
         int databaseSizeBeforeUpdate = companyContainerRepository.findAll().size();
         companyContainer.setId(count.incrementAndGet());
 
+        // Create the CompanyContainer
+        CompanyContainerDTO companyContainerDTO = companyContainerMapper.toDto(companyContainer);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCompanyContainerMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, companyContainer.getId())
+                patch(ENTITY_API_URL_ID, companyContainerDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(companyContainer))
+                    .content(TestUtil.convertObjectToJsonBytes(companyContainerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -329,12 +349,15 @@ class CompanyContainerResourceIT {
         int databaseSizeBeforeUpdate = companyContainerRepository.findAll().size();
         companyContainer.setId(count.incrementAndGet());
 
+        // Create the CompanyContainer
+        CompanyContainerDTO companyContainerDTO = companyContainerMapper.toDto(companyContainer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCompanyContainerMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(companyContainer))
+                    .content(TestUtil.convertObjectToJsonBytes(companyContainerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -349,12 +372,15 @@ class CompanyContainerResourceIT {
         int databaseSizeBeforeUpdate = companyContainerRepository.findAll().size();
         companyContainer.setId(count.incrementAndGet());
 
+        // Create the CompanyContainer
+        CompanyContainerDTO companyContainerDTO = companyContainerMapper.toDto(companyContainer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCompanyContainerMockMvc
             .perform(
                 patch(ENTITY_API_URL)
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(companyContainer))
+                    .content(TestUtil.convertObjectToJsonBytes(companyContainerDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

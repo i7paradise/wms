@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.Door;
 import com.wms.uhfrfid.repository.DoorRepository;
+import com.wms.uhfrfid.service.dto.DoorDTO;
+import com.wms.uhfrfid.service.mapper.DoorMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -40,6 +42,9 @@ class DoorResourceIT {
 
     @Autowired
     private DoorRepository doorRepository;
+
+    @Autowired
+    private DoorMapper doorMapper;
 
     @Autowired
     private EntityManager em;
@@ -81,8 +86,9 @@ class DoorResourceIT {
     void createDoor() throws Exception {
         int databaseSizeBeforeCreate = doorRepository.findAll().size();
         // Create the Door
+        DoorDTO doorDTO = doorMapper.toDto(door);
         restDoorMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(door)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(doorDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Door in the database
@@ -97,12 +103,13 @@ class DoorResourceIT {
     void createDoorWithExistingId() throws Exception {
         // Create the Door with an existing ID
         door.setId(1L);
+        DoorDTO doorDTO = doorMapper.toDto(door);
 
         int databaseSizeBeforeCreate = doorRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDoorMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(door)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(doorDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Door in the database
@@ -118,9 +125,10 @@ class DoorResourceIT {
         door.setName(null);
 
         // Create the Door, which fails.
+        DoorDTO doorDTO = doorMapper.toDto(door);
 
         restDoorMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(door)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(doorDTO)))
             .andExpect(status().isBadRequest());
 
         List<Door> doorList = doorRepository.findAll();
@@ -177,12 +185,13 @@ class DoorResourceIT {
         // Disconnect from session so that the updates on updatedDoor are not directly saved in db
         em.detach(updatedDoor);
         updatedDoor.name(UPDATED_NAME);
+        DoorDTO doorDTO = doorMapper.toDto(updatedDoor);
 
         restDoorMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedDoor.getId())
+                put(ENTITY_API_URL_ID, doorDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedDoor))
+                    .content(TestUtil.convertObjectToJsonBytes(doorDTO))
             )
             .andExpect(status().isOk());
 
@@ -199,12 +208,15 @@ class DoorResourceIT {
         int databaseSizeBeforeUpdate = doorRepository.findAll().size();
         door.setId(count.incrementAndGet());
 
+        // Create the Door
+        DoorDTO doorDTO = doorMapper.toDto(door);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDoorMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, door.getId())
+                put(ENTITY_API_URL_ID, doorDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(door))
+                    .content(TestUtil.convertObjectToJsonBytes(doorDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -219,12 +231,15 @@ class DoorResourceIT {
         int databaseSizeBeforeUpdate = doorRepository.findAll().size();
         door.setId(count.incrementAndGet());
 
+        // Create the Door
+        DoorDTO doorDTO = doorMapper.toDto(door);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDoorMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(door))
+                    .content(TestUtil.convertObjectToJsonBytes(doorDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -239,9 +254,12 @@ class DoorResourceIT {
         int databaseSizeBeforeUpdate = doorRepository.findAll().size();
         door.setId(count.incrementAndGet());
 
+        // Create the Door
+        DoorDTO doorDTO = doorMapper.toDto(door);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDoorMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(door)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(doorDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Door in the database
@@ -313,12 +331,15 @@ class DoorResourceIT {
         int databaseSizeBeforeUpdate = doorRepository.findAll().size();
         door.setId(count.incrementAndGet());
 
+        // Create the Door
+        DoorDTO doorDTO = doorMapper.toDto(door);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDoorMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, door.getId())
+                patch(ENTITY_API_URL_ID, doorDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(door))
+                    .content(TestUtil.convertObjectToJsonBytes(doorDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -333,12 +354,15 @@ class DoorResourceIT {
         int databaseSizeBeforeUpdate = doorRepository.findAll().size();
         door.setId(count.incrementAndGet());
 
+        // Create the Door
+        DoorDTO doorDTO = doorMapper.toDto(door);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDoorMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(door))
+                    .content(TestUtil.convertObjectToJsonBytes(doorDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -353,9 +377,12 @@ class DoorResourceIT {
         int databaseSizeBeforeUpdate = doorRepository.findAll().size();
         door.setId(count.incrementAndGet());
 
+        // Create the Door
+        DoorDTO doorDTO = doorMapper.toDto(door);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDoorMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(door)))
+            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(doorDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Door in the database

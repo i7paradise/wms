@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.WHLevel;
 import com.wms.uhfrfid.repository.WHLevelRepository;
+import com.wms.uhfrfid.service.dto.WHLevelDTO;
+import com.wms.uhfrfid.service.mapper.WHLevelMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -43,6 +45,9 @@ class WHLevelResourceIT {
 
     @Autowired
     private WHLevelRepository wHLevelRepository;
+
+    @Autowired
+    private WHLevelMapper wHLevelMapper;
 
     @Autowired
     private EntityManager em;
@@ -84,8 +89,9 @@ class WHLevelResourceIT {
     void createWHLevel() throws Exception {
         int databaseSizeBeforeCreate = wHLevelRepository.findAll().size();
         // Create the WHLevel
+        WHLevelDTO wHLevelDTO = wHLevelMapper.toDto(wHLevel);
         restWHLevelMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHLevel)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHLevelDTO)))
             .andExpect(status().isCreated());
 
         // Validate the WHLevel in the database
@@ -101,12 +107,13 @@ class WHLevelResourceIT {
     void createWHLevelWithExistingId() throws Exception {
         // Create the WHLevel with an existing ID
         wHLevel.setId(1L);
+        WHLevelDTO wHLevelDTO = wHLevelMapper.toDto(wHLevel);
 
         int databaseSizeBeforeCreate = wHLevelRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restWHLevelMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHLevel)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHLevelDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the WHLevel in the database
@@ -122,9 +129,10 @@ class WHLevelResourceIT {
         wHLevel.setName(null);
 
         // Create the WHLevel, which fails.
+        WHLevelDTO wHLevelDTO = wHLevelMapper.toDto(wHLevel);
 
         restWHLevelMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHLevel)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHLevelDTO)))
             .andExpect(status().isBadRequest());
 
         List<WHLevel> wHLevelList = wHLevelRepository.findAll();
@@ -183,12 +191,13 @@ class WHLevelResourceIT {
         // Disconnect from session so that the updates on updatedWHLevel are not directly saved in db
         em.detach(updatedWHLevel);
         updatedWHLevel.name(UPDATED_NAME).note(UPDATED_NOTE);
+        WHLevelDTO wHLevelDTO = wHLevelMapper.toDto(updatedWHLevel);
 
         restWHLevelMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedWHLevel.getId())
+                put(ENTITY_API_URL_ID, wHLevelDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedWHLevel))
+                    .content(TestUtil.convertObjectToJsonBytes(wHLevelDTO))
             )
             .andExpect(status().isOk());
 
@@ -206,12 +215,15 @@ class WHLevelResourceIT {
         int databaseSizeBeforeUpdate = wHLevelRepository.findAll().size();
         wHLevel.setId(count.incrementAndGet());
 
+        // Create the WHLevel
+        WHLevelDTO wHLevelDTO = wHLevelMapper.toDto(wHLevel);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWHLevelMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, wHLevel.getId())
+                put(ENTITY_API_URL_ID, wHLevelDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(wHLevel))
+                    .content(TestUtil.convertObjectToJsonBytes(wHLevelDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -226,12 +238,15 @@ class WHLevelResourceIT {
         int databaseSizeBeforeUpdate = wHLevelRepository.findAll().size();
         wHLevel.setId(count.incrementAndGet());
 
+        // Create the WHLevel
+        WHLevelDTO wHLevelDTO = wHLevelMapper.toDto(wHLevel);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWHLevelMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(wHLevel))
+                    .content(TestUtil.convertObjectToJsonBytes(wHLevelDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -246,9 +261,12 @@ class WHLevelResourceIT {
         int databaseSizeBeforeUpdate = wHLevelRepository.findAll().size();
         wHLevel.setId(count.incrementAndGet());
 
+        // Create the WHLevel
+        WHLevelDTO wHLevelDTO = wHLevelMapper.toDto(wHLevel);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWHLevelMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHLevel)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHLevelDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the WHLevel in the database
@@ -320,12 +338,15 @@ class WHLevelResourceIT {
         int databaseSizeBeforeUpdate = wHLevelRepository.findAll().size();
         wHLevel.setId(count.incrementAndGet());
 
+        // Create the WHLevel
+        WHLevelDTO wHLevelDTO = wHLevelMapper.toDto(wHLevel);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWHLevelMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, wHLevel.getId())
+                patch(ENTITY_API_URL_ID, wHLevelDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(wHLevel))
+                    .content(TestUtil.convertObjectToJsonBytes(wHLevelDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -340,12 +361,15 @@ class WHLevelResourceIT {
         int databaseSizeBeforeUpdate = wHLevelRepository.findAll().size();
         wHLevel.setId(count.incrementAndGet());
 
+        // Create the WHLevel
+        WHLevelDTO wHLevelDTO = wHLevelMapper.toDto(wHLevel);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWHLevelMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(wHLevel))
+                    .content(TestUtil.convertObjectToJsonBytes(wHLevelDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -360,9 +384,14 @@ class WHLevelResourceIT {
         int databaseSizeBeforeUpdate = wHLevelRepository.findAll().size();
         wHLevel.setId(count.incrementAndGet());
 
+        // Create the WHLevel
+        WHLevelDTO wHLevelDTO = wHLevelMapper.toDto(wHLevel);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWHLevelMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(wHLevel)))
+            .perform(
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(wHLevelDTO))
+            )
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the WHLevel in the database

@@ -6,6 +6,7 @@ import com.wms.uhfrfid.domain.enumeration.DeliveryOrderStatus;
 import com.wms.uhfrfid.repository.DeliveryOrderRepository;
 import com.wms.uhfrfid.repository.ReceptionRepository;
 import com.wms.uhfrfid.repository.UserRepository;
+import com.wms.uhfrfid.service.mapper.DeliveryOrderMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,10 +25,11 @@ public class ReceptionService extends DeliveryOrderService {
 
     public ReceptionService(
         DeliveryOrderRepository deliveryOrderRepository,
+        DeliveryOrderMapper deliveryOrderMapper,
         ReceptionRepository receptionRepository,
         UserRepository userRepository
     ) {
-        super(deliveryOrderRepository);
+        super(deliveryOrderRepository, deliveryOrderMapper);
         this.receptionRepository = receptionRepository;
         this.userRepository = userRepository;
     }

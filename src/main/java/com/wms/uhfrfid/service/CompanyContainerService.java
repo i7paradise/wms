@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.CompanyContainer;
 import com.wms.uhfrfid.repository.CompanyContainerRepository;
+import com.wms.uhfrfid.service.dto.CompanyContainerDTO;
+import com.wms.uhfrfid.service.mapper.CompanyContainerMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,43 +23,44 @@ public class CompanyContainerService {
 
     private final CompanyContainerRepository companyContainerRepository;
 
-    public CompanyContainerService(CompanyContainerRepository companyContainerRepository) {
+    private final CompanyContainerMapper companyContainerMapper;
+
+    public CompanyContainerService(CompanyContainerRepository companyContainerRepository, CompanyContainerMapper companyContainerMapper) {
         this.companyContainerRepository = companyContainerRepository;
+        this.companyContainerMapper = companyContainerMapper;
     }
 
     /**
      * Save a companyContainer.
      *
-     * @param companyContainer the entity to save.
+     * @param companyContainerDTO the entity to save.
      * @return the persisted entity.
      */
-    public CompanyContainer save(CompanyContainer companyContainer) {
-        log.debug("Request to save CompanyContainer : {}", companyContainer);
-        return companyContainerRepository.save(companyContainer);
+    public CompanyContainerDTO save(CompanyContainerDTO companyContainerDTO) {
+        log.debug("Request to save CompanyContainer : {}", companyContainerDTO);
+        CompanyContainer companyContainer = companyContainerMapper.toEntity(companyContainerDTO);
+        companyContainer = companyContainerRepository.save(companyContainer);
+        return companyContainerMapper.toDto(companyContainer);
     }
 
     /**
      * Partially update a companyContainer.
      *
-     * @param companyContainer the entity to update partially.
+     * @param companyContainerDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<CompanyContainer> partialUpdate(CompanyContainer companyContainer) {
-        log.debug("Request to partially update CompanyContainer : {}", companyContainer);
+    public Optional<CompanyContainerDTO> partialUpdate(CompanyContainerDTO companyContainerDTO) {
+        log.debug("Request to partially update CompanyContainer : {}", companyContainerDTO);
 
         return companyContainerRepository
-            .findById(companyContainer.getId())
+            .findById(companyContainerDTO.getId())
             .map(existingCompanyContainer -> {
-                if (companyContainer.getRfidTag() != null) {
-                    existingCompanyContainer.setRfidTag(companyContainer.getRfidTag());
-                }
-                if (companyContainer.getColor() != null) {
-                    existingCompanyContainer.setColor(companyContainer.getColor());
-                }
+                companyContainerMapper.partialUpdate(existingCompanyContainer, companyContainerDTO);
 
                 return existingCompanyContainer;
             })
-            .map(companyContainerRepository::save);
+            .map(companyContainerRepository::save)
+            .map(companyContainerMapper::toDto);
     }
 
     /**
@@ -67,9 +70,9 @@ public class CompanyContainerService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<CompanyContainer> findAll(Pageable pageable) {
+    public Page<CompanyContainerDTO> findAll(Pageable pageable) {
         log.debug("Request to get all CompanyContainers");
-        return companyContainerRepository.findAll(pageable);
+        return companyContainerRepository.findAll(pageable).map(companyContainerMapper::toDto);
     }
 
     /**
@@ -79,9 +82,9 @@ public class CompanyContainerService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<CompanyContainer> findOne(Long id) {
+    public Optional<CompanyContainerDTO> findOne(Long id) {
         log.debug("Request to get CompanyContainer : {}", id);
-        return companyContainerRepository.findById(id);
+        return companyContainerRepository.findById(id).map(companyContainerMapper::toDto);
     }
 
     /**

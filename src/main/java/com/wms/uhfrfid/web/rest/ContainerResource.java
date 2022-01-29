@@ -1,8 +1,8 @@
 package com.wms.uhfrfid.web.rest;
 
-import com.wms.uhfrfid.domain.Container;
 import com.wms.uhfrfid.repository.ContainerRepository;
 import com.wms.uhfrfid.service.ContainerService;
+import com.wms.uhfrfid.service.dto.ContainerDTO;
 import com.wms.uhfrfid.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,17 +51,17 @@ public class ContainerResource {
     /**
      * {@code POST  /containers} : Create a new container.
      *
-     * @param container the container to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new container, or with status {@code 400 (Bad Request)} if the container has already an ID.
+     * @param containerDTO the containerDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new containerDTO, or with status {@code 400 (Bad Request)} if the container has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/containers")
-    public ResponseEntity<Container> createContainer(@Valid @RequestBody Container container) throws URISyntaxException {
-        log.debug("REST request to save Container : {}", container);
-        if (container.getId() != null) {
+    public ResponseEntity<ContainerDTO> createContainer(@Valid @RequestBody ContainerDTO containerDTO) throws URISyntaxException {
+        log.debug("REST request to save Container : {}", containerDTO);
+        if (containerDTO.getId() != null) {
             throw new BadRequestAlertException("A new container cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Container result = containerService.save(container);
+        ContainerDTO result = containerService.save(containerDTO);
         return ResponseEntity
             .created(new URI("/api/containers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -71,23 +71,23 @@ public class ContainerResource {
     /**
      * {@code PUT  /containers/:id} : Updates an existing container.
      *
-     * @param id the id of the container to save.
-     * @param container the container to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated container,
-     * or with status {@code 400 (Bad Request)} if the container is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the container couldn't be updated.
+     * @param id the id of the containerDTO to save.
+     * @param containerDTO the containerDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated containerDTO,
+     * or with status {@code 400 (Bad Request)} if the containerDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the containerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/containers/{id}")
-    public ResponseEntity<Container> updateContainer(
+    public ResponseEntity<ContainerDTO> updateContainer(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Container container
+        @Valid @RequestBody ContainerDTO containerDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update Container : {}, {}", id, container);
-        if (container.getId() == null) {
+        log.debug("REST request to update Container : {}, {}", id, containerDTO);
+        if (containerDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, container.getId())) {
+        if (!Objects.equals(id, containerDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -95,34 +95,34 @@ public class ContainerResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Container result = containerService.save(container);
+        ContainerDTO result = containerService.save(containerDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, container.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, containerDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /containers/:id} : Partial updates given fields of an existing container, field will ignore if it is null
      *
-     * @param id the id of the container to save.
-     * @param container the container to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated container,
-     * or with status {@code 400 (Bad Request)} if the container is not valid,
-     * or with status {@code 404 (Not Found)} if the container is not found,
-     * or with status {@code 500 (Internal Server Error)} if the container couldn't be updated.
+     * @param id the id of the containerDTO to save.
+     * @param containerDTO the containerDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated containerDTO,
+     * or with status {@code 400 (Bad Request)} if the containerDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the containerDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the containerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/containers/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<Container> partialUpdateContainer(
+    public ResponseEntity<ContainerDTO> partialUpdateContainer(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Container container
+        @NotNull @RequestBody ContainerDTO containerDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update Container partially : {}, {}", id, container);
-        if (container.getId() == null) {
+        log.debug("REST request to partial update Container partially : {}, {}", id, containerDTO);
+        if (containerDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, container.getId())) {
+        if (!Objects.equals(id, containerDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -130,11 +130,11 @@ public class ContainerResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Container> result = containerService.partialUpdate(container);
+        Optional<ContainerDTO> result = containerService.partialUpdate(containerDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, container.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, containerDTO.getId().toString())
         );
     }
 
@@ -145,9 +145,9 @@ public class ContainerResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of containers in body.
      */
     @GetMapping("/containers")
-    public ResponseEntity<List<Container>> getAllContainers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<ContainerDTO>> getAllContainers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Containers");
-        Page<Container> page = containerService.findAll(pageable);
+        Page<ContainerDTO> page = containerService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -155,20 +155,20 @@ public class ContainerResource {
     /**
      * {@code GET  /containers/:id} : get the "id" container.
      *
-     * @param id the id of the container to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the container, or with status {@code 404 (Not Found)}.
+     * @param id the id of the containerDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the containerDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/containers/{id}")
-    public ResponseEntity<Container> getContainer(@PathVariable Long id) {
+    public ResponseEntity<ContainerDTO> getContainer(@PathVariable Long id) {
         log.debug("REST request to get Container : {}", id);
-        Optional<Container> container = containerService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(container);
+        Optional<ContainerDTO> containerDTO = containerService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(containerDTO);
     }
 
     /**
      * {@code DELETE  /containers/:id} : delete the "id" container.
      *
-     * @param id the id of the container to delete.
+     * @param id the id of the containerDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/containers/{id}")

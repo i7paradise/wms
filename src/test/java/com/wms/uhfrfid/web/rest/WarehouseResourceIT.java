@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.Warehouse;
 import com.wms.uhfrfid.repository.WarehouseRepository;
+import com.wms.uhfrfid.service.dto.WarehouseDTO;
+import com.wms.uhfrfid.service.mapper.WarehouseMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -49,6 +51,9 @@ class WarehouseResourceIT {
 
     @Autowired
     private WarehouseRepository warehouseRepository;
+
+    @Autowired
+    private WarehouseMapper warehouseMapper;
 
     @Autowired
     private EntityManager em;
@@ -98,8 +103,9 @@ class WarehouseResourceIT {
     void createWarehouse() throws Exception {
         int databaseSizeBeforeCreate = warehouseRepository.findAll().size();
         // Create the Warehouse
+        WarehouseDTO warehouseDTO = warehouseMapper.toDto(warehouse);
         restWarehouseMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(warehouse)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(warehouseDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Warehouse in the database
@@ -117,12 +123,13 @@ class WarehouseResourceIT {
     void createWarehouseWithExistingId() throws Exception {
         // Create the Warehouse with an existing ID
         warehouse.setId(1L);
+        WarehouseDTO warehouseDTO = warehouseMapper.toDto(warehouse);
 
         int databaseSizeBeforeCreate = warehouseRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restWarehouseMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(warehouse)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(warehouseDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Warehouse in the database
@@ -138,9 +145,10 @@ class WarehouseResourceIT {
         warehouse.setName(null);
 
         // Create the Warehouse, which fails.
+        WarehouseDTO warehouseDTO = warehouseMapper.toDto(warehouse);
 
         restWarehouseMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(warehouse)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(warehouseDTO)))
             .andExpect(status().isBadRequest());
 
         List<Warehouse> warehouseList = warehouseRepository.findAll();
@@ -155,9 +163,10 @@ class WarehouseResourceIT {
         warehouse.setPhone(null);
 
         // Create the Warehouse, which fails.
+        WarehouseDTO warehouseDTO = warehouseMapper.toDto(warehouse);
 
         restWarehouseMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(warehouse)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(warehouseDTO)))
             .andExpect(status().isBadRequest());
 
         List<Warehouse> warehouseList = warehouseRepository.findAll();
@@ -172,9 +181,10 @@ class WarehouseResourceIT {
         warehouse.setContactPerson(null);
 
         // Create the Warehouse, which fails.
+        WarehouseDTO warehouseDTO = warehouseMapper.toDto(warehouse);
 
         restWarehouseMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(warehouse)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(warehouseDTO)))
             .andExpect(status().isBadRequest());
 
         List<Warehouse> warehouseList = warehouseRepository.findAll();
@@ -237,12 +247,13 @@ class WarehouseResourceIT {
         // Disconnect from session so that the updates on updatedWarehouse are not directly saved in db
         em.detach(updatedWarehouse);
         updatedWarehouse.name(UPDATED_NAME).note(UPDATED_NOTE).phone(UPDATED_PHONE).contactPerson(UPDATED_CONTACT_PERSON);
+        WarehouseDTO warehouseDTO = warehouseMapper.toDto(updatedWarehouse);
 
         restWarehouseMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedWarehouse.getId())
+                put(ENTITY_API_URL_ID, warehouseDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedWarehouse))
+                    .content(TestUtil.convertObjectToJsonBytes(warehouseDTO))
             )
             .andExpect(status().isOk());
 
@@ -262,12 +273,15 @@ class WarehouseResourceIT {
         int databaseSizeBeforeUpdate = warehouseRepository.findAll().size();
         warehouse.setId(count.incrementAndGet());
 
+        // Create the Warehouse
+        WarehouseDTO warehouseDTO = warehouseMapper.toDto(warehouse);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWarehouseMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, warehouse.getId())
+                put(ENTITY_API_URL_ID, warehouseDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(warehouse))
+                    .content(TestUtil.convertObjectToJsonBytes(warehouseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -282,12 +296,15 @@ class WarehouseResourceIT {
         int databaseSizeBeforeUpdate = warehouseRepository.findAll().size();
         warehouse.setId(count.incrementAndGet());
 
+        // Create the Warehouse
+        WarehouseDTO warehouseDTO = warehouseMapper.toDto(warehouse);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWarehouseMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(warehouse))
+                    .content(TestUtil.convertObjectToJsonBytes(warehouseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -302,9 +319,12 @@ class WarehouseResourceIT {
         int databaseSizeBeforeUpdate = warehouseRepository.findAll().size();
         warehouse.setId(count.incrementAndGet());
 
+        // Create the Warehouse
+        WarehouseDTO warehouseDTO = warehouseMapper.toDto(warehouse);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWarehouseMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(warehouse)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(warehouseDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Warehouse in the database
@@ -382,12 +402,15 @@ class WarehouseResourceIT {
         int databaseSizeBeforeUpdate = warehouseRepository.findAll().size();
         warehouse.setId(count.incrementAndGet());
 
+        // Create the Warehouse
+        WarehouseDTO warehouseDTO = warehouseMapper.toDto(warehouse);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWarehouseMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, warehouse.getId())
+                patch(ENTITY_API_URL_ID, warehouseDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(warehouse))
+                    .content(TestUtil.convertObjectToJsonBytes(warehouseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -402,12 +425,15 @@ class WarehouseResourceIT {
         int databaseSizeBeforeUpdate = warehouseRepository.findAll().size();
         warehouse.setId(count.incrementAndGet());
 
+        // Create the Warehouse
+        WarehouseDTO warehouseDTO = warehouseMapper.toDto(warehouse);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWarehouseMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(warehouse))
+                    .content(TestUtil.convertObjectToJsonBytes(warehouseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -422,10 +448,13 @@ class WarehouseResourceIT {
         int databaseSizeBeforeUpdate = warehouseRepository.findAll().size();
         warehouse.setId(count.incrementAndGet());
 
+        // Create the Warehouse
+        WarehouseDTO warehouseDTO = warehouseMapper.toDto(warehouse);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWarehouseMockMvc
             .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(warehouse))
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(warehouseDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

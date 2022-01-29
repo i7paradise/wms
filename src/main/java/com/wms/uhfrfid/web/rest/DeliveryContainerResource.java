@@ -1,8 +1,8 @@
 package com.wms.uhfrfid.web.rest;
 
-import com.wms.uhfrfid.domain.DeliveryContainer;
 import com.wms.uhfrfid.repository.DeliveryContainerRepository;
 import com.wms.uhfrfid.service.DeliveryContainerService;
+import com.wms.uhfrfid.service.dto.DeliveryContainerDTO;
 import com.wms.uhfrfid.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -52,18 +52,18 @@ public class DeliveryContainerResource {
     /**
      * {@code POST  /delivery-containers} : Create a new deliveryContainer.
      *
-     * @param deliveryContainer the deliveryContainer to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new deliveryContainer, or with status {@code 400 (Bad Request)} if the deliveryContainer has already an ID.
+     * @param deliveryContainerDTO the deliveryContainerDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new deliveryContainerDTO, or with status {@code 400 (Bad Request)} if the deliveryContainer has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/delivery-containers")
-    public ResponseEntity<DeliveryContainer> createDeliveryContainer(@RequestBody DeliveryContainer deliveryContainer)
+    public ResponseEntity<DeliveryContainerDTO> createDeliveryContainer(@RequestBody DeliveryContainerDTO deliveryContainerDTO)
         throws URISyntaxException {
-        log.debug("REST request to save DeliveryContainer : {}", deliveryContainer);
-        if (deliveryContainer.getId() != null) {
+        log.debug("REST request to save DeliveryContainer : {}", deliveryContainerDTO);
+        if (deliveryContainerDTO.getId() != null) {
             throw new BadRequestAlertException("A new deliveryContainer cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        DeliveryContainer result = deliveryContainerService.save(deliveryContainer);
+        DeliveryContainerDTO result = deliveryContainerService.save(deliveryContainerDTO);
         return ResponseEntity
             .created(new URI("/api/delivery-containers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -73,23 +73,23 @@ public class DeliveryContainerResource {
     /**
      * {@code PUT  /delivery-containers/:id} : Updates an existing deliveryContainer.
      *
-     * @param id the id of the deliveryContainer to save.
-     * @param deliveryContainer the deliveryContainer to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated deliveryContainer,
-     * or with status {@code 400 (Bad Request)} if the deliveryContainer is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the deliveryContainer couldn't be updated.
+     * @param id the id of the deliveryContainerDTO to save.
+     * @param deliveryContainerDTO the deliveryContainerDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated deliveryContainerDTO,
+     * or with status {@code 400 (Bad Request)} if the deliveryContainerDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the deliveryContainerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/delivery-containers/{id}")
-    public ResponseEntity<DeliveryContainer> updateDeliveryContainer(
+    public ResponseEntity<DeliveryContainerDTO> updateDeliveryContainer(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody DeliveryContainer deliveryContainer
+        @RequestBody DeliveryContainerDTO deliveryContainerDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update DeliveryContainer : {}, {}", id, deliveryContainer);
-        if (deliveryContainer.getId() == null) {
+        log.debug("REST request to update DeliveryContainer : {}, {}", id, deliveryContainerDTO);
+        if (deliveryContainerDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, deliveryContainer.getId())) {
+        if (!Objects.equals(id, deliveryContainerDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -97,34 +97,34 @@ public class DeliveryContainerResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        DeliveryContainer result = deliveryContainerService.save(deliveryContainer);
+        DeliveryContainerDTO result = deliveryContainerService.save(deliveryContainerDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, deliveryContainer.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, deliveryContainerDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /delivery-containers/:id} : Partial updates given fields of an existing deliveryContainer, field will ignore if it is null
      *
-     * @param id the id of the deliveryContainer to save.
-     * @param deliveryContainer the deliveryContainer to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated deliveryContainer,
-     * or with status {@code 400 (Bad Request)} if the deliveryContainer is not valid,
-     * or with status {@code 404 (Not Found)} if the deliveryContainer is not found,
-     * or with status {@code 500 (Internal Server Error)} if the deliveryContainer couldn't be updated.
+     * @param id the id of the deliveryContainerDTO to save.
+     * @param deliveryContainerDTO the deliveryContainerDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated deliveryContainerDTO,
+     * or with status {@code 400 (Bad Request)} if the deliveryContainerDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the deliveryContainerDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the deliveryContainerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/delivery-containers/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<DeliveryContainer> partialUpdateDeliveryContainer(
+    public ResponseEntity<DeliveryContainerDTO> partialUpdateDeliveryContainer(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody DeliveryContainer deliveryContainer
+        @RequestBody DeliveryContainerDTO deliveryContainerDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update DeliveryContainer partially : {}, {}", id, deliveryContainer);
-        if (deliveryContainer.getId() == null) {
+        log.debug("REST request to partial update DeliveryContainer partially : {}, {}", id, deliveryContainerDTO);
+        if (deliveryContainerDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, deliveryContainer.getId())) {
+        if (!Objects.equals(id, deliveryContainerDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -132,11 +132,11 @@ public class DeliveryContainerResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<DeliveryContainer> result = deliveryContainerService.partialUpdate(deliveryContainer);
+        Optional<DeliveryContainerDTO> result = deliveryContainerService.partialUpdate(deliveryContainerDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, deliveryContainer.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, deliveryContainerDTO.getId().toString())
         );
     }
 
@@ -147,11 +147,11 @@ public class DeliveryContainerResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of deliveryContainers in body.
      */
     @GetMapping("/delivery-containers")
-    public ResponseEntity<List<DeliveryContainer>> getAllDeliveryContainers(
+    public ResponseEntity<List<DeliveryContainerDTO>> getAllDeliveryContainers(
         @org.springdoc.api.annotations.ParameterObject Pageable pageable
     ) {
         log.debug("REST request to get a page of DeliveryContainers");
-        Page<DeliveryContainer> page = deliveryContainerService.findAll(pageable);
+        Page<DeliveryContainerDTO> page = deliveryContainerService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -159,20 +159,20 @@ public class DeliveryContainerResource {
     /**
      * {@code GET  /delivery-containers/:id} : get the "id" deliveryContainer.
      *
-     * @param id the id of the deliveryContainer to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the deliveryContainer, or with status {@code 404 (Not Found)}.
+     * @param id the id of the deliveryContainerDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the deliveryContainerDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/delivery-containers/{id}")
-    public ResponseEntity<DeliveryContainer> getDeliveryContainer(@PathVariable Long id) {
+    public ResponseEntity<DeliveryContainerDTO> getDeliveryContainer(@PathVariable Long id) {
         log.debug("REST request to get DeliveryContainer : {}", id);
-        Optional<DeliveryContainer> deliveryContainer = deliveryContainerService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(deliveryContainer);
+        Optional<DeliveryContainerDTO> deliveryContainerDTO = deliveryContainerService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(deliveryContainerDTO);
     }
 
     /**
      * {@code DELETE  /delivery-containers/:id} : delete the "id" deliveryContainer.
      *
-     * @param id the id of the deliveryContainer to delete.
+     * @param id the id of the deliveryContainerDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/delivery-containers/{id}")

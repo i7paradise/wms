@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.UHFRFIDAntenna;
 import com.wms.uhfrfid.repository.UHFRFIDAntennaRepository;
+import com.wms.uhfrfid.service.dto.UHFRFIDAntennaDTO;
+import com.wms.uhfrfid.service.mapper.UHFRFIDAntennaMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,46 +23,44 @@ public class UHFRFIDAntennaService {
 
     private final UHFRFIDAntennaRepository uHFRFIDAntennaRepository;
 
-    public UHFRFIDAntennaService(UHFRFIDAntennaRepository uHFRFIDAntennaRepository) {
+    private final UHFRFIDAntennaMapper uHFRFIDAntennaMapper;
+
+    public UHFRFIDAntennaService(UHFRFIDAntennaRepository uHFRFIDAntennaRepository, UHFRFIDAntennaMapper uHFRFIDAntennaMapper) {
         this.uHFRFIDAntennaRepository = uHFRFIDAntennaRepository;
+        this.uHFRFIDAntennaMapper = uHFRFIDAntennaMapper;
     }
 
     /**
      * Save a uHFRFIDAntenna.
      *
-     * @param uHFRFIDAntenna the entity to save.
+     * @param uHFRFIDAntennaDTO the entity to save.
      * @return the persisted entity.
      */
-    public UHFRFIDAntenna save(UHFRFIDAntenna uHFRFIDAntenna) {
-        log.debug("Request to save UHFRFIDAntenna : {}", uHFRFIDAntenna);
-        return uHFRFIDAntennaRepository.save(uHFRFIDAntenna);
+    public UHFRFIDAntennaDTO save(UHFRFIDAntennaDTO uHFRFIDAntennaDTO) {
+        log.debug("Request to save UHFRFIDAntenna : {}", uHFRFIDAntennaDTO);
+        UHFRFIDAntenna uHFRFIDAntenna = uHFRFIDAntennaMapper.toEntity(uHFRFIDAntennaDTO);
+        uHFRFIDAntenna = uHFRFIDAntennaRepository.save(uHFRFIDAntenna);
+        return uHFRFIDAntennaMapper.toDto(uHFRFIDAntenna);
     }
 
     /**
      * Partially update a uHFRFIDAntenna.
      *
-     * @param uHFRFIDAntenna the entity to update partially.
+     * @param uHFRFIDAntennaDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<UHFRFIDAntenna> partialUpdate(UHFRFIDAntenna uHFRFIDAntenna) {
-        log.debug("Request to partially update UHFRFIDAntenna : {}", uHFRFIDAntenna);
+    public Optional<UHFRFIDAntennaDTO> partialUpdate(UHFRFIDAntennaDTO uHFRFIDAntennaDTO) {
+        log.debug("Request to partially update UHFRFIDAntenna : {}", uHFRFIDAntennaDTO);
 
         return uHFRFIDAntennaRepository
-            .findById(uHFRFIDAntenna.getId())
+            .findById(uHFRFIDAntennaDTO.getId())
             .map(existingUHFRFIDAntenna -> {
-                if (uHFRFIDAntenna.getName() != null) {
-                    existingUHFRFIDAntenna.setName(uHFRFIDAntenna.getName());
-                }
-                if (uHFRFIDAntenna.getOutputPower() != null) {
-                    existingUHFRFIDAntenna.setOutputPower(uHFRFIDAntenna.getOutputPower());
-                }
-                if (uHFRFIDAntenna.getStatus() != null) {
-                    existingUHFRFIDAntenna.setStatus(uHFRFIDAntenna.getStatus());
-                }
+                uHFRFIDAntennaMapper.partialUpdate(existingUHFRFIDAntenna, uHFRFIDAntennaDTO);
 
                 return existingUHFRFIDAntenna;
             })
-            .map(uHFRFIDAntennaRepository::save);
+            .map(uHFRFIDAntennaRepository::save)
+            .map(uHFRFIDAntennaMapper::toDto);
     }
 
     /**
@@ -70,9 +70,9 @@ public class UHFRFIDAntennaService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<UHFRFIDAntenna> findAll(Pageable pageable) {
+    public Page<UHFRFIDAntennaDTO> findAll(Pageable pageable) {
         log.debug("Request to get all UHFRFIDAntennas");
-        return uHFRFIDAntennaRepository.findAll(pageable);
+        return uHFRFIDAntennaRepository.findAll(pageable).map(uHFRFIDAntennaMapper::toDto);
     }
 
     /**
@@ -82,9 +82,9 @@ public class UHFRFIDAntennaService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<UHFRFIDAntenna> findOne(Long id) {
+    public Optional<UHFRFIDAntennaDTO> findOne(Long id) {
         log.debug("Request to get UHFRFIDAntenna : {}", id);
-        return uHFRFIDAntennaRepository.findById(id);
+        return uHFRFIDAntennaRepository.findById(id).map(uHFRFIDAntennaMapper::toDto);
     }
 
     /**

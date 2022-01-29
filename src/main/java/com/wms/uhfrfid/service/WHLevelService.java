@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.WHLevel;
 import com.wms.uhfrfid.repository.WHLevelRepository;
+import com.wms.uhfrfid.service.dto.WHLevelDTO;
+import com.wms.uhfrfid.service.mapper.WHLevelMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,43 +23,44 @@ public class WHLevelService {
 
     private final WHLevelRepository wHLevelRepository;
 
-    public WHLevelService(WHLevelRepository wHLevelRepository) {
+    private final WHLevelMapper wHLevelMapper;
+
+    public WHLevelService(WHLevelRepository wHLevelRepository, WHLevelMapper wHLevelMapper) {
         this.wHLevelRepository = wHLevelRepository;
+        this.wHLevelMapper = wHLevelMapper;
     }
 
     /**
      * Save a wHLevel.
      *
-     * @param wHLevel the entity to save.
+     * @param wHLevelDTO the entity to save.
      * @return the persisted entity.
      */
-    public WHLevel save(WHLevel wHLevel) {
-        log.debug("Request to save WHLevel : {}", wHLevel);
-        return wHLevelRepository.save(wHLevel);
+    public WHLevelDTO save(WHLevelDTO wHLevelDTO) {
+        log.debug("Request to save WHLevel : {}", wHLevelDTO);
+        WHLevel wHLevel = wHLevelMapper.toEntity(wHLevelDTO);
+        wHLevel = wHLevelRepository.save(wHLevel);
+        return wHLevelMapper.toDto(wHLevel);
     }
 
     /**
      * Partially update a wHLevel.
      *
-     * @param wHLevel the entity to update partially.
+     * @param wHLevelDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<WHLevel> partialUpdate(WHLevel wHLevel) {
-        log.debug("Request to partially update WHLevel : {}", wHLevel);
+    public Optional<WHLevelDTO> partialUpdate(WHLevelDTO wHLevelDTO) {
+        log.debug("Request to partially update WHLevel : {}", wHLevelDTO);
 
         return wHLevelRepository
-            .findById(wHLevel.getId())
+            .findById(wHLevelDTO.getId())
             .map(existingWHLevel -> {
-                if (wHLevel.getName() != null) {
-                    existingWHLevel.setName(wHLevel.getName());
-                }
-                if (wHLevel.getNote() != null) {
-                    existingWHLevel.setNote(wHLevel.getNote());
-                }
+                wHLevelMapper.partialUpdate(existingWHLevel, wHLevelDTO);
 
                 return existingWHLevel;
             })
-            .map(wHLevelRepository::save);
+            .map(wHLevelRepository::save)
+            .map(wHLevelMapper::toDto);
     }
 
     /**
@@ -67,9 +70,9 @@ public class WHLevelService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<WHLevel> findAll(Pageable pageable) {
+    public Page<WHLevelDTO> findAll(Pageable pageable) {
         log.debug("Request to get all WHLevels");
-        return wHLevelRepository.findAll(pageable);
+        return wHLevelRepository.findAll(pageable).map(wHLevelMapper::toDto);
     }
 
     /**
@@ -79,9 +82,9 @@ public class WHLevelService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<WHLevel> findOne(Long id) {
+    public Optional<WHLevelDTO> findOne(Long id) {
         log.debug("Request to get WHLevel : {}", id);
-        return wHLevelRepository.findById(id);
+        return wHLevelRepository.findById(id).map(wHLevelMapper::toDto);
     }
 
     /**

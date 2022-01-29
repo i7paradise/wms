@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.Company;
 import com.wms.uhfrfid.repository.CompanyRepository;
+import com.wms.uhfrfid.service.dto.CompanyDTO;
+import com.wms.uhfrfid.service.mapper.CompanyMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,49 +23,44 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
 
-    public CompanyService(CompanyRepository companyRepository) {
+    private final CompanyMapper companyMapper;
+
+    public CompanyService(CompanyRepository companyRepository, CompanyMapper companyMapper) {
         this.companyRepository = companyRepository;
+        this.companyMapper = companyMapper;
     }
 
     /**
      * Save a company.
      *
-     * @param company the entity to save.
+     * @param companyDTO the entity to save.
      * @return the persisted entity.
      */
-    public Company save(Company company) {
-        log.debug("Request to save Company : {}", company);
-        return companyRepository.save(company);
+    public CompanyDTO save(CompanyDTO companyDTO) {
+        log.debug("Request to save Company : {}", companyDTO);
+        Company company = companyMapper.toEntity(companyDTO);
+        company = companyRepository.save(company);
+        return companyMapper.toDto(company);
     }
 
     /**
      * Partially update a company.
      *
-     * @param company the entity to update partially.
+     * @param companyDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Company> partialUpdate(Company company) {
-        log.debug("Request to partially update Company : {}", company);
+    public Optional<CompanyDTO> partialUpdate(CompanyDTO companyDTO) {
+        log.debug("Request to partially update Company : {}", companyDTO);
 
         return companyRepository
-            .findById(company.getId())
+            .findById(companyDTO.getId())
             .map(existingCompany -> {
-                if (company.getName() != null) {
-                    existingCompany.setName(company.getName());
-                }
-                if (company.getAddress() != null) {
-                    existingCompany.setAddress(company.getAddress());
-                }
-                if (company.getPhone() != null) {
-                    existingCompany.setPhone(company.getPhone());
-                }
-                if (company.getDescription() != null) {
-                    existingCompany.setDescription(company.getDescription());
-                }
+                companyMapper.partialUpdate(existingCompany, companyDTO);
 
                 return existingCompany;
             })
-            .map(companyRepository::save);
+            .map(companyRepository::save)
+            .map(companyMapper::toDto);
     }
 
     /**
@@ -73,9 +70,9 @@ public class CompanyService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Company> findAll(Pageable pageable) {
+    public Page<CompanyDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Companies");
-        return companyRepository.findAll(pageable);
+        return companyRepository.findAll(pageable).map(companyMapper::toDto);
     }
 
     /**
@@ -85,9 +82,9 @@ public class CompanyService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Company> findOne(Long id) {
+    public Optional<CompanyDTO> findOne(Long id) {
         log.debug("Request to get Company : {}", id);
-        return companyRepository.findById(id);
+        return companyRepository.findById(id).map(companyMapper::toDto);
     }
 
     /**

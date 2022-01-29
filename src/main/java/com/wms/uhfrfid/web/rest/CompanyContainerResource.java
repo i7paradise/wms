@@ -1,8 +1,8 @@
 package com.wms.uhfrfid.web.rest;
 
-import com.wms.uhfrfid.domain.CompanyContainer;
 import com.wms.uhfrfid.repository.CompanyContainerRepository;
 import com.wms.uhfrfid.service.CompanyContainerService;
+import com.wms.uhfrfid.service.dto.CompanyContainerDTO;
 import com.wms.uhfrfid.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -52,18 +52,18 @@ public class CompanyContainerResource {
     /**
      * {@code POST  /company-containers} : Create a new companyContainer.
      *
-     * @param companyContainer the companyContainer to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new companyContainer, or with status {@code 400 (Bad Request)} if the companyContainer has already an ID.
+     * @param companyContainerDTO the companyContainerDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new companyContainerDTO, or with status {@code 400 (Bad Request)} if the companyContainer has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/company-containers")
-    public ResponseEntity<CompanyContainer> createCompanyContainer(@RequestBody CompanyContainer companyContainer)
+    public ResponseEntity<CompanyContainerDTO> createCompanyContainer(@RequestBody CompanyContainerDTO companyContainerDTO)
         throws URISyntaxException {
-        log.debug("REST request to save CompanyContainer : {}", companyContainer);
-        if (companyContainer.getId() != null) {
+        log.debug("REST request to save CompanyContainer : {}", companyContainerDTO);
+        if (companyContainerDTO.getId() != null) {
             throw new BadRequestAlertException("A new companyContainer cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        CompanyContainer result = companyContainerService.save(companyContainer);
+        CompanyContainerDTO result = companyContainerService.save(companyContainerDTO);
         return ResponseEntity
             .created(new URI("/api/company-containers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -73,23 +73,23 @@ public class CompanyContainerResource {
     /**
      * {@code PUT  /company-containers/:id} : Updates an existing companyContainer.
      *
-     * @param id the id of the companyContainer to save.
-     * @param companyContainer the companyContainer to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated companyContainer,
-     * or with status {@code 400 (Bad Request)} if the companyContainer is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the companyContainer couldn't be updated.
+     * @param id the id of the companyContainerDTO to save.
+     * @param companyContainerDTO the companyContainerDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated companyContainerDTO,
+     * or with status {@code 400 (Bad Request)} if the companyContainerDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the companyContainerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/company-containers/{id}")
-    public ResponseEntity<CompanyContainer> updateCompanyContainer(
+    public ResponseEntity<CompanyContainerDTO> updateCompanyContainer(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody CompanyContainer companyContainer
+        @RequestBody CompanyContainerDTO companyContainerDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update CompanyContainer : {}, {}", id, companyContainer);
-        if (companyContainer.getId() == null) {
+        log.debug("REST request to update CompanyContainer : {}, {}", id, companyContainerDTO);
+        if (companyContainerDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, companyContainer.getId())) {
+        if (!Objects.equals(id, companyContainerDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -97,34 +97,34 @@ public class CompanyContainerResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        CompanyContainer result = companyContainerService.save(companyContainer);
+        CompanyContainerDTO result = companyContainerService.save(companyContainerDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, companyContainer.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, companyContainerDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /company-containers/:id} : Partial updates given fields of an existing companyContainer, field will ignore if it is null
      *
-     * @param id the id of the companyContainer to save.
-     * @param companyContainer the companyContainer to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated companyContainer,
-     * or with status {@code 400 (Bad Request)} if the companyContainer is not valid,
-     * or with status {@code 404 (Not Found)} if the companyContainer is not found,
-     * or with status {@code 500 (Internal Server Error)} if the companyContainer couldn't be updated.
+     * @param id the id of the companyContainerDTO to save.
+     * @param companyContainerDTO the companyContainerDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated companyContainerDTO,
+     * or with status {@code 400 (Bad Request)} if the companyContainerDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the companyContainerDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the companyContainerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/company-containers/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<CompanyContainer> partialUpdateCompanyContainer(
+    public ResponseEntity<CompanyContainerDTO> partialUpdateCompanyContainer(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody CompanyContainer companyContainer
+        @RequestBody CompanyContainerDTO companyContainerDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update CompanyContainer partially : {}, {}", id, companyContainer);
-        if (companyContainer.getId() == null) {
+        log.debug("REST request to partial update CompanyContainer partially : {}, {}", id, companyContainerDTO);
+        if (companyContainerDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, companyContainer.getId())) {
+        if (!Objects.equals(id, companyContainerDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -132,11 +132,11 @@ public class CompanyContainerResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<CompanyContainer> result = companyContainerService.partialUpdate(companyContainer);
+        Optional<CompanyContainerDTO> result = companyContainerService.partialUpdate(companyContainerDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, companyContainer.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, companyContainerDTO.getId().toString())
         );
     }
 
@@ -147,11 +147,11 @@ public class CompanyContainerResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of companyContainers in body.
      */
     @GetMapping("/company-containers")
-    public ResponseEntity<List<CompanyContainer>> getAllCompanyContainers(
+    public ResponseEntity<List<CompanyContainerDTO>> getAllCompanyContainers(
         @org.springdoc.api.annotations.ParameterObject Pageable pageable
     ) {
         log.debug("REST request to get a page of CompanyContainers");
-        Page<CompanyContainer> page = companyContainerService.findAll(pageable);
+        Page<CompanyContainerDTO> page = companyContainerService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -159,20 +159,20 @@ public class CompanyContainerResource {
     /**
      * {@code GET  /company-containers/:id} : get the "id" companyContainer.
      *
-     * @param id the id of the companyContainer to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the companyContainer, or with status {@code 404 (Not Found)}.
+     * @param id the id of the companyContainerDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the companyContainerDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/company-containers/{id}")
-    public ResponseEntity<CompanyContainer> getCompanyContainer(@PathVariable Long id) {
+    public ResponseEntity<CompanyContainerDTO> getCompanyContainer(@PathVariable Long id) {
         log.debug("REST request to get CompanyContainer : {}", id);
-        Optional<CompanyContainer> companyContainer = companyContainerService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(companyContainer);
+        Optional<CompanyContainerDTO> companyContainerDTO = companyContainerService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(companyContainerDTO);
     }
 
     /**
      * {@code DELETE  /company-containers/:id} : delete the "id" companyContainer.
      *
-     * @param id the id of the companyContainer to delete.
+     * @param id the id of the companyContainerDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/company-containers/{id}")

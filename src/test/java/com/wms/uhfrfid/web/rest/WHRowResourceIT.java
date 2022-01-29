@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.WHRow;
 import com.wms.uhfrfid.repository.WHRowRepository;
+import com.wms.uhfrfid.service.dto.WHRowDTO;
+import com.wms.uhfrfid.service.mapper.WHRowMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -43,6 +45,9 @@ class WHRowResourceIT {
 
     @Autowired
     private WHRowRepository wHRowRepository;
+
+    @Autowired
+    private WHRowMapper wHRowMapper;
 
     @Autowired
     private EntityManager em;
@@ -84,8 +89,9 @@ class WHRowResourceIT {
     void createWHRow() throws Exception {
         int databaseSizeBeforeCreate = wHRowRepository.findAll().size();
         // Create the WHRow
+        WHRowDTO wHRowDTO = wHRowMapper.toDto(wHRow);
         restWHRowMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHRow)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHRowDTO)))
             .andExpect(status().isCreated());
 
         // Validate the WHRow in the database
@@ -101,12 +107,13 @@ class WHRowResourceIT {
     void createWHRowWithExistingId() throws Exception {
         // Create the WHRow with an existing ID
         wHRow.setId(1L);
+        WHRowDTO wHRowDTO = wHRowMapper.toDto(wHRow);
 
         int databaseSizeBeforeCreate = wHRowRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restWHRowMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHRow)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHRowDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the WHRow in the database
@@ -122,9 +129,10 @@ class WHRowResourceIT {
         wHRow.setName(null);
 
         // Create the WHRow, which fails.
+        WHRowDTO wHRowDTO = wHRowMapper.toDto(wHRow);
 
         restWHRowMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHRow)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHRowDTO)))
             .andExpect(status().isBadRequest());
 
         List<WHRow> wHRowList = wHRowRepository.findAll();
@@ -183,12 +191,13 @@ class WHRowResourceIT {
         // Disconnect from session so that the updates on updatedWHRow are not directly saved in db
         em.detach(updatedWHRow);
         updatedWHRow.name(UPDATED_NAME).note(UPDATED_NOTE);
+        WHRowDTO wHRowDTO = wHRowMapper.toDto(updatedWHRow);
 
         restWHRowMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedWHRow.getId())
+                put(ENTITY_API_URL_ID, wHRowDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedWHRow))
+                    .content(TestUtil.convertObjectToJsonBytes(wHRowDTO))
             )
             .andExpect(status().isOk());
 
@@ -206,12 +215,15 @@ class WHRowResourceIT {
         int databaseSizeBeforeUpdate = wHRowRepository.findAll().size();
         wHRow.setId(count.incrementAndGet());
 
+        // Create the WHRow
+        WHRowDTO wHRowDTO = wHRowMapper.toDto(wHRow);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWHRowMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, wHRow.getId())
+                put(ENTITY_API_URL_ID, wHRowDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(wHRow))
+                    .content(TestUtil.convertObjectToJsonBytes(wHRowDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -226,12 +238,15 @@ class WHRowResourceIT {
         int databaseSizeBeforeUpdate = wHRowRepository.findAll().size();
         wHRow.setId(count.incrementAndGet());
 
+        // Create the WHRow
+        WHRowDTO wHRowDTO = wHRowMapper.toDto(wHRow);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWHRowMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(wHRow))
+                    .content(TestUtil.convertObjectToJsonBytes(wHRowDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -246,9 +261,12 @@ class WHRowResourceIT {
         int databaseSizeBeforeUpdate = wHRowRepository.findAll().size();
         wHRow.setId(count.incrementAndGet());
 
+        // Create the WHRow
+        WHRowDTO wHRowDTO = wHRowMapper.toDto(wHRow);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWHRowMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHRow)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(wHRowDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the WHRow in the database
@@ -322,12 +340,15 @@ class WHRowResourceIT {
         int databaseSizeBeforeUpdate = wHRowRepository.findAll().size();
         wHRow.setId(count.incrementAndGet());
 
+        // Create the WHRow
+        WHRowDTO wHRowDTO = wHRowMapper.toDto(wHRow);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWHRowMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, wHRow.getId())
+                patch(ENTITY_API_URL_ID, wHRowDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(wHRow))
+                    .content(TestUtil.convertObjectToJsonBytes(wHRowDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -342,12 +363,15 @@ class WHRowResourceIT {
         int databaseSizeBeforeUpdate = wHRowRepository.findAll().size();
         wHRow.setId(count.incrementAndGet());
 
+        // Create the WHRow
+        WHRowDTO wHRowDTO = wHRowMapper.toDto(wHRow);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWHRowMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(wHRow))
+                    .content(TestUtil.convertObjectToJsonBytes(wHRowDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -362,9 +386,12 @@ class WHRowResourceIT {
         int databaseSizeBeforeUpdate = wHRowRepository.findAll().size();
         wHRow.setId(count.incrementAndGet());
 
+        // Create the WHRow
+        WHRowDTO wHRowDTO = wHRowMapper.toDto(wHRow);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWHRowMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(wHRow)))
+            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(wHRowDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the WHRow in the database

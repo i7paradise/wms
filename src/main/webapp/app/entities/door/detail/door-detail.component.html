@@ -1,0 +1,38 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="door">
+      <h2 data-cy="doorDetailsHeading"><span jhiTranslate="wmsApp.door.detail.title">Door</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ door.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.door.name">Name</span></dt>
+        <dd>
+          <span>{{ door.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.door.area">Area</span></dt>
+        <dd>
+          <div *ngIf="door.area">
+            <a [routerLink]="['/area', door.area?.id, 'view']">{{ door.area?.type }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/door', door.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

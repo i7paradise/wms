@@ -1,0 +1,44 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="uHFRFIDReader">
+      <h2 data-cy="uHFRFIDReaderDetailsHeading"><span jhiTranslate="wmsApp.uHFRFIDReader.detail.title">UHFRFID Reader</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ uHFRFIDReader.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.uHFRFIDReader.name">Name</span></dt>
+        <dd>
+          <span>{{ uHFRFIDReader.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.uHFRFIDReader.ip">Ip</span></dt>
+        <dd>
+          <span>{{ uHFRFIDReader.ip }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.uHFRFIDReader.port">Port</span></dt>
+        <dd>
+          <span>{{ uHFRFIDReader.port }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.uHFRFIDReader.status">Status</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'wmsApp.UHFRFIDReaderStatus.' + uHFRFIDReader.status }}">{{ uHFRFIDReader.status }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/uhfrfid-reader', uHFRFIDReader.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

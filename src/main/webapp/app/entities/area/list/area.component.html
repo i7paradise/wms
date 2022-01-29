@@ -1,0 +1,76 @@
+<div>
+  <h2 id="page-heading" data-cy="AreaHeading">
+    <span jhiTranslate="wmsApp.area.home.title">Areas</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="wmsApp.area.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-area"
+        [routerLink]="['/area/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="wmsApp.area.home.createLabel"> Create a new Area </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="areas?.length === 0">
+    <span jhiTranslate="wmsApp.area.home.notFound">No areas found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="areas && areas.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
+          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="type"><span jhiTranslate="wmsApp.area.type">Type</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="warehouse.name">
+            <span jhiTranslate="wmsApp.area.warehouse">Warehouse</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+        <tr *ngFor="let area of areas; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/area', area.id, 'view']">{{ area.id }}</a>
+          </td>
+          <td jhiTranslate="{{ 'wmsApp.AreaType.' + area.type }}">{{ area.type }}</td>
+          <td>
+            <div *ngIf="area.warehouse">
+              <a [routerLink]="['/warehouse', area.warehouse?.id, 'view']">{{ area.warehouse?.name }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/area', area.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button type="submit" [routerLink]="['/area', area.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(area)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

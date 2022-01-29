@@ -1,0 +1,11 @@
+export enum DeliveryOrderItemStatus {
+  IN_PROGRESS = 'IN_PROGRESS',
+
+  VERIFIED = 'VERIFIED',
+
+  LABELED = 'LABELED',
+
+  PARTIALLY_PLACED = 'PARTIALLY_PLACED',
+
+  FULLY_PLACED = 'FULLY_PLACED',
+}

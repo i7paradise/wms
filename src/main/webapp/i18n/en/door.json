@@ -1,0 +1,25 @@
+{
+  "wmsApp": {
+    "door": {
+      "home": {
+        "title": "Doors",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Door",
+        "createOrEditLabel": "Create or edit a Door",
+        "notFound": "No Doors found"
+      },
+      "created": "A new Door is created with identifier {{ param }}",
+      "updated": "A Door is updated with identifier {{ param }}",
+      "deleted": "A Door is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Door {{ id }}?"
+      },
+      "detail": {
+        "title": "Door"
+      },
+      "id": "ID",
+      "name": "Name",
+      "area": "Area"
+    }
+  }
+}

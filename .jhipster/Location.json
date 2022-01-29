@@ -1,0 +1,33 @@
+{
+  "applications": ["wms"],
+  "changelogDate": "20220129215939",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "location",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "note",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Location",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "warehouse",
+      "otherEntityRelationshipName": "location",
+      "relationshipName": "warehouse",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

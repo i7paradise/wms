@@ -13,7 +13,6 @@ application {
     clientThemeVariant primary
   }
   entities *
-  paginate * with infinite-scroll
 }
 
 entity Company {
@@ -227,4 +226,5 @@ relationship ManyToOne {
 }
 
 service * with serviceClass
-paginate Warehouse, Area, Door, Location, WHRow, WHLevel, Position, Product, ProductCategory, Customer, DeliveryOrder, DeliveryOrderItem  with pagination
+dto * with mapstruct
+paginate * with infinite-scroll

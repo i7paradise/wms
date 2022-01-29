@@ -1,0 +1,44 @@
+{
+  "applications": ["wms"],
+  "changelogDate": "20220129215639",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "warehouse",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "note",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "phone",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "contactPerson",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "fluentMethods": true,
+  "javadoc": "Warehouse of the company",
+  "jpaMetamodelFiltering": false,
+  "name": "Warehouse",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "company",
+      "otherEntityRelationshipName": "warehouse",
+      "relationshipName": "company",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

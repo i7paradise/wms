@@ -1,0 +1,74 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-company-container-heading"
+        data-cy="CompanyContainerCreateUpdateHeading"
+        jhiTranslate="wmsApp.companyContainer.home.createOrEditLabel"
+      >
+        Create or edit a Company Container
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.companyContainer.rfidTag" for="field_rfidTag">Rfid Tag</label>
+          <input type="text" class="form-control" name="rfidTag" id="field_rfidTag" data-cy="rfidTag" formControlName="rfidTag" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.companyContainer.color" for="field_color">Color</label>
+          <input type="text" class="form-control" name="color" id="field_color" data-cy="color" formControlName="color" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.companyContainer.company" for="field_company">Company</label>
+          <select class="form-control" id="field_company" data-cy="company" name="company" formControlName="company">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="companyOption.id === editForm.get('company')!.value?.id ? editForm.get('company')!.value : companyOption"
+              *ngFor="let companyOption of companiesSharedCollection; trackBy: trackCompanyById"
+            >
+              {{ companyOption.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.companyContainer.container" for="field_container">Container</label>
+          <select class="form-control" id="field_container" data-cy="container" name="container" formControlName="container">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="containerOption.id === editForm.get('container')!.value?.id ? editForm.get('container')!.value : containerOption"
+              *ngFor="let containerOption of containersSharedCollection; trackBy: trackContainerById"
+            >
+              {{ containerOption.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

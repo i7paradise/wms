@@ -1,0 +1,33 @@
+{
+  "applications": ["wms"],
+  "changelogDate": "20220129220139",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "bay",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "note",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Bay",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "wHRow",
+      "otherEntityRelationshipName": "bay",
+      "relationshipName": "whrow",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

@@ -1,0 +1,9 @@
+{
+  "wmsApp": {
+    "AreaType": {
+      "null": "",
+      "RECEIVING": "RECEIVING",
+      "SHIPPING": "SHIPPING"
+    }
+  }
+}

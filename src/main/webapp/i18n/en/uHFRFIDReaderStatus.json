@@ -1,0 +1,9 @@
+{
+  "wmsApp": {
+    "UHFRFIDReaderStatus": {
+      "null": "",
+      "DISCONNECTED": "DISCONNECTED",
+      "CONNECTED": "CONNECTED"
+    }
+  }
+}

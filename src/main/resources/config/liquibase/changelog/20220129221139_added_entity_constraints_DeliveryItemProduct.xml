@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <!--
+        Added the constraints for entity DeliveryItemProduct.
+    -->
+    <changeSet id="20220129221139-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="delivery_container_id"
+                                 baseTableName="delivery_item_product"
+                                 constraintName="fk_delivery_item_product__delivery_container_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="delivery_container"/>
+    </changeSet>
+</databaseChangeLog>

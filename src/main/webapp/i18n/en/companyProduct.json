@@ -1,0 +1,29 @@
+{
+  "wmsApp": {
+    "companyProduct": {
+      "home": {
+        "title": "Company Products",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Company Product",
+        "createOrEditLabel": "Create or edit a Company Product",
+        "notFound": "No Company Products found"
+      },
+      "created": "A new Company Product is created with identifier {{ param }}",
+      "updated": "A Company Product is updated with identifier {{ param }}",
+      "deleted": "A Company Product is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Company Product {{ id }}?"
+      },
+      "detail": {
+        "title": "Company Product"
+      },
+      "id": "ID",
+      "quantity": "Quantity",
+      "sku": "Sku",
+      "stockingRatio": "Stocking Ratio",
+      "container": "Container",
+      "company": "Company",
+      "product": "Product"
+    }
+  }
+}

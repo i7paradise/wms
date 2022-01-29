@@ -1,0 +1,15 @@
+{
+  "applications": ["wms"],
+  "changelogDate": "20220129215139",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "company_user",
+  "fields": [],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "CompanyUser",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}

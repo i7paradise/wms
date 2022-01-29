@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="deliveryItemProduct">
+      <h2 data-cy="deliveryItemProductDetailsHeading">
+        <span jhiTranslate="wmsApp.deliveryItemProduct.detail.title">Delivery Item Product</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ deliveryItemProduct.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.deliveryItemProduct.rfidTAG">Rfid TAG</span></dt>
+        <dd>
+          <span>{{ deliveryItemProduct.rfidTAG }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.deliveryItemProduct.deliveryContainer">Delivery Container</span></dt>
+        <dd>
+          <div *ngIf="deliveryItemProduct.deliveryContainer">
+            <a [routerLink]="['/delivery-container', deliveryItemProduct.deliveryContainer?.id, 'view']">{{
+              deliveryItemProduct.deliveryContainer?.id
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/delivery-item-product', deliveryItemProduct.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

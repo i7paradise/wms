@@ -1,0 +1,58 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="companyProduct">
+      <h2 data-cy="companyProductDetailsHeading"><span jhiTranslate="wmsApp.companyProduct.detail.title">Company Product</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ companyProduct.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.companyProduct.quantity">Quantity</span></dt>
+        <dd>
+          <span>{{ companyProduct.quantity }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.companyProduct.sku">Sku</span></dt>
+        <dd>
+          <span>{{ companyProduct.sku }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.companyProduct.stockingRatio">Stocking Ratio</span></dt>
+        <dd>
+          <span>{{ companyProduct.stockingRatio }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.companyProduct.container">Container</span></dt>
+        <dd>
+          <div *ngIf="companyProduct.container">
+            <a [routerLink]="['/container', companyProduct.container?.id, 'view']">{{ companyProduct.container?.name }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.companyProduct.company">Company</span></dt>
+        <dd>
+          <div *ngIf="companyProduct.company">
+            <a [routerLink]="['/company', companyProduct.company?.id, 'view']">{{ companyProduct.company?.name }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.companyProduct.product">Product</span></dt>
+        <dd>
+          <div *ngIf="companyProduct.product">
+            <a [routerLink]="['/product', companyProduct.product?.id, 'view']">{{ companyProduct.product?.name }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/company-product', companyProduct.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

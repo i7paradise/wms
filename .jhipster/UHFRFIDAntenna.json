@@ -1,0 +1,40 @@
+{
+  "applications": ["wms"],
+  "changelogDate": "20220129215539",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "uhfrfid_antenna",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "outputPower",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "UHFRFIDAntennaStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "AVAILABLE,IN_USE"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "UHFRFIDAntenna",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "uHFRFIDReader",
+      "otherEntityRelationshipName": "uHFRFIDAntenna",
+      "relationshipName": "uhfReader",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

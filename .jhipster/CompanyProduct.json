@@ -1,0 +1,55 @@
+{
+  "applications": ["wms"],
+  "changelogDate": "20220129220639",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "company_product",
+  "fields": [
+    {
+      "fieldName": "quantity",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "sku",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "stockingRatio",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "CompanyProduct",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "container",
+      "otherEntityRelationshipName": "companyProduct",
+      "ownerSide": true,
+      "relationshipName": "container",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "company",
+      "otherEntityRelationshipName": "companyProduct",
+      "relationshipName": "company",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "product",
+      "otherEntityRelationshipName": "companyProduct",
+      "relationshipName": "product",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

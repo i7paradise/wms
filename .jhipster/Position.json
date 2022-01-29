@@ -1,0 +1,33 @@
+{
+  "applications": ["wms"],
+  "changelogDate": "20220129220339",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "position",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "note",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Position",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "wHLevel",
+      "otherEntityRelationshipName": "position",
+      "relationshipName": "whlevel",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

@@ -1,0 +1,9 @@
+{
+  "wmsApp": {
+    "DoorAntennaType": {
+      "null": "",
+      "INNER": "INNER",
+      "OUTER": "OUTER"
+    }
+  }
+}

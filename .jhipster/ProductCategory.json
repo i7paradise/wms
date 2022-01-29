@@ -1,0 +1,25 @@
+{
+  "applications": ["wms"],
+  "changelogDate": "20220129220539",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "product_category",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "ProductCategory",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}

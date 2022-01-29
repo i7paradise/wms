@@ -1,0 +1,27 @@
+{
+  "wmsApp": {
+    "companyContainer": {
+      "home": {
+        "title": "Company Containers",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Company Container",
+        "createOrEditLabel": "Create or edit a Company Container",
+        "notFound": "No Company Containers found"
+      },
+      "created": "A new Company Container is created with identifier {{ param }}",
+      "updated": "A Company Container is updated with identifier {{ param }}",
+      "deleted": "A Company Container is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Company Container {{ id }}?"
+      },
+      "detail": {
+        "title": "Company Container"
+      },
+      "id": "ID",
+      "rfidTag": "Rfid Tag",
+      "color": "Color",
+      "company": "Company",
+      "container": "Container"
+    }
+  }
+}

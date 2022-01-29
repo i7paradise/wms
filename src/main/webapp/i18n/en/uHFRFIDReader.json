@@ -1,0 +1,27 @@
+{
+  "wmsApp": {
+    "uHFRFIDReader": {
+      "home": {
+        "title": "UHFRFID Readers",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new UHFRFID Reader",
+        "createOrEditLabel": "Create or edit a UHFRFID Reader",
+        "notFound": "No UHFRFID Readers found"
+      },
+      "created": "A new UHFRFID Reader is created with identifier {{ param }}",
+      "updated": "A UHFRFID Reader is updated with identifier {{ param }}",
+      "deleted": "A UHFRFID Reader is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete UHFRFID Reader {{ id }}?"
+      },
+      "detail": {
+        "title": "UHFRFID Reader"
+      },
+      "id": "ID",
+      "name": "Name",
+      "ip": "Ip",
+      "port": "Port",
+      "status": "Status"
+    }
+  }
+}

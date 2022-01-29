@@ -1,0 +1,33 @@
+{
+  "applications": ["wms"],
+  "changelogDate": "20220129220039",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "wh_row",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "note",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "WHRow",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "location",
+      "otherEntityRelationshipName": "wHRow",
+      "relationshipName": "location",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

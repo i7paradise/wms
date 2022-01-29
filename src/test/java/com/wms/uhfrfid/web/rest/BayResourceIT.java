@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.Bay;
 import com.wms.uhfrfid.repository.BayRepository;
+import com.wms.uhfrfid.service.dto.BayDTO;
+import com.wms.uhfrfid.service.mapper.BayMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -43,6 +45,9 @@ class BayResourceIT {
 
     @Autowired
     private BayRepository bayRepository;
+
+    @Autowired
+    private BayMapper bayMapper;
 
     @Autowired
     private EntityManager em;
@@ -84,8 +89,9 @@ class BayResourceIT {
     void createBay() throws Exception {
         int databaseSizeBeforeCreate = bayRepository.findAll().size();
         // Create the Bay
+        BayDTO bayDTO = bayMapper.toDto(bay);
         restBayMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(bay)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(bayDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Bay in the database
@@ -101,12 +107,13 @@ class BayResourceIT {
     void createBayWithExistingId() throws Exception {
         // Create the Bay with an existing ID
         bay.setId(1L);
+        BayDTO bayDTO = bayMapper.toDto(bay);
 
         int databaseSizeBeforeCreate = bayRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restBayMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(bay)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(bayDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Bay in the database
@@ -122,9 +129,10 @@ class BayResourceIT {
         bay.setName(null);
 
         // Create the Bay, which fails.
+        BayDTO bayDTO = bayMapper.toDto(bay);
 
         restBayMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(bay)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(bayDTO)))
             .andExpect(status().isBadRequest());
 
         List<Bay> bayList = bayRepository.findAll();
@@ -183,12 +191,13 @@ class BayResourceIT {
         // Disconnect from session so that the updates on updatedBay are not directly saved in db
         em.detach(updatedBay);
         updatedBay.name(UPDATED_NAME).note(UPDATED_NOTE);
+        BayDTO bayDTO = bayMapper.toDto(updatedBay);
 
         restBayMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedBay.getId())
+                put(ENTITY_API_URL_ID, bayDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedBay))
+                    .content(TestUtil.convertObjectToJsonBytes(bayDTO))
             )
             .andExpect(status().isOk());
 
@@ -206,10 +215,15 @@ class BayResourceIT {
         int databaseSizeBeforeUpdate = bayRepository.findAll().size();
         bay.setId(count.incrementAndGet());
 
+        // Create the Bay
+        BayDTO bayDTO = bayMapper.toDto(bay);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restBayMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, bay.getId()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(bay))
+                put(ENTITY_API_URL_ID, bayDTO.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(bayDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -224,12 +238,15 @@ class BayResourceIT {
         int databaseSizeBeforeUpdate = bayRepository.findAll().size();
         bay.setId(count.incrementAndGet());
 
+        // Create the Bay
+        BayDTO bayDTO = bayMapper.toDto(bay);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restBayMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(bay))
+                    .content(TestUtil.convertObjectToJsonBytes(bayDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -244,9 +261,12 @@ class BayResourceIT {
         int databaseSizeBeforeUpdate = bayRepository.findAll().size();
         bay.setId(count.incrementAndGet());
 
+        // Create the Bay
+        BayDTO bayDTO = bayMapper.toDto(bay);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restBayMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(bay)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(bayDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Bay in the database
@@ -320,12 +340,15 @@ class BayResourceIT {
         int databaseSizeBeforeUpdate = bayRepository.findAll().size();
         bay.setId(count.incrementAndGet());
 
+        // Create the Bay
+        BayDTO bayDTO = bayMapper.toDto(bay);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restBayMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, bay.getId())
+                patch(ENTITY_API_URL_ID, bayDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(bay))
+                    .content(TestUtil.convertObjectToJsonBytes(bayDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -340,12 +363,15 @@ class BayResourceIT {
         int databaseSizeBeforeUpdate = bayRepository.findAll().size();
         bay.setId(count.incrementAndGet());
 
+        // Create the Bay
+        BayDTO bayDTO = bayMapper.toDto(bay);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restBayMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(bay))
+                    .content(TestUtil.convertObjectToJsonBytes(bayDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -360,9 +386,12 @@ class BayResourceIT {
         int databaseSizeBeforeUpdate = bayRepository.findAll().size();
         bay.setId(count.incrementAndGet());
 
+        // Create the Bay
+        BayDTO bayDTO = bayMapper.toDto(bay);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restBayMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(bay)))
+            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(bayDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Bay in the database

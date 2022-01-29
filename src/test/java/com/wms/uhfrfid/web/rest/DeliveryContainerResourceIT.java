@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.DeliveryContainer;
 import com.wms.uhfrfid.repository.DeliveryContainerRepository;
+import com.wms.uhfrfid.service.dto.DeliveryContainerDTO;
+import com.wms.uhfrfid.service.mapper.DeliveryContainerMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -40,6 +42,9 @@ class DeliveryContainerResourceIT {
 
     @Autowired
     private DeliveryContainerRepository deliveryContainerRepository;
+
+    @Autowired
+    private DeliveryContainerMapper deliveryContainerMapper;
 
     @Autowired
     private EntityManager em;
@@ -81,9 +86,12 @@ class DeliveryContainerResourceIT {
     void createDeliveryContainer() throws Exception {
         int databaseSizeBeforeCreate = deliveryContainerRepository.findAll().size();
         // Create the DeliveryContainer
+        DeliveryContainerDTO deliveryContainerDTO = deliveryContainerMapper.toDto(deliveryContainer);
         restDeliveryContainerMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(deliveryContainer))
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryContainerDTO))
             )
             .andExpect(status().isCreated());
 
@@ -99,13 +107,16 @@ class DeliveryContainerResourceIT {
     void createDeliveryContainerWithExistingId() throws Exception {
         // Create the DeliveryContainer with an existing ID
         deliveryContainer.setId(1L);
+        DeliveryContainerDTO deliveryContainerDTO = deliveryContainerMapper.toDto(deliveryContainer);
 
         int databaseSizeBeforeCreate = deliveryContainerRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDeliveryContainerMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(deliveryContainer))
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryContainerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -164,12 +175,13 @@ class DeliveryContainerResourceIT {
         // Disconnect from session so that the updates on updatedDeliveryContainer are not directly saved in db
         em.detach(updatedDeliveryContainer);
         updatedDeliveryContainer.supplierRFIDTag(UPDATED_SUPPLIER_RFID_TAG);
+        DeliveryContainerDTO deliveryContainerDTO = deliveryContainerMapper.toDto(updatedDeliveryContainer);
 
         restDeliveryContainerMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedDeliveryContainer.getId())
+                put(ENTITY_API_URL_ID, deliveryContainerDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedDeliveryContainer))
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryContainerDTO))
             )
             .andExpect(status().isOk());
 
@@ -186,12 +198,15 @@ class DeliveryContainerResourceIT {
         int databaseSizeBeforeUpdate = deliveryContainerRepository.findAll().size();
         deliveryContainer.setId(count.incrementAndGet());
 
+        // Create the DeliveryContainer
+        DeliveryContainerDTO deliveryContainerDTO = deliveryContainerMapper.toDto(deliveryContainer);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDeliveryContainerMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, deliveryContainer.getId())
+                put(ENTITY_API_URL_ID, deliveryContainerDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(deliveryContainer))
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryContainerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -206,12 +221,15 @@ class DeliveryContainerResourceIT {
         int databaseSizeBeforeUpdate = deliveryContainerRepository.findAll().size();
         deliveryContainer.setId(count.incrementAndGet());
 
+        // Create the DeliveryContainer
+        DeliveryContainerDTO deliveryContainerDTO = deliveryContainerMapper.toDto(deliveryContainer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDeliveryContainerMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(deliveryContainer))
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryContainerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -226,10 +244,13 @@ class DeliveryContainerResourceIT {
         int databaseSizeBeforeUpdate = deliveryContainerRepository.findAll().size();
         deliveryContainer.setId(count.incrementAndGet());
 
+        // Create the DeliveryContainer
+        DeliveryContainerDTO deliveryContainerDTO = deliveryContainerMapper.toDto(deliveryContainer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDeliveryContainerMockMvc
             .perform(
-                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(deliveryContainer))
+                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(deliveryContainerDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 
@@ -300,12 +321,15 @@ class DeliveryContainerResourceIT {
         int databaseSizeBeforeUpdate = deliveryContainerRepository.findAll().size();
         deliveryContainer.setId(count.incrementAndGet());
 
+        // Create the DeliveryContainer
+        DeliveryContainerDTO deliveryContainerDTO = deliveryContainerMapper.toDto(deliveryContainer);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDeliveryContainerMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, deliveryContainer.getId())
+                patch(ENTITY_API_URL_ID, deliveryContainerDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(deliveryContainer))
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryContainerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -320,12 +344,15 @@ class DeliveryContainerResourceIT {
         int databaseSizeBeforeUpdate = deliveryContainerRepository.findAll().size();
         deliveryContainer.setId(count.incrementAndGet());
 
+        // Create the DeliveryContainer
+        DeliveryContainerDTO deliveryContainerDTO = deliveryContainerMapper.toDto(deliveryContainer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDeliveryContainerMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(deliveryContainer))
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryContainerDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -340,12 +367,15 @@ class DeliveryContainerResourceIT {
         int databaseSizeBeforeUpdate = deliveryContainerRepository.findAll().size();
         deliveryContainer.setId(count.incrementAndGet());
 
+        // Create the DeliveryContainer
+        DeliveryContainerDTO deliveryContainerDTO = deliveryContainerMapper.toDto(deliveryContainer);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDeliveryContainerMockMvc
             .perform(
                 patch(ENTITY_API_URL)
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(deliveryContainer))
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryContainerDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

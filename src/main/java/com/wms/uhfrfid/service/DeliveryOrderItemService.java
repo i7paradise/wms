@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.DeliveryOrderItem;
 import com.wms.uhfrfid.repository.DeliveryOrderItemRepository;
+import com.wms.uhfrfid.service.dto.DeliveryOrderItemDTO;
+import com.wms.uhfrfid.service.mapper.DeliveryOrderItemMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,46 +23,47 @@ public class DeliveryOrderItemService {
 
     private final DeliveryOrderItemRepository deliveryOrderItemRepository;
 
-    public DeliveryOrderItemService(DeliveryOrderItemRepository deliveryOrderItemRepository) {
+    private final DeliveryOrderItemMapper deliveryOrderItemMapper;
+
+    public DeliveryOrderItemService(
+        DeliveryOrderItemRepository deliveryOrderItemRepository,
+        DeliveryOrderItemMapper deliveryOrderItemMapper
+    ) {
         this.deliveryOrderItemRepository = deliveryOrderItemRepository;
+        this.deliveryOrderItemMapper = deliveryOrderItemMapper;
     }
 
     /**
      * Save a deliveryOrderItem.
      *
-     * @param deliveryOrderItem the entity to save.
+     * @param deliveryOrderItemDTO the entity to save.
      * @return the persisted entity.
      */
-    public DeliveryOrderItem save(DeliveryOrderItem deliveryOrderItem) {
-        log.debug("Request to save DeliveryOrderItem : {}", deliveryOrderItem);
-        return deliveryOrderItemRepository.save(deliveryOrderItem);
+    public DeliveryOrderItemDTO save(DeliveryOrderItemDTO deliveryOrderItemDTO) {
+        log.debug("Request to save DeliveryOrderItem : {}", deliveryOrderItemDTO);
+        DeliveryOrderItem deliveryOrderItem = deliveryOrderItemMapper.toEntity(deliveryOrderItemDTO);
+        deliveryOrderItem = deliveryOrderItemRepository.save(deliveryOrderItem);
+        return deliveryOrderItemMapper.toDto(deliveryOrderItem);
     }
 
     /**
      * Partially update a deliveryOrderItem.
      *
-     * @param deliveryOrderItem the entity to update partially.
+     * @param deliveryOrderItemDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<DeliveryOrderItem> partialUpdate(DeliveryOrderItem deliveryOrderItem) {
-        log.debug("Request to partially update DeliveryOrderItem : {}", deliveryOrderItem);
+    public Optional<DeliveryOrderItemDTO> partialUpdate(DeliveryOrderItemDTO deliveryOrderItemDTO) {
+        log.debug("Request to partially update DeliveryOrderItem : {}", deliveryOrderItemDTO);
 
         return deliveryOrderItemRepository
-            .findById(deliveryOrderItem.getId())
+            .findById(deliveryOrderItemDTO.getId())
             .map(existingDeliveryOrderItem -> {
-                if (deliveryOrderItem.getUnitQuantity() != null) {
-                    existingDeliveryOrderItem.setUnitQuantity(deliveryOrderItem.getUnitQuantity());
-                }
-                if (deliveryOrderItem.getContainerQuantity() != null) {
-                    existingDeliveryOrderItem.setContainerQuantity(deliveryOrderItem.getContainerQuantity());
-                }
-                if (deliveryOrderItem.getStatus() != null) {
-                    existingDeliveryOrderItem.setStatus(deliveryOrderItem.getStatus());
-                }
+                deliveryOrderItemMapper.partialUpdate(existingDeliveryOrderItem, deliveryOrderItemDTO);
 
                 return existingDeliveryOrderItem;
             })
-            .map(deliveryOrderItemRepository::save);
+            .map(deliveryOrderItemRepository::save)
+            .map(deliveryOrderItemMapper::toDto);
     }
 
     /**
@@ -70,9 +73,9 @@ public class DeliveryOrderItemService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<DeliveryOrderItem> findAll(Pageable pageable) {
+    public Page<DeliveryOrderItemDTO> findAll(Pageable pageable) {
         log.debug("Request to get all DeliveryOrderItems");
-        return deliveryOrderItemRepository.findAll(pageable);
+        return deliveryOrderItemRepository.findAll(pageable).map(deliveryOrderItemMapper::toDto);
     }
 
     /**
@@ -82,9 +85,9 @@ public class DeliveryOrderItemService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<DeliveryOrderItem> findOne(Long id) {
+    public Optional<DeliveryOrderItemDTO> findOne(Long id) {
         log.debug("Request to get DeliveryOrderItem : {}", id);
-        return deliveryOrderItemRepository.findById(id);
+        return deliveryOrderItemRepository.findById(id).map(deliveryOrderItemMapper::toDto);
     }
 
     /**

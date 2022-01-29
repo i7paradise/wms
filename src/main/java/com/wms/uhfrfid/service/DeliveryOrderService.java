@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.DeliveryOrder;
 import com.wms.uhfrfid.repository.DeliveryOrderRepository;
+import com.wms.uhfrfid.service.dto.DeliveryOrderDTO;
+import com.wms.uhfrfid.service.mapper.DeliveryOrderMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,49 +23,44 @@ public class DeliveryOrderService {
 
     private final DeliveryOrderRepository deliveryOrderRepository;
 
-    public DeliveryOrderService(DeliveryOrderRepository deliveryOrderRepository) {
+    private final DeliveryOrderMapper deliveryOrderMapper;
+
+    public DeliveryOrderService(DeliveryOrderRepository deliveryOrderRepository, DeliveryOrderMapper deliveryOrderMapper) {
         this.deliveryOrderRepository = deliveryOrderRepository;
+        this.deliveryOrderMapper = deliveryOrderMapper;
     }
 
     /**
      * Save a deliveryOrder.
      *
-     * @param deliveryOrder the entity to save.
+     * @param deliveryOrderDTO the entity to save.
      * @return the persisted entity.
      */
-    public DeliveryOrder save(DeliveryOrder deliveryOrder) {
-        log.debug("Request to save DeliveryOrder : {}", deliveryOrder);
-        return deliveryOrderRepository.save(deliveryOrder);
+    public DeliveryOrderDTO save(DeliveryOrderDTO deliveryOrderDTO) {
+        log.debug("Request to save DeliveryOrder : {}", deliveryOrderDTO);
+        DeliveryOrder deliveryOrder = deliveryOrderMapper.toEntity(deliveryOrderDTO);
+        deliveryOrder = deliveryOrderRepository.save(deliveryOrder);
+        return deliveryOrderMapper.toDto(deliveryOrder);
     }
 
     /**
      * Partially update a deliveryOrder.
      *
-     * @param deliveryOrder the entity to update partially.
+     * @param deliveryOrderDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<DeliveryOrder> partialUpdate(DeliveryOrder deliveryOrder) {
-        log.debug("Request to partially update DeliveryOrder : {}", deliveryOrder);
+    public Optional<DeliveryOrderDTO> partialUpdate(DeliveryOrderDTO deliveryOrderDTO) {
+        log.debug("Request to partially update DeliveryOrder : {}", deliveryOrderDTO);
 
         return deliveryOrderRepository
-            .findById(deliveryOrder.getId())
+            .findById(deliveryOrderDTO.getId())
             .map(existingDeliveryOrder -> {
-                if (deliveryOrder.getDoNumber() != null) {
-                    existingDeliveryOrder.setDoNumber(deliveryOrder.getDoNumber());
-                }
-                if (deliveryOrder.getPlacedDate() != null) {
-                    existingDeliveryOrder.setPlacedDate(deliveryOrder.getPlacedDate());
-                }
-                if (deliveryOrder.getStatus() != null) {
-                    existingDeliveryOrder.setStatus(deliveryOrder.getStatus());
-                }
-                if (deliveryOrder.getCode() != null) {
-                    existingDeliveryOrder.setCode(deliveryOrder.getCode());
-                }
+                deliveryOrderMapper.partialUpdate(existingDeliveryOrder, deliveryOrderDTO);
 
                 return existingDeliveryOrder;
             })
-            .map(deliveryOrderRepository::save);
+            .map(deliveryOrderRepository::save)
+            .map(deliveryOrderMapper::toDto);
     }
 
     /**
@@ -73,9 +70,9 @@ public class DeliveryOrderService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<DeliveryOrder> findAll(Pageable pageable) {
+    public Page<DeliveryOrderDTO> findAll(Pageable pageable) {
         log.debug("Request to get all DeliveryOrders");
-        return deliveryOrderRepository.findAll(pageable);
+        return deliveryOrderRepository.findAll(pageable).map(deliveryOrderMapper::toDto);
     }
 
     /**
@@ -85,9 +82,9 @@ public class DeliveryOrderService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<DeliveryOrder> findOne(Long id) {
+    public Optional<DeliveryOrderDTO> findOne(Long id) {
         log.debug("Request to get DeliveryOrder : {}", id);
-        return deliveryOrderRepository.findById(id);
+        return deliveryOrderRepository.findById(id).map(deliveryOrderMapper::toDto);
     }
 
     /**

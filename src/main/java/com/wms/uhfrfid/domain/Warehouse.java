@@ -1,6 +1,5 @@
 package com.wms.uhfrfid.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -10,7 +9,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 /**
  * Warehouse of the company
  */
-@Schema(description = "Warehouse of the company")
 @Entity
 @Table(name = "warehouse")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

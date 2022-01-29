@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.DeliveryItemProduct;
 import com.wms.uhfrfid.repository.DeliveryItemProductRepository;
+import com.wms.uhfrfid.service.dto.DeliveryItemProductDTO;
+import com.wms.uhfrfid.service.mapper.DeliveryItemProductMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -40,6 +42,9 @@ class DeliveryItemProductResourceIT {
 
     @Autowired
     private DeliveryItemProductRepository deliveryItemProductRepository;
+
+    @Autowired
+    private DeliveryItemProductMapper deliveryItemProductMapper;
 
     @Autowired
     private EntityManager em;
@@ -81,9 +86,12 @@ class DeliveryItemProductResourceIT {
     void createDeliveryItemProduct() throws Exception {
         int databaseSizeBeforeCreate = deliveryItemProductRepository.findAll().size();
         // Create the DeliveryItemProduct
+        DeliveryItemProductDTO deliveryItemProductDTO = deliveryItemProductMapper.toDto(deliveryItemProduct);
         restDeliveryItemProductMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(deliveryItemProduct))
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProductDTO))
             )
             .andExpect(status().isCreated());
 
@@ -99,13 +107,16 @@ class DeliveryItemProductResourceIT {
     void createDeliveryItemProductWithExistingId() throws Exception {
         // Create the DeliveryItemProduct with an existing ID
         deliveryItemProduct.setId(1L);
+        DeliveryItemProductDTO deliveryItemProductDTO = deliveryItemProductMapper.toDto(deliveryItemProduct);
 
         int databaseSizeBeforeCreate = deliveryItemProductRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDeliveryItemProductMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(deliveryItemProduct))
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProductDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -122,10 +133,13 @@ class DeliveryItemProductResourceIT {
         deliveryItemProduct.setRfidTAG(null);
 
         // Create the DeliveryItemProduct, which fails.
+        DeliveryItemProductDTO deliveryItemProductDTO = deliveryItemProductMapper.toDto(deliveryItemProduct);
 
         restDeliveryItemProductMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(deliveryItemProduct))
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProductDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -183,12 +197,13 @@ class DeliveryItemProductResourceIT {
         // Disconnect from session so that the updates on updatedDeliveryItemProduct are not directly saved in db
         em.detach(updatedDeliveryItemProduct);
         updatedDeliveryItemProduct.rfidTAG(UPDATED_RFID_TAG);
+        DeliveryItemProductDTO deliveryItemProductDTO = deliveryItemProductMapper.toDto(updatedDeliveryItemProduct);
 
         restDeliveryItemProductMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedDeliveryItemProduct.getId())
+                put(ENTITY_API_URL_ID, deliveryItemProductDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedDeliveryItemProduct))
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProductDTO))
             )
             .andExpect(status().isOk());
 
@@ -205,12 +220,15 @@ class DeliveryItemProductResourceIT {
         int databaseSizeBeforeUpdate = deliveryItemProductRepository.findAll().size();
         deliveryItemProduct.setId(count.incrementAndGet());
 
+        // Create the DeliveryItemProduct
+        DeliveryItemProductDTO deliveryItemProductDTO = deliveryItemProductMapper.toDto(deliveryItemProduct);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDeliveryItemProductMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, deliveryItemProduct.getId())
+                put(ENTITY_API_URL_ID, deliveryItemProductDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProduct))
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProductDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -225,12 +243,15 @@ class DeliveryItemProductResourceIT {
         int databaseSizeBeforeUpdate = deliveryItemProductRepository.findAll().size();
         deliveryItemProduct.setId(count.incrementAndGet());
 
+        // Create the DeliveryItemProduct
+        DeliveryItemProductDTO deliveryItemProductDTO = deliveryItemProductMapper.toDto(deliveryItemProduct);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDeliveryItemProductMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProduct))
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProductDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -245,10 +266,15 @@ class DeliveryItemProductResourceIT {
         int databaseSizeBeforeUpdate = deliveryItemProductRepository.findAll().size();
         deliveryItemProduct.setId(count.incrementAndGet());
 
+        // Create the DeliveryItemProduct
+        DeliveryItemProductDTO deliveryItemProductDTO = deliveryItemProductMapper.toDto(deliveryItemProduct);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDeliveryItemProductMockMvc
             .perform(
-                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(deliveryItemProduct))
+                put(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProductDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 
@@ -321,12 +347,15 @@ class DeliveryItemProductResourceIT {
         int databaseSizeBeforeUpdate = deliveryItemProductRepository.findAll().size();
         deliveryItemProduct.setId(count.incrementAndGet());
 
+        // Create the DeliveryItemProduct
+        DeliveryItemProductDTO deliveryItemProductDTO = deliveryItemProductMapper.toDto(deliveryItemProduct);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDeliveryItemProductMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, deliveryItemProduct.getId())
+                patch(ENTITY_API_URL_ID, deliveryItemProductDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProduct))
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProductDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -341,12 +370,15 @@ class DeliveryItemProductResourceIT {
         int databaseSizeBeforeUpdate = deliveryItemProductRepository.findAll().size();
         deliveryItemProduct.setId(count.incrementAndGet());
 
+        // Create the DeliveryItemProduct
+        DeliveryItemProductDTO deliveryItemProductDTO = deliveryItemProductMapper.toDto(deliveryItemProduct);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDeliveryItemProductMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProduct))
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProductDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -361,12 +393,15 @@ class DeliveryItemProductResourceIT {
         int databaseSizeBeforeUpdate = deliveryItemProductRepository.findAll().size();
         deliveryItemProduct.setId(count.incrementAndGet());
 
+        // Create the DeliveryItemProduct
+        DeliveryItemProductDTO deliveryItemProductDTO = deliveryItemProductMapper.toDto(deliveryItemProduct);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDeliveryItemProductMockMvc
             .perform(
                 patch(ENTITY_API_URL)
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProduct))
+                    .content(TestUtil.convertObjectToJsonBytes(deliveryItemProductDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

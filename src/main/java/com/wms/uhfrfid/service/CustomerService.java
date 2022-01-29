@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.Customer;
 import com.wms.uhfrfid.repository.CustomerRepository;
+import com.wms.uhfrfid.service.dto.CustomerDTO;
+import com.wms.uhfrfid.service.mapper.CustomerMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,64 +23,44 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    public CustomerService(CustomerRepository customerRepository) {
+    private final CustomerMapper customerMapper;
+
+    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
     }
 
     /**
      * Save a customer.
      *
-     * @param customer the entity to save.
+     * @param customerDTO the entity to save.
      * @return the persisted entity.
      */
-    public Customer save(Customer customer) {
-        log.debug("Request to save Customer : {}", customer);
-        return customerRepository.save(customer);
+    public CustomerDTO save(CustomerDTO customerDTO) {
+        log.debug("Request to save Customer : {}", customerDTO);
+        Customer customer = customerMapper.toEntity(customerDTO);
+        customer = customerRepository.save(customer);
+        return customerMapper.toDto(customer);
     }
 
     /**
      * Partially update a customer.
      *
-     * @param customer the entity to update partially.
+     * @param customerDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Customer> partialUpdate(Customer customer) {
-        log.debug("Request to partially update Customer : {}", customer);
+    public Optional<CustomerDTO> partialUpdate(CustomerDTO customerDTO) {
+        log.debug("Request to partially update Customer : {}", customerDTO);
 
         return customerRepository
-            .findById(customer.getId())
+            .findById(customerDTO.getId())
             .map(existingCustomer -> {
-                if (customer.getFirstName() != null) {
-                    existingCustomer.setFirstName(customer.getFirstName());
-                }
-                if (customer.getLastName() != null) {
-                    existingCustomer.setLastName(customer.getLastName());
-                }
-                if (customer.getGender() != null) {
-                    existingCustomer.setGender(customer.getGender());
-                }
-                if (customer.getEmail() != null) {
-                    existingCustomer.setEmail(customer.getEmail());
-                }
-                if (customer.getPhone() != null) {
-                    existingCustomer.setPhone(customer.getPhone());
-                }
-                if (customer.getAddressLine1() != null) {
-                    existingCustomer.setAddressLine1(customer.getAddressLine1());
-                }
-                if (customer.getAddressLine2() != null) {
-                    existingCustomer.setAddressLine2(customer.getAddressLine2());
-                }
-                if (customer.getCity() != null) {
-                    existingCustomer.setCity(customer.getCity());
-                }
-                if (customer.getCountry() != null) {
-                    existingCustomer.setCountry(customer.getCountry());
-                }
+                customerMapper.partialUpdate(existingCustomer, customerDTO);
 
                 return existingCustomer;
             })
-            .map(customerRepository::save);
+            .map(customerRepository::save)
+            .map(customerMapper::toDto);
     }
 
     /**
@@ -88,9 +70,9 @@ public class CustomerService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Customer> findAll(Pageable pageable) {
+    public Page<CustomerDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Customers");
-        return customerRepository.findAll(pageable);
+        return customerRepository.findAll(pageable).map(customerMapper::toDto);
     }
 
     /**
@@ -100,9 +82,9 @@ public class CustomerService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Customer> findOne(Long id) {
+    public Optional<CustomerDTO> findOne(Long id) {
         log.debug("Request to get Customer : {}", id);
-        return customerRepository.findById(id);
+        return customerRepository.findById(id).map(customerMapper::toDto);
     }
 
     /**

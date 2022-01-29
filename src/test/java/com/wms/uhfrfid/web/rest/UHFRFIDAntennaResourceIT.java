@@ -9,6 +9,8 @@ import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.UHFRFIDAntenna;
 import com.wms.uhfrfid.domain.enumeration.UHFRFIDAntennaStatus;
 import com.wms.uhfrfid.repository.UHFRFIDAntennaRepository;
+import com.wms.uhfrfid.service.dto.UHFRFIDAntennaDTO;
+import com.wms.uhfrfid.service.mapper.UHFRFIDAntennaMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -47,6 +49,9 @@ class UHFRFIDAntennaResourceIT {
 
     @Autowired
     private UHFRFIDAntennaRepository uHFRFIDAntennaRepository;
+
+    @Autowired
+    private UHFRFIDAntennaMapper uHFRFIDAntennaMapper;
 
     @Autowired
     private EntityManager em;
@@ -88,9 +93,10 @@ class UHFRFIDAntennaResourceIT {
     void createUHFRFIDAntenna() throws Exception {
         int databaseSizeBeforeCreate = uHFRFIDAntennaRepository.findAll().size();
         // Create the UHFRFIDAntenna
+        UHFRFIDAntennaDTO uHFRFIDAntennaDTO = uHFRFIDAntennaMapper.toDto(uHFRFIDAntenna);
         restUHFRFIDAntennaMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntenna))
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntennaDTO))
             )
             .andExpect(status().isCreated());
 
@@ -108,13 +114,14 @@ class UHFRFIDAntennaResourceIT {
     void createUHFRFIDAntennaWithExistingId() throws Exception {
         // Create the UHFRFIDAntenna with an existing ID
         uHFRFIDAntenna.setId(1L);
+        UHFRFIDAntennaDTO uHFRFIDAntennaDTO = uHFRFIDAntennaMapper.toDto(uHFRFIDAntenna);
 
         int databaseSizeBeforeCreate = uHFRFIDAntennaRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restUHFRFIDAntennaMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntenna))
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntennaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -131,10 +138,11 @@ class UHFRFIDAntennaResourceIT {
         uHFRFIDAntenna.setName(null);
 
         // Create the UHFRFIDAntenna, which fails.
+        UHFRFIDAntennaDTO uHFRFIDAntennaDTO = uHFRFIDAntennaMapper.toDto(uHFRFIDAntenna);
 
         restUHFRFIDAntennaMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntenna))
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntennaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -150,10 +158,11 @@ class UHFRFIDAntennaResourceIT {
         uHFRFIDAntenna.setOutputPower(null);
 
         // Create the UHFRFIDAntenna, which fails.
+        UHFRFIDAntennaDTO uHFRFIDAntennaDTO = uHFRFIDAntennaMapper.toDto(uHFRFIDAntenna);
 
         restUHFRFIDAntennaMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntenna))
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntennaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -169,10 +178,11 @@ class UHFRFIDAntennaResourceIT {
         uHFRFIDAntenna.setStatus(null);
 
         // Create the UHFRFIDAntenna, which fails.
+        UHFRFIDAntennaDTO uHFRFIDAntennaDTO = uHFRFIDAntennaMapper.toDto(uHFRFIDAntenna);
 
         restUHFRFIDAntennaMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntenna))
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntennaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -234,12 +244,13 @@ class UHFRFIDAntennaResourceIT {
         // Disconnect from session so that the updates on updatedUHFRFIDAntenna are not directly saved in db
         em.detach(updatedUHFRFIDAntenna);
         updatedUHFRFIDAntenna.name(UPDATED_NAME).outputPower(UPDATED_OUTPUT_POWER).status(UPDATED_STATUS);
+        UHFRFIDAntennaDTO uHFRFIDAntennaDTO = uHFRFIDAntennaMapper.toDto(updatedUHFRFIDAntenna);
 
         restUHFRFIDAntennaMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedUHFRFIDAntenna.getId())
+                put(ENTITY_API_URL_ID, uHFRFIDAntennaDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedUHFRFIDAntenna))
+                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntennaDTO))
             )
             .andExpect(status().isOk());
 
@@ -258,12 +269,15 @@ class UHFRFIDAntennaResourceIT {
         int databaseSizeBeforeUpdate = uHFRFIDAntennaRepository.findAll().size();
         uHFRFIDAntenna.setId(count.incrementAndGet());
 
+        // Create the UHFRFIDAntenna
+        UHFRFIDAntennaDTO uHFRFIDAntennaDTO = uHFRFIDAntennaMapper.toDto(uHFRFIDAntenna);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restUHFRFIDAntennaMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, uHFRFIDAntenna.getId())
+                put(ENTITY_API_URL_ID, uHFRFIDAntennaDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntenna))
+                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntennaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -278,12 +292,15 @@ class UHFRFIDAntennaResourceIT {
         int databaseSizeBeforeUpdate = uHFRFIDAntennaRepository.findAll().size();
         uHFRFIDAntenna.setId(count.incrementAndGet());
 
+        // Create the UHFRFIDAntenna
+        UHFRFIDAntennaDTO uHFRFIDAntennaDTO = uHFRFIDAntennaMapper.toDto(uHFRFIDAntenna);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restUHFRFIDAntennaMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntenna))
+                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntennaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -298,9 +315,14 @@ class UHFRFIDAntennaResourceIT {
         int databaseSizeBeforeUpdate = uHFRFIDAntennaRepository.findAll().size();
         uHFRFIDAntenna.setId(count.incrementAndGet());
 
+        // Create the UHFRFIDAntenna
+        UHFRFIDAntennaDTO uHFRFIDAntennaDTO = uHFRFIDAntennaMapper.toDto(uHFRFIDAntenna);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restUHFRFIDAntennaMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntenna)))
+            .perform(
+                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntennaDTO))
+            )
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the UHFRFIDAntenna in the database
@@ -376,12 +398,15 @@ class UHFRFIDAntennaResourceIT {
         int databaseSizeBeforeUpdate = uHFRFIDAntennaRepository.findAll().size();
         uHFRFIDAntenna.setId(count.incrementAndGet());
 
+        // Create the UHFRFIDAntenna
+        UHFRFIDAntennaDTO uHFRFIDAntennaDTO = uHFRFIDAntennaMapper.toDto(uHFRFIDAntenna);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restUHFRFIDAntennaMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, uHFRFIDAntenna.getId())
+                patch(ENTITY_API_URL_ID, uHFRFIDAntennaDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntenna))
+                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntennaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -396,12 +421,15 @@ class UHFRFIDAntennaResourceIT {
         int databaseSizeBeforeUpdate = uHFRFIDAntennaRepository.findAll().size();
         uHFRFIDAntenna.setId(count.incrementAndGet());
 
+        // Create the UHFRFIDAntenna
+        UHFRFIDAntennaDTO uHFRFIDAntennaDTO = uHFRFIDAntennaMapper.toDto(uHFRFIDAntenna);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restUHFRFIDAntennaMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntenna))
+                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntennaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -416,10 +444,15 @@ class UHFRFIDAntennaResourceIT {
         int databaseSizeBeforeUpdate = uHFRFIDAntennaRepository.findAll().size();
         uHFRFIDAntenna.setId(count.incrementAndGet());
 
+        // Create the UHFRFIDAntenna
+        UHFRFIDAntennaDTO uHFRFIDAntennaDTO = uHFRFIDAntennaMapper.toDto(uHFRFIDAntenna);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restUHFRFIDAntennaMockMvc
             .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntenna))
+                patch(ENTITY_API_URL)
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDAntennaDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

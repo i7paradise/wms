@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.Area;
 import com.wms.uhfrfid.repository.AreaRepository;
+import com.wms.uhfrfid.service.dto.AreaDTO;
+import com.wms.uhfrfid.service.mapper.AreaMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,40 +23,44 @@ public class AreaService {
 
     private final AreaRepository areaRepository;
 
-    public AreaService(AreaRepository areaRepository) {
+    private final AreaMapper areaMapper;
+
+    public AreaService(AreaRepository areaRepository, AreaMapper areaMapper) {
         this.areaRepository = areaRepository;
+        this.areaMapper = areaMapper;
     }
 
     /**
      * Save a area.
      *
-     * @param area the entity to save.
+     * @param areaDTO the entity to save.
      * @return the persisted entity.
      */
-    public Area save(Area area) {
-        log.debug("Request to save Area : {}", area);
-        return areaRepository.save(area);
+    public AreaDTO save(AreaDTO areaDTO) {
+        log.debug("Request to save Area : {}", areaDTO);
+        Area area = areaMapper.toEntity(areaDTO);
+        area = areaRepository.save(area);
+        return areaMapper.toDto(area);
     }
 
     /**
      * Partially update a area.
      *
-     * @param area the entity to update partially.
+     * @param areaDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Area> partialUpdate(Area area) {
-        log.debug("Request to partially update Area : {}", area);
+    public Optional<AreaDTO> partialUpdate(AreaDTO areaDTO) {
+        log.debug("Request to partially update Area : {}", areaDTO);
 
         return areaRepository
-            .findById(area.getId())
+            .findById(areaDTO.getId())
             .map(existingArea -> {
-                if (area.getType() != null) {
-                    existingArea.setType(area.getType());
-                }
+                areaMapper.partialUpdate(existingArea, areaDTO);
 
                 return existingArea;
             })
-            .map(areaRepository::save);
+            .map(areaRepository::save)
+            .map(areaMapper::toDto);
     }
 
     /**
@@ -64,9 +70,9 @@ public class AreaService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Area> findAll(Pageable pageable) {
+    public Page<AreaDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Areas");
-        return areaRepository.findAll(pageable);
+        return areaRepository.findAll(pageable).map(areaMapper::toDto);
     }
 
     /**
@@ -76,9 +82,9 @@ public class AreaService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Area> findOne(Long id) {
+    public Optional<AreaDTO> findOne(Long id) {
         log.debug("Request to get Area : {}", id);
-        return areaRepository.findById(id);
+        return areaRepository.findById(id).map(areaMapper::toDto);
     }
 
     /**

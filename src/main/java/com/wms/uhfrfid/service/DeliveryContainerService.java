@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.DeliveryContainer;
 import com.wms.uhfrfid.repository.DeliveryContainerRepository;
+import com.wms.uhfrfid.service.dto.DeliveryContainerDTO;
+import com.wms.uhfrfid.service.mapper.DeliveryContainerMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,40 +23,47 @@ public class DeliveryContainerService {
 
     private final DeliveryContainerRepository deliveryContainerRepository;
 
-    public DeliveryContainerService(DeliveryContainerRepository deliveryContainerRepository) {
+    private final DeliveryContainerMapper deliveryContainerMapper;
+
+    public DeliveryContainerService(
+        DeliveryContainerRepository deliveryContainerRepository,
+        DeliveryContainerMapper deliveryContainerMapper
+    ) {
         this.deliveryContainerRepository = deliveryContainerRepository;
+        this.deliveryContainerMapper = deliveryContainerMapper;
     }
 
     /**
      * Save a deliveryContainer.
      *
-     * @param deliveryContainer the entity to save.
+     * @param deliveryContainerDTO the entity to save.
      * @return the persisted entity.
      */
-    public DeliveryContainer save(DeliveryContainer deliveryContainer) {
-        log.debug("Request to save DeliveryContainer : {}", deliveryContainer);
-        return deliveryContainerRepository.save(deliveryContainer);
+    public DeliveryContainerDTO save(DeliveryContainerDTO deliveryContainerDTO) {
+        log.debug("Request to save DeliveryContainer : {}", deliveryContainerDTO);
+        DeliveryContainer deliveryContainer = deliveryContainerMapper.toEntity(deliveryContainerDTO);
+        deliveryContainer = deliveryContainerRepository.save(deliveryContainer);
+        return deliveryContainerMapper.toDto(deliveryContainer);
     }
 
     /**
      * Partially update a deliveryContainer.
      *
-     * @param deliveryContainer the entity to update partially.
+     * @param deliveryContainerDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<DeliveryContainer> partialUpdate(DeliveryContainer deliveryContainer) {
-        log.debug("Request to partially update DeliveryContainer : {}", deliveryContainer);
+    public Optional<DeliveryContainerDTO> partialUpdate(DeliveryContainerDTO deliveryContainerDTO) {
+        log.debug("Request to partially update DeliveryContainer : {}", deliveryContainerDTO);
 
         return deliveryContainerRepository
-            .findById(deliveryContainer.getId())
+            .findById(deliveryContainerDTO.getId())
             .map(existingDeliveryContainer -> {
-                if (deliveryContainer.getSupplierRFIDTag() != null) {
-                    existingDeliveryContainer.setSupplierRFIDTag(deliveryContainer.getSupplierRFIDTag());
-                }
+                deliveryContainerMapper.partialUpdate(existingDeliveryContainer, deliveryContainerDTO);
 
                 return existingDeliveryContainer;
             })
-            .map(deliveryContainerRepository::save);
+            .map(deliveryContainerRepository::save)
+            .map(deliveryContainerMapper::toDto);
     }
 
     /**
@@ -64,9 +73,9 @@ public class DeliveryContainerService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<DeliveryContainer> findAll(Pageable pageable) {
+    public Page<DeliveryContainerDTO> findAll(Pageable pageable) {
         log.debug("Request to get all DeliveryContainers");
-        return deliveryContainerRepository.findAll(pageable);
+        return deliveryContainerRepository.findAll(pageable).map(deliveryContainerMapper::toDto);
     }
 
     /**
@@ -76,9 +85,9 @@ public class DeliveryContainerService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<DeliveryContainer> findOne(Long id) {
+    public Optional<DeliveryContainerDTO> findOne(Long id) {
         log.debug("Request to get DeliveryContainer : {}", id);
-        return deliveryContainerRepository.findById(id);
+        return deliveryContainerRepository.findById(id).map(deliveryContainerMapper::toDto);
     }
 
     /**

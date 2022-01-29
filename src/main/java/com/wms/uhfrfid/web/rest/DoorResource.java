@@ -1,8 +1,8 @@
 package com.wms.uhfrfid.web.rest;
 
-import com.wms.uhfrfid.domain.Door;
 import com.wms.uhfrfid.repository.DoorRepository;
 import com.wms.uhfrfid.service.DoorService;
+import com.wms.uhfrfid.service.dto.DoorDTO;
 import com.wms.uhfrfid.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,17 +51,17 @@ public class DoorResource {
     /**
      * {@code POST  /doors} : Create a new door.
      *
-     * @param door the door to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new door, or with status {@code 400 (Bad Request)} if the door has already an ID.
+     * @param doorDTO the doorDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new doorDTO, or with status {@code 400 (Bad Request)} if the door has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/doors")
-    public ResponseEntity<Door> createDoor(@Valid @RequestBody Door door) throws URISyntaxException {
-        log.debug("REST request to save Door : {}", door);
-        if (door.getId() != null) {
+    public ResponseEntity<DoorDTO> createDoor(@Valid @RequestBody DoorDTO doorDTO) throws URISyntaxException {
+        log.debug("REST request to save Door : {}", doorDTO);
+        if (doorDTO.getId() != null) {
             throw new BadRequestAlertException("A new door cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Door result = doorService.save(door);
+        DoorDTO result = doorService.save(doorDTO);
         return ResponseEntity
             .created(new URI("/api/doors/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -71,21 +71,23 @@ public class DoorResource {
     /**
      * {@code PUT  /doors/:id} : Updates an existing door.
      *
-     * @param id the id of the door to save.
-     * @param door the door to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated door,
-     * or with status {@code 400 (Bad Request)} if the door is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the door couldn't be updated.
+     * @param id the id of the doorDTO to save.
+     * @param doorDTO the doorDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated doorDTO,
+     * or with status {@code 400 (Bad Request)} if the doorDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the doorDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/doors/{id}")
-    public ResponseEntity<Door> updateDoor(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Door door)
-        throws URISyntaxException {
-        log.debug("REST request to update Door : {}, {}", id, door);
-        if (door.getId() == null) {
+    public ResponseEntity<DoorDTO> updateDoor(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody DoorDTO doorDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to update Door : {}, {}", id, doorDTO);
+        if (doorDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, door.getId())) {
+        if (!Objects.equals(id, doorDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -93,34 +95,34 @@ public class DoorResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Door result = doorService.save(door);
+        DoorDTO result = doorService.save(doorDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, door.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, doorDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /doors/:id} : Partial updates given fields of an existing door, field will ignore if it is null
      *
-     * @param id the id of the door to save.
-     * @param door the door to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated door,
-     * or with status {@code 400 (Bad Request)} if the door is not valid,
-     * or with status {@code 404 (Not Found)} if the door is not found,
-     * or with status {@code 500 (Internal Server Error)} if the door couldn't be updated.
+     * @param id the id of the doorDTO to save.
+     * @param doorDTO the doorDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated doorDTO,
+     * or with status {@code 400 (Bad Request)} if the doorDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the doorDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the doorDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/doors/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<Door> partialUpdateDoor(
+    public ResponseEntity<DoorDTO> partialUpdateDoor(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Door door
+        @NotNull @RequestBody DoorDTO doorDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update Door partially : {}, {}", id, door);
-        if (door.getId() == null) {
+        log.debug("REST request to partial update Door partially : {}, {}", id, doorDTO);
+        if (doorDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, door.getId())) {
+        if (!Objects.equals(id, doorDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -128,11 +130,11 @@ public class DoorResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Door> result = doorService.partialUpdate(door);
+        Optional<DoorDTO> result = doorService.partialUpdate(doorDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, door.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, doorDTO.getId().toString())
         );
     }
 
@@ -143,9 +145,9 @@ public class DoorResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of doors in body.
      */
     @GetMapping("/doors")
-    public ResponseEntity<List<Door>> getAllDoors(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<DoorDTO>> getAllDoors(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Doors");
-        Page<Door> page = doorService.findAll(pageable);
+        Page<DoorDTO> page = doorService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -153,20 +155,20 @@ public class DoorResource {
     /**
      * {@code GET  /doors/:id} : get the "id" door.
      *
-     * @param id the id of the door to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the door, or with status {@code 404 (Not Found)}.
+     * @param id the id of the doorDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the doorDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/doors/{id}")
-    public ResponseEntity<Door> getDoor(@PathVariable Long id) {
+    public ResponseEntity<DoorDTO> getDoor(@PathVariable Long id) {
         log.debug("REST request to get Door : {}", id);
-        Optional<Door> door = doorService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(door);
+        Optional<DoorDTO> doorDTO = doorService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(doorDTO);
     }
 
     /**
      * {@code DELETE  /doors/:id} : delete the "id" door.
      *
-     * @param id the id of the door to delete.
+     * @param id the id of the doorDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/doors/{id}")

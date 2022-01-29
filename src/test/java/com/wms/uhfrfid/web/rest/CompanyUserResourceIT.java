@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.CompanyUser;
 import com.wms.uhfrfid.repository.CompanyUserRepository;
+import com.wms.uhfrfid.service.dto.CompanyUserDTO;
+import com.wms.uhfrfid.service.mapper.CompanyUserMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -37,6 +39,9 @@ class CompanyUserResourceIT {
 
     @Autowired
     private CompanyUserRepository companyUserRepository;
+
+    @Autowired
+    private CompanyUserMapper companyUserMapper;
 
     @Autowired
     private EntityManager em;
@@ -78,8 +83,11 @@ class CompanyUserResourceIT {
     void createCompanyUser() throws Exception {
         int databaseSizeBeforeCreate = companyUserRepository.findAll().size();
         // Create the CompanyUser
+        CompanyUserDTO companyUserDTO = companyUserMapper.toDto(companyUser);
         restCompanyUserMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyUser)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyUserDTO))
+            )
             .andExpect(status().isCreated());
 
         // Validate the CompanyUser in the database
@@ -93,12 +101,15 @@ class CompanyUserResourceIT {
     void createCompanyUserWithExistingId() throws Exception {
         // Create the CompanyUser with an existing ID
         companyUser.setId(1L);
+        CompanyUserDTO companyUserDTO = companyUserMapper.toDto(companyUser);
 
         int databaseSizeBeforeCreate = companyUserRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restCompanyUserMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyUser)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyUserDTO))
+            )
             .andExpect(status().isBadRequest());
 
         // Validate the CompanyUser in the database
@@ -153,12 +164,13 @@ class CompanyUserResourceIT {
         CompanyUser updatedCompanyUser = companyUserRepository.findById(companyUser.getId()).get();
         // Disconnect from session so that the updates on updatedCompanyUser are not directly saved in db
         em.detach(updatedCompanyUser);
+        CompanyUserDTO companyUserDTO = companyUserMapper.toDto(updatedCompanyUser);
 
         restCompanyUserMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedCompanyUser.getId())
+                put(ENTITY_API_URL_ID, companyUserDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedCompanyUser))
+                    .content(TestUtil.convertObjectToJsonBytes(companyUserDTO))
             )
             .andExpect(status().isOk());
 
@@ -174,12 +186,15 @@ class CompanyUserResourceIT {
         int databaseSizeBeforeUpdate = companyUserRepository.findAll().size();
         companyUser.setId(count.incrementAndGet());
 
+        // Create the CompanyUser
+        CompanyUserDTO companyUserDTO = companyUserMapper.toDto(companyUser);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCompanyUserMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, companyUser.getId())
+                put(ENTITY_API_URL_ID, companyUserDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(companyUser))
+                    .content(TestUtil.convertObjectToJsonBytes(companyUserDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -194,12 +209,15 @@ class CompanyUserResourceIT {
         int databaseSizeBeforeUpdate = companyUserRepository.findAll().size();
         companyUser.setId(count.incrementAndGet());
 
+        // Create the CompanyUser
+        CompanyUserDTO companyUserDTO = companyUserMapper.toDto(companyUser);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCompanyUserMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(companyUser))
+                    .content(TestUtil.convertObjectToJsonBytes(companyUserDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -214,9 +232,12 @@ class CompanyUserResourceIT {
         int databaseSizeBeforeUpdate = companyUserRepository.findAll().size();
         companyUser.setId(count.incrementAndGet());
 
+        // Create the CompanyUser
+        CompanyUserDTO companyUserDTO = companyUserMapper.toDto(companyUser);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCompanyUserMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyUser)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(companyUserDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the CompanyUser in the database
@@ -282,12 +303,15 @@ class CompanyUserResourceIT {
         int databaseSizeBeforeUpdate = companyUserRepository.findAll().size();
         companyUser.setId(count.incrementAndGet());
 
+        // Create the CompanyUser
+        CompanyUserDTO companyUserDTO = companyUserMapper.toDto(companyUser);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCompanyUserMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, companyUser.getId())
+                patch(ENTITY_API_URL_ID, companyUserDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(companyUser))
+                    .content(TestUtil.convertObjectToJsonBytes(companyUserDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -302,12 +326,15 @@ class CompanyUserResourceIT {
         int databaseSizeBeforeUpdate = companyUserRepository.findAll().size();
         companyUser.setId(count.incrementAndGet());
 
+        // Create the CompanyUser
+        CompanyUserDTO companyUserDTO = companyUserMapper.toDto(companyUser);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCompanyUserMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(companyUser))
+                    .content(TestUtil.convertObjectToJsonBytes(companyUserDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -322,10 +349,13 @@ class CompanyUserResourceIT {
         int databaseSizeBeforeUpdate = companyUserRepository.findAll().size();
         companyUser.setId(count.incrementAndGet());
 
+        // Create the CompanyUser
+        CompanyUserDTO companyUserDTO = companyUserMapper.toDto(companyUser);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCompanyUserMockMvc
             .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(companyUser))
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(companyUserDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

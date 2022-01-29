@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.Position;
 import com.wms.uhfrfid.repository.PositionRepository;
+import com.wms.uhfrfid.service.dto.PositionDTO;
+import com.wms.uhfrfid.service.mapper.PositionMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -43,6 +45,9 @@ class PositionResourceIT {
 
     @Autowired
     private PositionRepository positionRepository;
+
+    @Autowired
+    private PositionMapper positionMapper;
 
     @Autowired
     private EntityManager em;
@@ -84,8 +89,9 @@ class PositionResourceIT {
     void createPosition() throws Exception {
         int databaseSizeBeforeCreate = positionRepository.findAll().size();
         // Create the Position
+        PositionDTO positionDTO = positionMapper.toDto(position);
         restPositionMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(position)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(positionDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Position in the database
@@ -101,12 +107,13 @@ class PositionResourceIT {
     void createPositionWithExistingId() throws Exception {
         // Create the Position with an existing ID
         position.setId(1L);
+        PositionDTO positionDTO = positionMapper.toDto(position);
 
         int databaseSizeBeforeCreate = positionRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPositionMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(position)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(positionDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Position in the database
@@ -122,9 +129,10 @@ class PositionResourceIT {
         position.setName(null);
 
         // Create the Position, which fails.
+        PositionDTO positionDTO = positionMapper.toDto(position);
 
         restPositionMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(position)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(positionDTO)))
             .andExpect(status().isBadRequest());
 
         List<Position> positionList = positionRepository.findAll();
@@ -183,12 +191,13 @@ class PositionResourceIT {
         // Disconnect from session so that the updates on updatedPosition are not directly saved in db
         em.detach(updatedPosition);
         updatedPosition.name(UPDATED_NAME).note(UPDATED_NOTE);
+        PositionDTO positionDTO = positionMapper.toDto(updatedPosition);
 
         restPositionMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedPosition.getId())
+                put(ENTITY_API_URL_ID, positionDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedPosition))
+                    .content(TestUtil.convertObjectToJsonBytes(positionDTO))
             )
             .andExpect(status().isOk());
 
@@ -206,12 +215,15 @@ class PositionResourceIT {
         int databaseSizeBeforeUpdate = positionRepository.findAll().size();
         position.setId(count.incrementAndGet());
 
+        // Create the Position
+        PositionDTO positionDTO = positionMapper.toDto(position);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restPositionMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, position.getId())
+                put(ENTITY_API_URL_ID, positionDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(position))
+                    .content(TestUtil.convertObjectToJsonBytes(positionDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -226,12 +238,15 @@ class PositionResourceIT {
         int databaseSizeBeforeUpdate = positionRepository.findAll().size();
         position.setId(count.incrementAndGet());
 
+        // Create the Position
+        PositionDTO positionDTO = positionMapper.toDto(position);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restPositionMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(position))
+                    .content(TestUtil.convertObjectToJsonBytes(positionDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -246,9 +261,12 @@ class PositionResourceIT {
         int databaseSizeBeforeUpdate = positionRepository.findAll().size();
         position.setId(count.incrementAndGet());
 
+        // Create the Position
+        PositionDTO positionDTO = positionMapper.toDto(position);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restPositionMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(position)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(positionDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Position in the database
@@ -322,12 +340,15 @@ class PositionResourceIT {
         int databaseSizeBeforeUpdate = positionRepository.findAll().size();
         position.setId(count.incrementAndGet());
 
+        // Create the Position
+        PositionDTO positionDTO = positionMapper.toDto(position);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restPositionMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, position.getId())
+                patch(ENTITY_API_URL_ID, positionDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(position))
+                    .content(TestUtil.convertObjectToJsonBytes(positionDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -342,12 +363,15 @@ class PositionResourceIT {
         int databaseSizeBeforeUpdate = positionRepository.findAll().size();
         position.setId(count.incrementAndGet());
 
+        // Create the Position
+        PositionDTO positionDTO = positionMapper.toDto(position);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restPositionMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(position))
+                    .content(TestUtil.convertObjectToJsonBytes(positionDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -362,9 +386,14 @@ class PositionResourceIT {
         int databaseSizeBeforeUpdate = positionRepository.findAll().size();
         position.setId(count.incrementAndGet());
 
+        // Create the Position
+        PositionDTO positionDTO = positionMapper.toDto(position);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restPositionMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(position)))
+            .perform(
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(positionDTO))
+            )
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Position in the database

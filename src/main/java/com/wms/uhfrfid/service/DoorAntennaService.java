@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.DoorAntenna;
 import com.wms.uhfrfid.repository.DoorAntennaRepository;
+import com.wms.uhfrfid.service.dto.DoorAntennaDTO;
+import com.wms.uhfrfid.service.mapper.DoorAntennaMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,40 +23,44 @@ public class DoorAntennaService {
 
     private final DoorAntennaRepository doorAntennaRepository;
 
-    public DoorAntennaService(DoorAntennaRepository doorAntennaRepository) {
+    private final DoorAntennaMapper doorAntennaMapper;
+
+    public DoorAntennaService(DoorAntennaRepository doorAntennaRepository, DoorAntennaMapper doorAntennaMapper) {
         this.doorAntennaRepository = doorAntennaRepository;
+        this.doorAntennaMapper = doorAntennaMapper;
     }
 
     /**
      * Save a doorAntenna.
      *
-     * @param doorAntenna the entity to save.
+     * @param doorAntennaDTO the entity to save.
      * @return the persisted entity.
      */
-    public DoorAntenna save(DoorAntenna doorAntenna) {
-        log.debug("Request to save DoorAntenna : {}", doorAntenna);
-        return doorAntennaRepository.save(doorAntenna);
+    public DoorAntennaDTO save(DoorAntennaDTO doorAntennaDTO) {
+        log.debug("Request to save DoorAntenna : {}", doorAntennaDTO);
+        DoorAntenna doorAntenna = doorAntennaMapper.toEntity(doorAntennaDTO);
+        doorAntenna = doorAntennaRepository.save(doorAntenna);
+        return doorAntennaMapper.toDto(doorAntenna);
     }
 
     /**
      * Partially update a doorAntenna.
      *
-     * @param doorAntenna the entity to update partially.
+     * @param doorAntennaDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<DoorAntenna> partialUpdate(DoorAntenna doorAntenna) {
-        log.debug("Request to partially update DoorAntenna : {}", doorAntenna);
+    public Optional<DoorAntennaDTO> partialUpdate(DoorAntennaDTO doorAntennaDTO) {
+        log.debug("Request to partially update DoorAntenna : {}", doorAntennaDTO);
 
         return doorAntennaRepository
-            .findById(doorAntenna.getId())
+            .findById(doorAntennaDTO.getId())
             .map(existingDoorAntenna -> {
-                if (doorAntenna.getType() != null) {
-                    existingDoorAntenna.setType(doorAntenna.getType());
-                }
+                doorAntennaMapper.partialUpdate(existingDoorAntenna, doorAntennaDTO);
 
                 return existingDoorAntenna;
             })
-            .map(doorAntennaRepository::save);
+            .map(doorAntennaRepository::save)
+            .map(doorAntennaMapper::toDto);
     }
 
     /**
@@ -64,9 +70,9 @@ public class DoorAntennaService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<DoorAntenna> findAll(Pageable pageable) {
+    public Page<DoorAntennaDTO> findAll(Pageable pageable) {
         log.debug("Request to get all DoorAntennas");
-        return doorAntennaRepository.findAll(pageable);
+        return doorAntennaRepository.findAll(pageable).map(doorAntennaMapper::toDto);
     }
 
     /**
@@ -76,9 +82,9 @@ public class DoorAntennaService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<DoorAntenna> findOne(Long id) {
+    public Optional<DoorAntennaDTO> findOne(Long id) {
         log.debug("Request to get DoorAntenna : {}", id);
-        return doorAntennaRepository.findById(id);
+        return doorAntennaRepository.findById(id).map(doorAntennaMapper::toDto);
     }
 
     /**

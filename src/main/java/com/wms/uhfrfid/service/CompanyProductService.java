@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.CompanyProduct;
 import com.wms.uhfrfid.repository.CompanyProductRepository;
+import com.wms.uhfrfid.service.dto.CompanyProductDTO;
+import com.wms.uhfrfid.service.mapper.CompanyProductMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,46 +23,44 @@ public class CompanyProductService {
 
     private final CompanyProductRepository companyProductRepository;
 
-    public CompanyProductService(CompanyProductRepository companyProductRepository) {
+    private final CompanyProductMapper companyProductMapper;
+
+    public CompanyProductService(CompanyProductRepository companyProductRepository, CompanyProductMapper companyProductMapper) {
         this.companyProductRepository = companyProductRepository;
+        this.companyProductMapper = companyProductMapper;
     }
 
     /**
      * Save a companyProduct.
      *
-     * @param companyProduct the entity to save.
+     * @param companyProductDTO the entity to save.
      * @return the persisted entity.
      */
-    public CompanyProduct save(CompanyProduct companyProduct) {
-        log.debug("Request to save CompanyProduct : {}", companyProduct);
-        return companyProductRepository.save(companyProduct);
+    public CompanyProductDTO save(CompanyProductDTO companyProductDTO) {
+        log.debug("Request to save CompanyProduct : {}", companyProductDTO);
+        CompanyProduct companyProduct = companyProductMapper.toEntity(companyProductDTO);
+        companyProduct = companyProductRepository.save(companyProduct);
+        return companyProductMapper.toDto(companyProduct);
     }
 
     /**
      * Partially update a companyProduct.
      *
-     * @param companyProduct the entity to update partially.
+     * @param companyProductDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<CompanyProduct> partialUpdate(CompanyProduct companyProduct) {
-        log.debug("Request to partially update CompanyProduct : {}", companyProduct);
+    public Optional<CompanyProductDTO> partialUpdate(CompanyProductDTO companyProductDTO) {
+        log.debug("Request to partially update CompanyProduct : {}", companyProductDTO);
 
         return companyProductRepository
-            .findById(companyProduct.getId())
+            .findById(companyProductDTO.getId())
             .map(existingCompanyProduct -> {
-                if (companyProduct.getQuantity() != null) {
-                    existingCompanyProduct.setQuantity(companyProduct.getQuantity());
-                }
-                if (companyProduct.getSku() != null) {
-                    existingCompanyProduct.setSku(companyProduct.getSku());
-                }
-                if (companyProduct.getStockingRatio() != null) {
-                    existingCompanyProduct.setStockingRatio(companyProduct.getStockingRatio());
-                }
+                companyProductMapper.partialUpdate(existingCompanyProduct, companyProductDTO);
 
                 return existingCompanyProduct;
             })
-            .map(companyProductRepository::save);
+            .map(companyProductRepository::save)
+            .map(companyProductMapper::toDto);
     }
 
     /**
@@ -70,9 +70,9 @@ public class CompanyProductService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<CompanyProduct> findAll(Pageable pageable) {
+    public Page<CompanyProductDTO> findAll(Pageable pageable) {
         log.debug("Request to get all CompanyProducts");
-        return companyProductRepository.findAll(pageable);
+        return companyProductRepository.findAll(pageable).map(companyProductMapper::toDto);
     }
 
     /**
@@ -82,9 +82,9 @@ public class CompanyProductService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<CompanyProduct> findOne(Long id) {
+    public Optional<CompanyProductDTO> findOne(Long id) {
         log.debug("Request to get CompanyProduct : {}", id);
-        return companyProductRepository.findById(id);
+        return companyProductRepository.findById(id).map(companyProductMapper::toDto);
     }
 
     /**

@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.WHRow;
 import com.wms.uhfrfid.repository.WHRowRepository;
+import com.wms.uhfrfid.service.dto.WHRowDTO;
+import com.wms.uhfrfid.service.mapper.WHRowMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,43 +23,44 @@ public class WHRowService {
 
     private final WHRowRepository wHRowRepository;
 
-    public WHRowService(WHRowRepository wHRowRepository) {
+    private final WHRowMapper wHRowMapper;
+
+    public WHRowService(WHRowRepository wHRowRepository, WHRowMapper wHRowMapper) {
         this.wHRowRepository = wHRowRepository;
+        this.wHRowMapper = wHRowMapper;
     }
 
     /**
      * Save a wHRow.
      *
-     * @param wHRow the entity to save.
+     * @param wHRowDTO the entity to save.
      * @return the persisted entity.
      */
-    public WHRow save(WHRow wHRow) {
-        log.debug("Request to save WHRow : {}", wHRow);
-        return wHRowRepository.save(wHRow);
+    public WHRowDTO save(WHRowDTO wHRowDTO) {
+        log.debug("Request to save WHRow : {}", wHRowDTO);
+        WHRow wHRow = wHRowMapper.toEntity(wHRowDTO);
+        wHRow = wHRowRepository.save(wHRow);
+        return wHRowMapper.toDto(wHRow);
     }
 
     /**
      * Partially update a wHRow.
      *
-     * @param wHRow the entity to update partially.
+     * @param wHRowDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<WHRow> partialUpdate(WHRow wHRow) {
-        log.debug("Request to partially update WHRow : {}", wHRow);
+    public Optional<WHRowDTO> partialUpdate(WHRowDTO wHRowDTO) {
+        log.debug("Request to partially update WHRow : {}", wHRowDTO);
 
         return wHRowRepository
-            .findById(wHRow.getId())
+            .findById(wHRowDTO.getId())
             .map(existingWHRow -> {
-                if (wHRow.getName() != null) {
-                    existingWHRow.setName(wHRow.getName());
-                }
-                if (wHRow.getNote() != null) {
-                    existingWHRow.setNote(wHRow.getNote());
-                }
+                wHRowMapper.partialUpdate(existingWHRow, wHRowDTO);
 
                 return existingWHRow;
             })
-            .map(wHRowRepository::save);
+            .map(wHRowRepository::save)
+            .map(wHRowMapper::toDto);
     }
 
     /**
@@ -67,9 +70,9 @@ public class WHRowService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<WHRow> findAll(Pageable pageable) {
+    public Page<WHRowDTO> findAll(Pageable pageable) {
         log.debug("Request to get all WHRows");
-        return wHRowRepository.findAll(pageable);
+        return wHRowRepository.findAll(pageable).map(wHRowMapper::toDto);
     }
 
     /**
@@ -79,9 +82,9 @@ public class WHRowService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<WHRow> findOne(Long id) {
+    public Optional<WHRowDTO> findOne(Long id) {
         log.debug("Request to get WHRow : {}", id);
-        return wHRowRepository.findById(id);
+        return wHRowRepository.findById(id).map(wHRowMapper::toDto);
     }
 
     /**

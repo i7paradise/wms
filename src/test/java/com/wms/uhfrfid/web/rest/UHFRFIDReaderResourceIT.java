@@ -9,6 +9,8 @@ import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.UHFRFIDReader;
 import com.wms.uhfrfid.domain.enumeration.UHFRFIDReaderStatus;
 import com.wms.uhfrfid.repository.UHFRFIDReaderRepository;
+import com.wms.uhfrfid.service.dto.UHFRFIDReaderDTO;
+import com.wms.uhfrfid.service.mapper.UHFRFIDReaderMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -52,6 +54,9 @@ class UHFRFIDReaderResourceIT {
     private UHFRFIDReaderRepository uHFRFIDReaderRepository;
 
     @Autowired
+    private UHFRFIDReaderMapper uHFRFIDReaderMapper;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -91,8 +96,11 @@ class UHFRFIDReaderResourceIT {
     void createUHFRFIDReader() throws Exception {
         int databaseSizeBeforeCreate = uHFRFIDReaderRepository.findAll().size();
         // Create the UHFRFIDReader
+        UHFRFIDReaderDTO uHFRFIDReaderDTO = uHFRFIDReaderMapper.toDto(uHFRFIDReader);
         restUHFRFIDReaderMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReader)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReaderDTO))
+            )
             .andExpect(status().isCreated());
 
         // Validate the UHFRFIDReader in the database
@@ -110,12 +118,15 @@ class UHFRFIDReaderResourceIT {
     void createUHFRFIDReaderWithExistingId() throws Exception {
         // Create the UHFRFIDReader with an existing ID
         uHFRFIDReader.setId(1L);
+        UHFRFIDReaderDTO uHFRFIDReaderDTO = uHFRFIDReaderMapper.toDto(uHFRFIDReader);
 
         int databaseSizeBeforeCreate = uHFRFIDReaderRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restUHFRFIDReaderMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReader)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReaderDTO))
+            )
             .andExpect(status().isBadRequest());
 
         // Validate the UHFRFIDReader in the database
@@ -131,9 +142,12 @@ class UHFRFIDReaderResourceIT {
         uHFRFIDReader.setName(null);
 
         // Create the UHFRFIDReader, which fails.
+        UHFRFIDReaderDTO uHFRFIDReaderDTO = uHFRFIDReaderMapper.toDto(uHFRFIDReader);
 
         restUHFRFIDReaderMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReader)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReaderDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<UHFRFIDReader> uHFRFIDReaderList = uHFRFIDReaderRepository.findAll();
@@ -148,9 +162,12 @@ class UHFRFIDReaderResourceIT {
         uHFRFIDReader.setIp(null);
 
         // Create the UHFRFIDReader, which fails.
+        UHFRFIDReaderDTO uHFRFIDReaderDTO = uHFRFIDReaderMapper.toDto(uHFRFIDReader);
 
         restUHFRFIDReaderMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReader)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReaderDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<UHFRFIDReader> uHFRFIDReaderList = uHFRFIDReaderRepository.findAll();
@@ -165,9 +182,12 @@ class UHFRFIDReaderResourceIT {
         uHFRFIDReader.setPort(null);
 
         // Create the UHFRFIDReader, which fails.
+        UHFRFIDReaderDTO uHFRFIDReaderDTO = uHFRFIDReaderMapper.toDto(uHFRFIDReader);
 
         restUHFRFIDReaderMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReader)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReaderDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<UHFRFIDReader> uHFRFIDReaderList = uHFRFIDReaderRepository.findAll();
@@ -182,9 +202,12 @@ class UHFRFIDReaderResourceIT {
         uHFRFIDReader.setStatus(null);
 
         // Create the UHFRFIDReader, which fails.
+        UHFRFIDReaderDTO uHFRFIDReaderDTO = uHFRFIDReaderMapper.toDto(uHFRFIDReader);
 
         restUHFRFIDReaderMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReader)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReaderDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<UHFRFIDReader> uHFRFIDReaderList = uHFRFIDReaderRepository.findAll();
@@ -247,12 +270,13 @@ class UHFRFIDReaderResourceIT {
         // Disconnect from session so that the updates on updatedUHFRFIDReader are not directly saved in db
         em.detach(updatedUHFRFIDReader);
         updatedUHFRFIDReader.name(UPDATED_NAME).ip(UPDATED_IP).port(UPDATED_PORT).status(UPDATED_STATUS);
+        UHFRFIDReaderDTO uHFRFIDReaderDTO = uHFRFIDReaderMapper.toDto(updatedUHFRFIDReader);
 
         restUHFRFIDReaderMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedUHFRFIDReader.getId())
+                put(ENTITY_API_URL_ID, uHFRFIDReaderDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedUHFRFIDReader))
+                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDReaderDTO))
             )
             .andExpect(status().isOk());
 
@@ -272,12 +296,15 @@ class UHFRFIDReaderResourceIT {
         int databaseSizeBeforeUpdate = uHFRFIDReaderRepository.findAll().size();
         uHFRFIDReader.setId(count.incrementAndGet());
 
+        // Create the UHFRFIDReader
+        UHFRFIDReaderDTO uHFRFIDReaderDTO = uHFRFIDReaderMapper.toDto(uHFRFIDReader);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restUHFRFIDReaderMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, uHFRFIDReader.getId())
+                put(ENTITY_API_URL_ID, uHFRFIDReaderDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDReader))
+                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDReaderDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -292,12 +319,15 @@ class UHFRFIDReaderResourceIT {
         int databaseSizeBeforeUpdate = uHFRFIDReaderRepository.findAll().size();
         uHFRFIDReader.setId(count.incrementAndGet());
 
+        // Create the UHFRFIDReader
+        UHFRFIDReaderDTO uHFRFIDReaderDTO = uHFRFIDReaderMapper.toDto(uHFRFIDReader);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restUHFRFIDReaderMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDReader))
+                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDReaderDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -312,9 +342,14 @@ class UHFRFIDReaderResourceIT {
         int databaseSizeBeforeUpdate = uHFRFIDReaderRepository.findAll().size();
         uHFRFIDReader.setId(count.incrementAndGet());
 
+        // Create the UHFRFIDReader
+        UHFRFIDReaderDTO uHFRFIDReaderDTO = uHFRFIDReaderMapper.toDto(uHFRFIDReader);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restUHFRFIDReaderMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReader)))
+            .perform(
+                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(uHFRFIDReaderDTO))
+            )
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the UHFRFIDReader in the database
@@ -392,12 +427,15 @@ class UHFRFIDReaderResourceIT {
         int databaseSizeBeforeUpdate = uHFRFIDReaderRepository.findAll().size();
         uHFRFIDReader.setId(count.incrementAndGet());
 
+        // Create the UHFRFIDReader
+        UHFRFIDReaderDTO uHFRFIDReaderDTO = uHFRFIDReaderMapper.toDto(uHFRFIDReader);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restUHFRFIDReaderMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, uHFRFIDReader.getId())
+                patch(ENTITY_API_URL_ID, uHFRFIDReaderDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDReader))
+                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDReaderDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -412,12 +450,15 @@ class UHFRFIDReaderResourceIT {
         int databaseSizeBeforeUpdate = uHFRFIDReaderRepository.findAll().size();
         uHFRFIDReader.setId(count.incrementAndGet());
 
+        // Create the UHFRFIDReader
+        UHFRFIDReaderDTO uHFRFIDReaderDTO = uHFRFIDReaderMapper.toDto(uHFRFIDReader);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restUHFRFIDReaderMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDReader))
+                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDReaderDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -432,10 +473,15 @@ class UHFRFIDReaderResourceIT {
         int databaseSizeBeforeUpdate = uHFRFIDReaderRepository.findAll().size();
         uHFRFIDReader.setId(count.incrementAndGet());
 
+        // Create the UHFRFIDReader
+        UHFRFIDReaderDTO uHFRFIDReaderDTO = uHFRFIDReaderMapper.toDto(uHFRFIDReader);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restUHFRFIDReaderMockMvc
             .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(uHFRFIDReader))
+                patch(ENTITY_API_URL)
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(uHFRFIDReaderDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

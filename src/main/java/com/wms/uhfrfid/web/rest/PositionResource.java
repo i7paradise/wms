@@ -1,8 +1,8 @@
 package com.wms.uhfrfid.web.rest;
 
-import com.wms.uhfrfid.domain.Position;
 import com.wms.uhfrfid.repository.PositionRepository;
 import com.wms.uhfrfid.service.PositionService;
+import com.wms.uhfrfid.service.dto.PositionDTO;
 import com.wms.uhfrfid.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,17 +51,17 @@ public class PositionResource {
     /**
      * {@code POST  /positions} : Create a new position.
      *
-     * @param position the position to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new position, or with status {@code 400 (Bad Request)} if the position has already an ID.
+     * @param positionDTO the positionDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new positionDTO, or with status {@code 400 (Bad Request)} if the position has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/positions")
-    public ResponseEntity<Position> createPosition(@Valid @RequestBody Position position) throws URISyntaxException {
-        log.debug("REST request to save Position : {}", position);
-        if (position.getId() != null) {
+    public ResponseEntity<PositionDTO> createPosition(@Valid @RequestBody PositionDTO positionDTO) throws URISyntaxException {
+        log.debug("REST request to save Position : {}", positionDTO);
+        if (positionDTO.getId() != null) {
             throw new BadRequestAlertException("A new position cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Position result = positionService.save(position);
+        PositionDTO result = positionService.save(positionDTO);
         return ResponseEntity
             .created(new URI("/api/positions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -71,23 +71,23 @@ public class PositionResource {
     /**
      * {@code PUT  /positions/:id} : Updates an existing position.
      *
-     * @param id the id of the position to save.
-     * @param position the position to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated position,
-     * or with status {@code 400 (Bad Request)} if the position is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the position couldn't be updated.
+     * @param id the id of the positionDTO to save.
+     * @param positionDTO the positionDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated positionDTO,
+     * or with status {@code 400 (Bad Request)} if the positionDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the positionDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/positions/{id}")
-    public ResponseEntity<Position> updatePosition(
+    public ResponseEntity<PositionDTO> updatePosition(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Position position
+        @Valid @RequestBody PositionDTO positionDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update Position : {}, {}", id, position);
-        if (position.getId() == null) {
+        log.debug("REST request to update Position : {}, {}", id, positionDTO);
+        if (positionDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, position.getId())) {
+        if (!Objects.equals(id, positionDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -95,34 +95,34 @@ public class PositionResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Position result = positionService.save(position);
+        PositionDTO result = positionService.save(positionDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, position.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, positionDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /positions/:id} : Partial updates given fields of an existing position, field will ignore if it is null
      *
-     * @param id the id of the position to save.
-     * @param position the position to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated position,
-     * or with status {@code 400 (Bad Request)} if the position is not valid,
-     * or with status {@code 404 (Not Found)} if the position is not found,
-     * or with status {@code 500 (Internal Server Error)} if the position couldn't be updated.
+     * @param id the id of the positionDTO to save.
+     * @param positionDTO the positionDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated positionDTO,
+     * or with status {@code 400 (Bad Request)} if the positionDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the positionDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the positionDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/positions/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<Position> partialUpdatePosition(
+    public ResponseEntity<PositionDTO> partialUpdatePosition(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Position position
+        @NotNull @RequestBody PositionDTO positionDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update Position partially : {}, {}", id, position);
-        if (position.getId() == null) {
+        log.debug("REST request to partial update Position partially : {}, {}", id, positionDTO);
+        if (positionDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, position.getId())) {
+        if (!Objects.equals(id, positionDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -130,11 +130,11 @@ public class PositionResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Position> result = positionService.partialUpdate(position);
+        Optional<PositionDTO> result = positionService.partialUpdate(positionDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, position.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, positionDTO.getId().toString())
         );
     }
 
@@ -145,9 +145,9 @@ public class PositionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of positions in body.
      */
     @GetMapping("/positions")
-    public ResponseEntity<List<Position>> getAllPositions(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<PositionDTO>> getAllPositions(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Positions");
-        Page<Position> page = positionService.findAll(pageable);
+        Page<PositionDTO> page = positionService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -155,20 +155,20 @@ public class PositionResource {
     /**
      * {@code GET  /positions/:id} : get the "id" position.
      *
-     * @param id the id of the position to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the position, or with status {@code 404 (Not Found)}.
+     * @param id the id of the positionDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the positionDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/positions/{id}")
-    public ResponseEntity<Position> getPosition(@PathVariable Long id) {
+    public ResponseEntity<PositionDTO> getPosition(@PathVariable Long id) {
         log.debug("REST request to get Position : {}", id);
-        Optional<Position> position = positionService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(position);
+        Optional<PositionDTO> positionDTO = positionService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(positionDTO);
     }
 
     /**
      * {@code DELETE  /positions/:id} : delete the "id" position.
      *
-     * @param id the id of the position to delete.
+     * @param id the id of the positionDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/positions/{id}")

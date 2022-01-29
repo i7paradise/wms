@@ -2,6 +2,8 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.Bay;
 import com.wms.uhfrfid.repository.BayRepository;
+import com.wms.uhfrfid.service.dto.BayDTO;
+import com.wms.uhfrfid.service.mapper.BayMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,43 +23,44 @@ public class BayService {
 
     private final BayRepository bayRepository;
 
-    public BayService(BayRepository bayRepository) {
+    private final BayMapper bayMapper;
+
+    public BayService(BayRepository bayRepository, BayMapper bayMapper) {
         this.bayRepository = bayRepository;
+        this.bayMapper = bayMapper;
     }
 
     /**
      * Save a bay.
      *
-     * @param bay the entity to save.
+     * @param bayDTO the entity to save.
      * @return the persisted entity.
      */
-    public Bay save(Bay bay) {
-        log.debug("Request to save Bay : {}", bay);
-        return bayRepository.save(bay);
+    public BayDTO save(BayDTO bayDTO) {
+        log.debug("Request to save Bay : {}", bayDTO);
+        Bay bay = bayMapper.toEntity(bayDTO);
+        bay = bayRepository.save(bay);
+        return bayMapper.toDto(bay);
     }
 
     /**
      * Partially update a bay.
      *
-     * @param bay the entity to update partially.
+     * @param bayDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Bay> partialUpdate(Bay bay) {
-        log.debug("Request to partially update Bay : {}", bay);
+    public Optional<BayDTO> partialUpdate(BayDTO bayDTO) {
+        log.debug("Request to partially update Bay : {}", bayDTO);
 
         return bayRepository
-            .findById(bay.getId())
+            .findById(bayDTO.getId())
             .map(existingBay -> {
-                if (bay.getName() != null) {
-                    existingBay.setName(bay.getName());
-                }
-                if (bay.getNote() != null) {
-                    existingBay.setNote(bay.getNote());
-                }
+                bayMapper.partialUpdate(existingBay, bayDTO);
 
                 return existingBay;
             })
-            .map(bayRepository::save);
+            .map(bayRepository::save)
+            .map(bayMapper::toDto);
     }
 
     /**
@@ -67,9 +70,9 @@ public class BayService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Bay> findAll(Pageable pageable) {
+    public Page<BayDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Bays");
-        return bayRepository.findAll(pageable);
+        return bayRepository.findAll(pageable).map(bayMapper::toDto);
     }
 
     /**
@@ -79,9 +82,9 @@ public class BayService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Bay> findOne(Long id) {
+    public Optional<BayDTO> findOne(Long id) {
         log.debug("Request to get Bay : {}", id);
-        return bayRepository.findById(id);
+        return bayRepository.findById(id).map(bayMapper::toDto);
     }
 
     /**

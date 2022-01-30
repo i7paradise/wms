@@ -2,7 +2,10 @@ package com.wms.uhfrfid.service.mapper;
 
 import com.wms.uhfrfid.domain.DeliveryOrder;
 import com.wms.uhfrfid.service.dto.DeliveryOrderDTO;
-import org.mapstruct.*;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 /**
  * Mapper for the entity {@link DeliveryOrder} and its DTO {@link DeliveryOrderDTO}.

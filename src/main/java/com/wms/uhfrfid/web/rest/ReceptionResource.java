@@ -3,6 +3,7 @@ package com.wms.uhfrfid.web.rest;
 import com.wms.uhfrfid.security.SecurityUtils;
 import com.wms.uhfrfid.service.ReceptionService;
 import com.wms.uhfrfid.service.dto.DeliveryOrderDTO;
+import com.wms.uhfrfid.service.dto.DeliveryOrderDTOV2;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -48,10 +49,10 @@ public class ReceptionResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DeliveryOrderDTO> fetchOpenReception(@PathVariable Long id) {
+    public ResponseEntity<DeliveryOrderDTOV2> fetchReception(@PathVariable Long id) {
         log.debug("REST request to get DeliveryOrder : {}", id);
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new IllegalArgumentException("TODO 401"));
-        Optional<DeliveryOrderDTO> deliveryOrderDTO = receptionService.findOne(id, userLogin);
+        Optional<DeliveryOrderDTOV2> deliveryOrderDTO = receptionService.findOne(id, userLogin);
         return ResponseUtil.wrapOrNotFound(deliveryOrderDTO);
     }
 }

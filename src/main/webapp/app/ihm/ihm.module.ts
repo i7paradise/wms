@@ -6,9 +6,10 @@ import { DeliveryOrderModule } from 'app/entities/delivery-order/delivery-order.
 import { ihmRoute } from './ihm.route';
 import { RouterModule } from '@angular/router';
 import { ReceptionDetailComponent } from './reception-detail/reception-detail.component';
+import { ReceptionItemsComponent } from './reception-items/reception-items.component';
 
 @NgModule({
-  declarations: [ReceptionComponent, ReceptionDetailComponent],
+  declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent],
   imports: [CommonModule, SharedModule, RouterModule.forChild(ihmRoute), DeliveryOrderModule],
 })
 export class IhmModule {}

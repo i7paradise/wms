@@ -1,0 +1,69 @@
+<div class="reception-items">
+  <div class="alert alert-warning" id="no-result" *ngIf="deliveryOrderItems?.length === 0">
+    <span jhiTranslate="wmsApp.deliveryOrderItem.home.notFound">No deliveryOrderItems found</span>
+  </div>
+
+  <div class="table-responsive" *ngIf="deliveryOrderItems && deliveryOrderItems.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col">
+            <span jhiTranslate="wmsApp.deliveryOrderItem.unitQuantity">Unit Quantity</span>
+          </th>
+          <th scope="col">
+            <span jhiTranslate="wmsApp.deliveryOrderItem.containerQuantity">Container Quantity</span>
+          </th>
+          <th scope="col">
+            <span jhiTranslate="wmsApp.deliveryOrderItem.status">Status</span>
+          </th>
+          <th scope="col">
+            <span jhiTranslate="wmsApp.deliveryOrderItem.compganyProduct">Compgany Product</span>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let deliveryOrderItem of deliveryOrderItems" data-cy="entityTable">
+          <td>{{ deliveryOrderItem.unitQuantity }}</td>
+          <td>{{ deliveryOrderItem.containerQuantity }}</td>
+          <td jhiTranslate="{{ 'wmsApp.DeliveryOrderItemStatus.' + deliveryOrderItem.status }}">{{ deliveryOrderItem.status }}</td>
+          <td>
+            <div *ngIf="deliveryOrderItem.compganyProduct">
+              <a [routerLink]="['/company-product', deliveryOrderItem.compganyProduct?.id, 'view']">{{
+                deliveryOrderItem.compganyProduct?.sku
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/delivery-order-item', deliveryOrderItem.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/delivery-order-item', deliveryOrderItem.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </button>
+
+              <button type="submit" (click)="delete(deliveryOrderItem)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

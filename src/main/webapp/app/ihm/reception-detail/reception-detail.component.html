@@ -39,6 +39,8 @@
       <button type="button" [routerLink]="['/delivery-order', deliveryOrder.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
+
+      <jhi-reception-items [deliveryOrderItems]="deliveryOrder.deliveryOrderItems"></jhi-reception-items>
     </div>
   </div>
 </div>

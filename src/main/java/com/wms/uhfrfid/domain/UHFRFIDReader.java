@@ -4,15 +4,12 @@ import com.wms.uhfrfid.domain.enumeration.UHFRFIDReaderStatus;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A UHFRFIDReader.
  */
 @Entity
 @Table(name = "uhfrfid_reader")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UHFRFIDReader implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -5,15 +5,12 @@ import com.wms.uhfrfid.domain.enumeration.AreaType;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Area.
  */
 @Entity
 @Table(name = "area")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Area implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -5,15 +5,12 @@ import com.wms.uhfrfid.domain.enumeration.DoorAntennaType;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A DoorAntenna.
  */
 @Entity
 @Table(name = "door_antenna")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class DoorAntenna implements Serializable {
 
     private static final long serialVersionUID = 1L;

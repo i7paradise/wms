@@ -21,7 +21,8 @@
       "doNumber": "Do Number",
       "placedDate": "Placed Date",
       "status": "Status",
-      "code": "Code"
+      "code": "Code",
+      "deliveryOrderItem": "Delivery Order Item"
     }
   }
 }

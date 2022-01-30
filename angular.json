@@ -108,7 +108,6 @@
   },
   "defaultProject": "wms",
   "cli": {
-    "analytics": false,
     "cache": {
       "enabled": true,
       "path": "./target/",

@@ -4,15 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Door.
  */
 @Entity
 @Table(name = "door")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Door implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -10,7 +10,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = { CompanyProductMapper.class, DeliveryOrderMapper.class })
 public interface DeliveryOrderItemMapper extends EntityMapper<DeliveryOrderItemDTO, DeliveryOrderItem> {
     @Mapping(target = "compganyProduct", source = "compganyProduct", qualifiedByName = "sku")
-    @Mapping(target = "deliveryOrder", source = "deliveryOrder", qualifiedByName = "doNumber")
+    @Mapping(target = "deliveryOrder", source = "deliveryOrder", qualifiedByName = "id")
     DeliveryOrderItemDTO toDto(DeliveryOrderItem s);
 
     @Named("id")

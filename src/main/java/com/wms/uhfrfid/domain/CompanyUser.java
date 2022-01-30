@@ -2,15 +2,12 @@ package com.wms.uhfrfid.domain;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A CompanyUser.
  */
 @Entity
 @Table(name = "company_user")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class CompanyUser implements Serializable {
 
     private static final long serialVersionUID = 1L;

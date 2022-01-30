@@ -39,7 +39,6 @@
       "relationshipType": "one-to-one"
     },
     {
-      "otherEntityField": "doNumber",
       "otherEntityName": "deliveryOrder",
       "otherEntityRelationshipName": "deliveryOrderItem",
       "relationshipName": "deliveryOrder",

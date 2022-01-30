@@ -9,9 +9,8 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface DeliveryOrderMapper extends EntityMapper<DeliveryOrderDTO, DeliveryOrder> {
-    @Named("doNumber")
+    @Named("id")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "doNumber", source = "doNumber")
-    DeliveryOrderDTO toDtoDoNumber(DeliveryOrder deliveryOrder);
+    DeliveryOrderDTO toDtoId(DeliveryOrder deliveryOrder);
 }

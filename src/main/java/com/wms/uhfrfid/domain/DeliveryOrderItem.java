@@ -6,15 +6,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A DeliveryOrderItem.
  */
 @Entity
 @Table(name = "delivery_order_item")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class DeliveryOrderItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,6 +43,7 @@ public class DeliveryOrderItem implements Serializable {
     private CompanyProduct compganyProduct;
 
     @ManyToOne
+    @JsonIgnoreProperties(value = { "deliveryOrderItems" }, allowSetters = true)
     private DeliveryOrder deliveryOrder;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

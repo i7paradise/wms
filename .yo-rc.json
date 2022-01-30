@@ -6,7 +6,7 @@
     "baseName": "wms",
     "blueprints": [],
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
+    "cacheProvider": "no",
     "clientFramework": "angularX",
     "clientPackageManager": "npm",
     "clientTheme": "cosmo",
@@ -17,7 +17,7 @@
     "devServerPort": 4200,
     "dtoSuffix": "DTO",
     "enableGradleEnterprise": false,
-    "enableHibernateCache": true,
+    "enableHibernateCache": false,
     "enableSwaggerCodegen": false,
     "enableTranslation": true,
     "entities": [

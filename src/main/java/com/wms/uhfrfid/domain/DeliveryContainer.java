@@ -3,15 +3,12 @@ package com.wms.uhfrfid.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A DeliveryContainer.
  */
 @Entity
 @Table(name = "delivery_container")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class DeliveryContainer implements Serializable {
 
     private static final long serialVersionUID = 1L;

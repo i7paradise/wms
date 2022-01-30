@@ -39,9 +39,7 @@
         <dt><span jhiTranslate="wmsApp.deliveryOrderItem.deliveryOrder">Delivery Order</span></dt>
         <dd>
           <div *ngIf="deliveryOrderItem.deliveryOrder">
-            <a [routerLink]="['/delivery-order', deliveryOrderItem.deliveryOrder?.id, 'view']">{{
-              deliveryOrderItem.deliveryOrder?.doNumber
-            }}</a>
+            <a [routerLink]="['/delivery-order', deliveryOrderItem.deliveryOrder?.id, 'view']">{{ deliveryOrderItem.deliveryOrder?.id }}</a>
           </div>
         </dd>
       </dl>

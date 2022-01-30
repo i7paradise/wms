@@ -5,15 +5,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A CompanyProduct.
  */
 @Entity
 @Table(name = "company_product")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class CompanyProduct implements Serializable {
 
     private static final long serialVersionUID = 1L;

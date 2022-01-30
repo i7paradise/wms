@@ -1,19 +1,19 @@
 package com.wms.uhfrfid.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wms.uhfrfid.domain.enumeration.DeliveryOrderStatus;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A DeliveryOrder.
  */
 @Entity
 @Table(name = "delivery_order")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class DeliveryOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,6 +40,10 @@ public class DeliveryOrder implements Serializable {
     @NotNull
     @Column(name = "code", nullable = false)
     private String code;
+
+    @OneToMany(mappedBy = "deliveryOrder")
+    @JsonIgnoreProperties(value = { "compganyProduct", "deliveryOrder" }, allowSetters = true)
+    private Set<DeliveryOrderItem> deliveryOrderItems = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -106,6 +110,37 @@ public class DeliveryOrder implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Set<DeliveryOrderItem> getDeliveryOrderItems() {
+        return this.deliveryOrderItems;
+    }
+
+    public void setDeliveryOrderItems(Set<DeliveryOrderItem> deliveryOrderItems) {
+        if (this.deliveryOrderItems != null) {
+            this.deliveryOrderItems.forEach(i -> i.setDeliveryOrder(null));
+        }
+        if (deliveryOrderItems != null) {
+            deliveryOrderItems.forEach(i -> i.setDeliveryOrder(this));
+        }
+        this.deliveryOrderItems = deliveryOrderItems;
+    }
+
+    public DeliveryOrder deliveryOrderItems(Set<DeliveryOrderItem> deliveryOrderItems) {
+        this.setDeliveryOrderItems(deliveryOrderItems);
+        return this;
+    }
+
+    public DeliveryOrder addDeliveryOrderItem(DeliveryOrderItem deliveryOrderItem) {
+        this.deliveryOrderItems.add(deliveryOrderItem);
+        deliveryOrderItem.setDeliveryOrder(this);
+        return this;
+    }
+
+    public DeliveryOrder removeDeliveryOrderItem(DeliveryOrderItem deliveryOrderItem) {
+        this.deliveryOrderItems.remove(deliveryOrderItem);
+        deliveryOrderItem.setDeliveryOrder(null);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

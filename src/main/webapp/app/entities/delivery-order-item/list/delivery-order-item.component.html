@@ -45,7 +45,7 @@
           <th scope="col" jhiSortBy="compganyProduct.sku">
             <span jhiTranslate="wmsApp.deliveryOrderItem.compganyProduct">Compgany Product</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="deliveryOrder.doNumber">
+          <th scope="col" jhiSortBy="deliveryOrder.id">
             <span jhiTranslate="wmsApp.deliveryOrderItem.deliveryOrder">Delivery Order</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
@@ -69,7 +69,7 @@
           <td>
             <div *ngIf="deliveryOrderItem.deliveryOrder">
               <a [routerLink]="['/delivery-order', deliveryOrderItem.deliveryOrder?.id, 'view']">{{
-                deliveryOrderItem.deliveryOrder?.doNumber
+                deliveryOrderItem.deliveryOrder?.id
               }}</a>
             </div>
           </td>

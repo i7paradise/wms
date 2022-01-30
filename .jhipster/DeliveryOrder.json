@@ -32,6 +32,13 @@
   "name": "DeliveryOrder",
   "pagination": "infinite-scroll",
   "readOnly": false,
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityName": "deliveryOrderItem",
+      "otherEntityRelationshipName": "deliveryOrder",
+      "relationshipName": "deliveryOrderItem",
+      "relationshipType": "one-to-many"
+    }
+  ],
   "service": "serviceClass"
 }

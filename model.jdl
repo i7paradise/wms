@@ -6,7 +6,7 @@ application {
     baseName wms
     authenticationType jwt
     packageName com.wms.uhfrfid
-    cacheProvider ehcache
+    cacheProvider no
     prodDatabaseType postgresql
     clientFramework angularX
     clientTheme cosmo
@@ -212,7 +212,7 @@ relationship ManyToOne {
 	CompanyProduct{company(name)} to Company
     CompanyProduct{product(name)} to Product
 
-	DeliveryOrderItem{deliveryOrder(doNumber)} to DeliveryOrder
+	DeliveryOrderItem to DeliveryOrder
     DeliveryContainer{deliveryOrderItem} to DeliveryOrderItem
     DeliveryContainer{companyContainer} to CompanyContainer
 

@@ -48,7 +48,7 @@ public class Company implements Serializable {
     private Set<Order> orders = new HashSet<>();
 
     @OneToMany(mappedBy = "company")
-    @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "company", "uhfRFIDAntennas" }, allowSetters = true)
     private Set<UHFRFIDReader> uhfRFIDReaders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

@@ -1,13 +1,9 @@
 package com.wms.uhfrfid.web.rest;
 
 import com.wms.uhfrfid.security.SecurityUtils;
-import com.wms.uhfrfid.service.ReceptionService;
 import com.wms.uhfrfid.service.XSPSUHFRFIDReaderService;
 import com.wms.uhfrfid.service.dto.UHFRFIDReaderDTO;
 import com.wms.uhfrfid.service.dto.UHFRFIDReaderDTOV2;
-
-import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -22,6 +18,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * ReceptionResource controller
  */
@@ -29,7 +28,7 @@ import tech.jhipster.web.util.ResponseUtil;
 @RequestMapping(XSPSUHFRFIDReaderResource.PATH)
 public class XSPSUHFRFIDReaderResource {
 
-    public static final String PATH = "/api/v1/receptions";
+    public static final String PATH = "/api/v1/rfid";
 
     private final Logger log = LoggerFactory.getLogger(XSPSUHFRFIDReaderResource.class);
     private final XSPSUHFRFIDReaderService xspsUHFRFIDReaderService;

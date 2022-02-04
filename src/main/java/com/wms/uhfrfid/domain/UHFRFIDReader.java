@@ -3,6 +3,8 @@ package com.wms.uhfrfid.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wms.uhfrfid.domain.enumeration.UHFRFIDReaderStatus;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -41,6 +43,10 @@ public class UHFRFIDReader implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = { "companyUsers", "companyContainers", "orders", "uhfRFIDReaders" }, allowSetters = true)
     private Company company;
+
+    @OneToMany(mappedBy = "uhfRFIDReader")
+    @JsonIgnoreProperties(value = { "uhfRFIDReader" }, allowSetters = true)
+    private Set<UHFRFIDAntenna> uhfRFIDAntennas = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -119,6 +125,37 @@ public class UHFRFIDReader implements Serializable {
 
     public UHFRFIDReader company(Company company) {
         this.setCompany(company);
+        return this;
+    }
+
+    public Set<UHFRFIDAntenna> getUhfRFIDAntennas() {
+        return this.uhfRFIDAntennas;
+    }
+
+    public void setUhfRFIDAntennas(Set<UHFRFIDAntenna> uHFRFIDAntennas) {
+        if (this.uhfRFIDAntennas != null) {
+            this.uhfRFIDAntennas.forEach(i -> i.setUhfRFIDReader(null));
+        }
+        if (uHFRFIDAntennas != null) {
+            uHFRFIDAntennas.forEach(i -> i.setUhfRFIDReader(this));
+        }
+        this.uhfRFIDAntennas = uHFRFIDAntennas;
+    }
+
+    public UHFRFIDReader uhfRFIDAntennas(Set<UHFRFIDAntenna> uHFRFIDAntennas) {
+        this.setUhfRFIDAntennas(uHFRFIDAntennas);
+        return this;
+    }
+
+    public UHFRFIDReader addUhfRFIDAntenna(UHFRFIDAntenna uHFRFIDAntenna) {
+        this.uhfRFIDAntennas.add(uHFRFIDAntenna);
+        uHFRFIDAntenna.setUhfRFIDReader(this);
+        return this;
+    }
+
+    public UHFRFIDReader removeUhfRFIDAntenna(UHFRFIDAntenna uHFRFIDAntenna) {
+        this.uhfRFIDAntennas.remove(uHFRFIDAntenna);
+        uHFRFIDAntenna.setUhfRFIDReader(null);
         return this;
     }
 

@@ -14,9 +14,9 @@ import org.mapstruct.Mapping;
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface UHFRFIDReaderV2Mapper extends EntityMapper<UHFRFIDReaderDTOV2, UHFRFIDReader> {
-    @Mapping(target = "uhfReader", ignore = true)
+    @Mapping(target = "uhfRFIDReader", ignore = true)
     UHFRFIDAntenna toEntity(UHFRFIDAntennaDTO s);
 
-    @Mapping(target = "uhfReader", ignore = true)
+    @Mapping(target = "uhfRFIDReader", ignore = true)
     UHFRFIDAntennaDTO toEntity(UHFRFIDAntenna s);
 }

@@ -40,8 +40,8 @@
           <th scope="col" jhiSortBy="status">
             <span jhiTranslate="wmsApp.uHFRFIDAntenna.status">Status</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="uhfReader.name">
-            <span jhiTranslate="wmsApp.uHFRFIDAntenna.uhfReader">Uhf Reader</span> <fa-icon icon="sort"></fa-icon>
+          <th scope="col" jhiSortBy="uhfRFIDReader.name">
+            <span jhiTranslate="wmsApp.uHFRFIDAntenna.uhfRFIDReader">Uhf RFID Reader</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
         </tr>
@@ -55,8 +55,8 @@
           <td>{{ uHFRFIDAntenna.outputPower }}</td>
           <td jhiTranslate="{{ 'wmsApp.UHFRFIDAntennaStatus.' + uHFRFIDAntenna.status }}">{{ uHFRFIDAntenna.status }}</td>
           <td>
-            <div *ngIf="uHFRFIDAntenna.uhfReader">
-              <a [routerLink]="['/uhfrfid-reader', uHFRFIDAntenna.uhfReader?.id, 'view']">{{ uHFRFIDAntenna.uhfReader?.name }}</a>
+            <div *ngIf="uHFRFIDAntenna.uhfRFIDReader">
+              <a [routerLink]="['/uhfrfid-reader', uHFRFIDAntenna.uhfRFIDReader?.id, 'view']">{{ uHFRFIDAntenna.uhfRFIDReader?.name }}</a>
             </div>
           </td>
           <td class="text-right">

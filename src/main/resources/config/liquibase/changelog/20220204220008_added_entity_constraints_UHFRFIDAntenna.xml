@@ -8,9 +8,9 @@
     -->
     <changeSet id="20220204220008-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="uhf_reader_id"
+        <addForeignKeyConstraint baseColumnNames="uhfrfidreader_id"
                                  baseTableName="uhfrfid_antenna"
-                                 constraintName="fk_uhfrfid_antenna__uhf_reader_id"
+                                 constraintName="fk_uhfrfid_antenna__uhfrfidreader_id"
                                  referencedColumnNames="id"
                                  referencedTableName="uhfrfid_reader"/>
     </changeSet>

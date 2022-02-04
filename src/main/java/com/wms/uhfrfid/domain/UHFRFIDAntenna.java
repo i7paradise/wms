@@ -35,8 +35,8 @@ public class UHFRFIDAntenna implements Serializable {
     private UHFRFIDAntennaStatus status;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
-    private UHFRFIDReader uhfReader;
+    @JsonIgnoreProperties(value = { "company", "uhfRFIDAntennas" }, allowSetters = true)
+    private UHFRFIDReader uhfRFIDReader;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -92,16 +92,16 @@ public class UHFRFIDAntenna implements Serializable {
         this.status = status;
     }
 
-    public UHFRFIDReader getUhfReader() {
-        return this.uhfReader;
+    public UHFRFIDReader getUhfRFIDReader() {
+        return this.uhfRFIDReader;
     }
 
-    public void setUhfReader(UHFRFIDReader uHFRFIDReader) {
-        this.uhfReader = uHFRFIDReader;
+    public void setUhfRFIDReader(UHFRFIDReader uHFRFIDReader) {
+        this.uhfRFIDReader = uHFRFIDReader;
     }
 
-    public UHFRFIDAntenna uhfReader(UHFRFIDReader uHFRFIDReader) {
-        this.setUhfReader(uHFRFIDReader);
+    public UHFRFIDAntenna uhfRFIDReader(UHFRFIDReader uHFRFIDReader) {
+        this.setUhfRFIDReader(uHFRFIDReader);
         return this;
     }
 

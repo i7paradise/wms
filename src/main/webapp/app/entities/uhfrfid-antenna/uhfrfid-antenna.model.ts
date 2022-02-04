@@ -6,7 +6,7 @@ export interface IUHFRFIDAntenna {
   name?: string;
   outputPower?: number;
   status?: UHFRFIDAntennaStatus;
-  uhfReader?: IUHFRFIDReader | null;
+  uhfRFIDReader?: IUHFRFIDReader | null;
 }
 
 export class UHFRFIDAntenna implements IUHFRFIDAntenna {
@@ -15,7 +15,7 @@ export class UHFRFIDAntenna implements IUHFRFIDAntenna {
     public name?: string,
     public outputPower?: number,
     public status?: UHFRFIDAntennaStatus,
-    public uhfReader?: IUHFRFIDReader | null
+    public uhfRFIDReader?: IUHFRFIDReader | null
   ) {}
 }
 

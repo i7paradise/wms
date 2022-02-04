@@ -39,6 +39,13 @@
       "otherEntityRelationshipName": "uhfRFIDReader",
       "relationshipName": "company",
       "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "uHFRFIDAntenna",
+      "otherEntityRelationshipName": "uhfRFIDReader",
+      "relationshipName": "uhfRFIDAntenna",
+      "relationshipType": "one-to-many"
     }
   ],
   "service": "serviceClass"

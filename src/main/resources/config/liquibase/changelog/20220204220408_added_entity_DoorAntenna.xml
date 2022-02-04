@@ -20,7 +20,7 @@
             <column name="door_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="uhf_antenna_id" type="bigint">
+            <column name="uhfrfidantenna_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->

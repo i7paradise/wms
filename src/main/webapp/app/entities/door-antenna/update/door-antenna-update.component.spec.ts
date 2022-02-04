@@ -71,12 +71,12 @@ describe('DoorAntenna Management Update Component', () => {
 
     it('Should call UHFRFIDAntenna query and add missing value', () => {
       const doorAntenna: IDoorAntenna = { id: 456 };
-      const uhfAntenna: IUHFRFIDAntenna = { id: 71539 };
-      doorAntenna.uhfAntenna = uhfAntenna;
+      const uhfRFIDAntenna: IUHFRFIDAntenna = { id: 71539 };
+      doorAntenna.uhfRFIDAntenna = uhfRFIDAntenna;
 
       const uHFRFIDAntennaCollection: IUHFRFIDAntenna[] = [{ id: 40699 }];
       jest.spyOn(uHFRFIDAntennaService, 'query').mockReturnValue(of(new HttpResponse({ body: uHFRFIDAntennaCollection })));
-      const additionalUHFRFIDAntennas = [uhfAntenna];
+      const additionalUHFRFIDAntennas = [uhfRFIDAntenna];
       const expectedCollection: IUHFRFIDAntenna[] = [...additionalUHFRFIDAntennas, ...uHFRFIDAntennaCollection];
       jest.spyOn(uHFRFIDAntennaService, 'addUHFRFIDAntennaToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -95,15 +95,15 @@ describe('DoorAntenna Management Update Component', () => {
       const doorAntenna: IDoorAntenna = { id: 456 };
       const door: IDoor = { id: 80049 };
       doorAntenna.door = door;
-      const uhfAntenna: IUHFRFIDAntenna = { id: 92854 };
-      doorAntenna.uhfAntenna = uhfAntenna;
+      const uhfRFIDAntenna: IUHFRFIDAntenna = { id: 92854 };
+      doorAntenna.uhfRFIDAntenna = uhfRFIDAntenna;
 
       activatedRoute.data = of({ doorAntenna });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(doorAntenna));
       expect(comp.doorsSharedCollection).toContain(door);
-      expect(comp.uHFRFIDAntennasSharedCollection).toContain(uhfAntenna);
+      expect(comp.uHFRFIDAntennasSharedCollection).toContain(uhfRFIDAntenna);
     });
   });
 

@@ -21,7 +21,7 @@
       "name": "Name",
       "outputPower": "Output Power",
       "status": "Status",
-      "uhfReader": "Uhf Reader"
+      "uhfRFIDReader": "Uhf RFID Reader"
     }
   }
 }

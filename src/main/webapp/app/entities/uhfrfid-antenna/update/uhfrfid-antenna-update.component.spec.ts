@@ -48,12 +48,12 @@ describe('UHFRFIDAntenna Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call UHFRFIDReader query and add missing value', () => {
       const uHFRFIDAntenna: IUHFRFIDAntenna = { id: 456 };
-      const uhfReader: IUHFRFIDReader = { id: 97718 };
-      uHFRFIDAntenna.uhfReader = uhfReader;
+      const uhfRFIDReader: IUHFRFIDReader = { id: 97718 };
+      uHFRFIDAntenna.uhfRFIDReader = uhfRFIDReader;
 
       const uHFRFIDReaderCollection: IUHFRFIDReader[] = [{ id: 9797 }];
       jest.spyOn(uHFRFIDReaderService, 'query').mockReturnValue(of(new HttpResponse({ body: uHFRFIDReaderCollection })));
-      const additionalUHFRFIDReaders = [uhfReader];
+      const additionalUHFRFIDReaders = [uhfRFIDReader];
       const expectedCollection: IUHFRFIDReader[] = [...additionalUHFRFIDReaders, ...uHFRFIDReaderCollection];
       jest.spyOn(uHFRFIDReaderService, 'addUHFRFIDReaderToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -70,14 +70,14 @@ describe('UHFRFIDAntenna Management Update Component', () => {
 
     it('Should update editForm', () => {
       const uHFRFIDAntenna: IUHFRFIDAntenna = { id: 456 };
-      const uhfReader: IUHFRFIDReader = { id: 44487 };
-      uHFRFIDAntenna.uhfReader = uhfReader;
+      const uhfRFIDReader: IUHFRFIDReader = { id: 44487 };
+      uHFRFIDAntenna.uhfRFIDReader = uhfRFIDReader;
 
       activatedRoute.data = of({ uHFRFIDAntenna });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(uHFRFIDAntenna));
-      expect(comp.uHFRFIDReadersSharedCollection).toContain(uhfReader);
+      expect(comp.uHFRFIDReadersSharedCollection).toContain(uhfRFIDReader);
     });
   });
 

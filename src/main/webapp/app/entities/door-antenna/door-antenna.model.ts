@@ -6,11 +6,16 @@ export interface IDoorAntenna {
   id?: number;
   type?: DoorAntennaType;
   door?: IDoor | null;
-  uhfAntenna?: IUHFRFIDAntenna | null;
+  uhfRFIDAntenna?: IUHFRFIDAntenna | null;
 }
 
 export class DoorAntenna implements IDoorAntenna {
-  constructor(public id?: number, public type?: DoorAntennaType, public door?: IDoor | null, public uhfAntenna?: IUHFRFIDAntenna | null) {}
+  constructor(
+    public id?: number,
+    public type?: DoorAntennaType,
+    public door?: IDoor | null,
+    public uhfRFIDAntenna?: IUHFRFIDAntenna | null
+  ) {}
 }
 
 export function getDoorAntennaIdentifier(doorAntenna: IDoorAntenna): number | undefined {

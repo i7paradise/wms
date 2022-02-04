@@ -29,7 +29,7 @@
       "otherEntityField": "name",
       "otherEntityName": "uHFRFIDAntenna",
       "otherEntityRelationshipName": "doorAntenna",
-      "relationshipName": "uhfAntenna",
+      "relationshipName": "uhfRFIDAntenna",
       "relationshipType": "many-to-one"
     }
   ],

@@ -26,7 +26,7 @@ export class UHFRFIDAntennaUpdateComponent implements OnInit {
     name: [null, [Validators.required]],
     outputPower: [null, [Validators.required]],
     status: [null, [Validators.required]],
-    uhfReader: [],
+    uhfRFIDReader: [],
   });
 
   constructor(
@@ -87,12 +87,12 @@ export class UHFRFIDAntennaUpdateComponent implements OnInit {
       name: uHFRFIDAntenna.name,
       outputPower: uHFRFIDAntenna.outputPower,
       status: uHFRFIDAntenna.status,
-      uhfReader: uHFRFIDAntenna.uhfReader,
+      uhfRFIDReader: uHFRFIDAntenna.uhfRFIDReader,
     });
 
     this.uHFRFIDReadersSharedCollection = this.uHFRFIDReaderService.addUHFRFIDReaderToCollectionIfMissing(
       this.uHFRFIDReadersSharedCollection,
-      uHFRFIDAntenna.uhfReader
+      uHFRFIDAntenna.uhfRFIDReader
     );
   }
 
@@ -102,7 +102,7 @@ export class UHFRFIDAntennaUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUHFRFIDReader[]>) => res.body ?? []))
       .pipe(
         map((uHFRFIDReaders: IUHFRFIDReader[]) =>
-          this.uHFRFIDReaderService.addUHFRFIDReaderToCollectionIfMissing(uHFRFIDReaders, this.editForm.get('uhfReader')!.value)
+          this.uHFRFIDReaderService.addUHFRFIDReaderToCollectionIfMissing(uHFRFIDReaders, this.editForm.get('uhfRFIDReader')!.value)
         )
       )
       .subscribe((uHFRFIDReaders: IUHFRFIDReader[]) => (this.uHFRFIDReadersSharedCollection = uHFRFIDReaders));
@@ -115,7 +115,7 @@ export class UHFRFIDAntennaUpdateComponent implements OnInit {
       name: this.editForm.get(['name'])!.value,
       outputPower: this.editForm.get(['outputPower'])!.value,
       status: this.editForm.get(['status'])!.value,
-      uhfReader: this.editForm.get(['uhfReader'])!.value,
+      uhfRFIDReader: this.editForm.get(['uhfRFIDReader'])!.value,
     };
   }
 }

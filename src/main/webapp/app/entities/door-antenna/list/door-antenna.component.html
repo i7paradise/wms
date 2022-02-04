@@ -37,8 +37,8 @@
           <th scope="col" jhiSortBy="door.name">
             <span jhiTranslate="wmsApp.doorAntenna.door">Door</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="uhfAntenna.name">
-            <span jhiTranslate="wmsApp.doorAntenna.uhfAntenna">Uhf Antenna</span> <fa-icon icon="sort"></fa-icon>
+          <th scope="col" jhiSortBy="uhfRFIDAntenna.name">
+            <span jhiTranslate="wmsApp.doorAntenna.uhfRFIDAntenna">Uhf RFID Antenna</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
         </tr>
@@ -55,8 +55,8 @@
             </div>
           </td>
           <td>
-            <div *ngIf="doorAntenna.uhfAntenna">
-              <a [routerLink]="['/uhfrfid-antenna', doorAntenna.uhfAntenna?.id, 'view']">{{ doorAntenna.uhfAntenna?.name }}</a>
+            <div *ngIf="doorAntenna.uhfRFIDAntenna">
+              <a [routerLink]="['/uhfrfid-antenna', doorAntenna.uhfRFIDAntenna?.id, 'view']">{{ doorAntenna.uhfRFIDAntenna?.name }}</a>
             </div>
           </td>
           <td class="text-right">

@@ -42,12 +42,22 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="wmsApp.doorAntenna.uhfAntenna" for="field_uhfAntenna">Uhf Antenna</label>
-          <select class="form-control" id="field_uhfAntenna" data-cy="uhfAntenna" name="uhfAntenna" formControlName="uhfAntenna">
+          <label class="form-control-label" jhiTranslate="wmsApp.doorAntenna.uhfRFIDAntenna" for="field_uhfRFIDAntenna"
+            >Uhf RFID Antenna</label
+          >
+          <select
+            class="form-control"
+            id="field_uhfRFIDAntenna"
+            data-cy="uhfRFIDAntenna"
+            name="uhfRFIDAntenna"
+            formControlName="uhfRFIDAntenna"
+          >
             <option [ngValue]="null"></option>
             <option
               [ngValue]="
-                uHFRFIDAntennaOption.id === editForm.get('uhfAntenna')!.value?.id ? editForm.get('uhfAntenna')!.value : uHFRFIDAntennaOption
+                uHFRFIDAntennaOption.id === editForm.get('uhfRFIDAntenna')!.value?.id
+                  ? editForm.get('uhfRFIDAntenna')!.value
+                  : uHFRFIDAntennaOption
               "
               *ngFor="let uHFRFIDAntennaOption of uHFRFIDAntennasSharedCollection; trackBy: trackUHFRFIDAntennaById"
             >

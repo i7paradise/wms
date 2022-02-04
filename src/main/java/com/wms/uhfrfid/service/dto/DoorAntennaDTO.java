@@ -17,7 +17,7 @@ public class DoorAntennaDTO implements Serializable {
 
     private DoorDTO door;
 
-    private UHFRFIDAntennaDTO uhfAntenna;
+    private UHFRFIDAntennaDTO uhfRFIDAntenna;
 
     public Long getId() {
         return id;
@@ -43,12 +43,12 @@ public class DoorAntennaDTO implements Serializable {
         this.door = door;
     }
 
-    public UHFRFIDAntennaDTO getUhfAntenna() {
-        return uhfAntenna;
+    public UHFRFIDAntennaDTO getUhfRFIDAntenna() {
+        return uhfRFIDAntenna;
     }
 
-    public void setUhfAntenna(UHFRFIDAntennaDTO uhfAntenna) {
-        this.uhfAntenna = uhfAntenna;
+    public void setUhfRFIDAntenna(UHFRFIDAntennaDTO uhfRFIDAntenna) {
+        this.uhfRFIDAntenna = uhfRFIDAntenna;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class DoorAntennaDTO implements Serializable {
             "id=" + getId() +
             ", type='" + getType() + "'" +
             ", door=" + getDoor() +
-            ", uhfAntenna=" + getUhfAntenna() +
+            ", uhfRFIDAntenna=" + getUhfRFIDAntenna() +
             "}";
     }
 }

@@ -171,8 +171,13 @@ entity OrderItemProduct {
 
 relationship OneToOne {
 	CompanyUser to User
+<<<<<<< HEAD
 
 	OrderItem{compganyProduct(sku)} to CompanyProduct
+=======
+//	User{role(name)} to Role
+	DeliveryOrderItem{compganyProduct(sku)} to CompanyProduct
+>>>>>>> a47969c... wip hicham
     
 	CompanyContainer{containerCategory(name)} to ContainerCategory
 	CompanyProduct{containerCategory(name)} to ContainerCategory
@@ -183,8 +188,12 @@ relationship ManyToOne {
 	CompanyUser to Company
 	
 	CompanyContainer{company(name)} to Company{companyContainer}
+<<<<<<< HEAD
     
 	Order to Company
+=======
+    CompanyContainer{container(name)} to Container
+>>>>>>> a47969c... wip hicham
 
 	Warehouse{company(name)} to Company
 

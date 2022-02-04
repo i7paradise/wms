@@ -1,7 +1,7 @@
 <div class="row justify-content-center">
   <div class="col-8">
-    <div *ngIf="deliveryOrder">
-      <h2 data-cy="deliveryOrderDetailsHeading"><span jhiTranslate="wmsApp.deliveryOrder.detail.title">Delivery Order</span></h2>
+    <div *ngIf="order">
+      <h2 data-cy="orderDetailsHeading"><span jhiTranslate="wmsApp.order.detail.title">Delivery Order</span></h2>
 
       <hr />
 
@@ -12,23 +12,23 @@
       <dl class="row-md jh-entity-details">
         <dt><span jhiTranslate="global.field.id">ID</span></dt>
         <dd>
-          <span>{{ deliveryOrder.id }}</span>
+          <span>{{ order.id }}</span>
         </dd>
-        <dt><span jhiTranslate="wmsApp.deliveryOrder.doNumber">Do Number</span></dt>
+        <dt><span jhiTranslate="wmsApp.order.transactionNumber">Do Number</span></dt>
         <dd>
-          <span>{{ deliveryOrder.doNumber }}</span>
+          <span>{{ order.transactionNumber }}</span>
         </dd>
-        <dt><span jhiTranslate="wmsApp.deliveryOrder.placedDate">Placed Date</span></dt>
+        <dt><span jhiTranslate="wmsApp.order.placedDate">Placed Date</span></dt>
         <dd>
-          <span>{{ deliveryOrder.placedDate | formatMediumDatetime }}</span>
+          <span>{{ order.placedDate | formatMediumDatetime }}</span>
         </dd>
-        <dt><span jhiTranslate="wmsApp.deliveryOrder.status">Status</span></dt>
+        <dt><span jhiTranslate="wmsApp.order.status">Status</span></dt>
         <dd>
-          <span jhiTranslate="{{ 'wmsApp.DeliveryOrderStatus.' + deliveryOrder.status }}">{{ deliveryOrder.status }}</span>
+          <span jhiTranslate="{{ 'wmsApp.OrderStatus.' + order.status }}">{{ order.status }}</span>
         </dd>
-        <dt><span jhiTranslate="wmsApp.deliveryOrder.code">Code</span></dt>
+        <dt><span jhiTranslate="wmsApp.order.code">Code</span></dt>
         <dd>
-          <span>{{ deliveryOrder.code }}</span>
+          <span>{{ order.code }}</span>
         </dd>
       </dl>
 
@@ -36,11 +36,11 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/delivery-order', deliveryOrder.id, 'edit']" class="btn btn-primary">
+      <button type="button" [routerLink]="['/order', order.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
 
-      <jhi-reception-items [deliveryOrderItems]="deliveryOrder.deliveryOrderItems"></jhi-reception-items>
+      <jhi-reception-items [orderItems]="order.orderItems"></jhi-reception-items>
     </div>
   </div>
 </div>

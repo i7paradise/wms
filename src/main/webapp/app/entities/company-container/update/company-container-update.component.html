@@ -28,6 +28,31 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.companyContainer.containerCategory" for="field_containerCategory"
+            >Container Category</label
+          >
+          <select
+            class="form-control"
+            id="field_containerCategory"
+            data-cy="containerCategory"
+            name="containerCategory"
+            formControlName="containerCategory"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                containerCategoryOption.id === editForm.get('containerCategory')!.value?.id
+                  ? editForm.get('containerCategory')!.value
+                  : containerCategoryOption
+              "
+              *ngFor="let containerCategoryOption of containerCategoriesCollection; trackBy: trackContainerCategoryById"
+            >
+              {{ containerCategoryOption.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" jhiTranslate="wmsApp.companyContainer.company" for="field_company">Company</label>
           <select class="form-control" id="field_company" data-cy="company" name="company" formControlName="company">
             <option [ngValue]="null"></option>
@@ -36,19 +61,6 @@
               *ngFor="let companyOption of companiesSharedCollection; trackBy: trackCompanyById"
             >
               {{ companyOption.name }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="wmsApp.companyContainer.container" for="field_container">Container</label>
-          <select class="form-control" id="field_container" data-cy="container" name="container" formControlName="container">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="containerOption.id === editForm.get('container')!.value?.id ? editForm.get('container')!.value : containerOption"
-              *ngFor="let containerOption of containersSharedCollection; trackBy: trackContainerById"
-            >
-              {{ containerOption.name }}
             </option>
           </select>
         </div>

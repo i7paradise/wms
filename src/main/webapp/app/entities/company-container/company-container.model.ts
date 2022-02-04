@@ -1,12 +1,12 @@
+import { IContainerCategory } from 'app/entities/container-category/container-category.model';
 import { ICompany } from 'app/entities/company/company.model';
-import { IContainer } from 'app/entities/container/container.model';
 
 export interface ICompanyContainer {
   id?: number;
   rfidTag?: string | null;
   color?: string | null;
+  containerCategory?: IContainerCategory | null;
   company?: ICompany | null;
-  container?: IContainer | null;
 }
 
 export class CompanyContainer implements ICompanyContainer {
@@ -14,8 +14,8 @@ export class CompanyContainer implements ICompanyContainer {
     public id?: number,
     public rfidTag?: string | null,
     public color?: string | null,
-    public company?: ICompany | null,
-    public container?: IContainer | null
+    public containerCategory?: IContainerCategory | null,
+    public company?: ICompany | null
   ) {}
 }
 

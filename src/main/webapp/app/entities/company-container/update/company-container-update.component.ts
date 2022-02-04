@@ -7,10 +7,10 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ICompanyContainer, CompanyContainer } from '../company-container.model';
 import { CompanyContainerService } from '../service/company-container.service';
+import { IContainerCategory } from 'app/entities/container-category/container-category.model';
+import { ContainerCategoryService } from 'app/entities/container-category/service/container-category.service';
 import { ICompany } from 'app/entities/company/company.model';
 import { CompanyService } from 'app/entities/company/service/company.service';
-import { IContainer } from 'app/entities/container/container.model';
-import { ContainerService } from 'app/entities/container/service/container.service';
 
 @Component({
   selector: 'jhi-company-container-update',
@@ -19,21 +19,21 @@ import { ContainerService } from 'app/entities/container/service/container.servi
 export class CompanyContainerUpdateComponent implements OnInit {
   isSaving = false;
 
+  containerCategoriesCollection: IContainerCategory[] = [];
   companiesSharedCollection: ICompany[] = [];
-  containersSharedCollection: IContainer[] = [];
 
   editForm = this.fb.group({
     id: [],
     rfidTag: [],
     color: [],
+    containerCategory: [],
     company: [],
-    container: [],
   });
 
   constructor(
     protected companyContainerService: CompanyContainerService,
+    protected containerCategoryService: ContainerCategoryService,
     protected companyService: CompanyService,
-    protected containerService: ContainerService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -60,11 +60,11 @@ export class CompanyContainerUpdateComponent implements OnInit {
     }
   }
 
-  trackCompanyById(index: number, item: ICompany): number {
+  trackContainerCategoryById(index: number, item: IContainerCategory): number {
     return item.id!;
   }
 
-  trackContainerById(index: number, item: IContainer): number {
+  trackCompanyById(index: number, item: ICompany): number {
     return item.id!;
   }
 
@@ -92,21 +92,34 @@ export class CompanyContainerUpdateComponent implements OnInit {
       id: companyContainer.id,
       rfidTag: companyContainer.rfidTag,
       color: companyContainer.color,
+      containerCategory: companyContainer.containerCategory,
       company: companyContainer.company,
-      container: companyContainer.container,
     });
 
+    this.containerCategoriesCollection = this.containerCategoryService.addContainerCategoryToCollectionIfMissing(
+      this.containerCategoriesCollection,
+      companyContainer.containerCategory
+    );
     this.companiesSharedCollection = this.companyService.addCompanyToCollectionIfMissing(
       this.companiesSharedCollection,
       companyContainer.company
     );
-    this.containersSharedCollection = this.containerService.addContainerToCollectionIfMissing(
-      this.containersSharedCollection,
-      companyContainer.container
-    );
   }
 
   protected loadRelationshipsOptions(): void {
+    this.containerCategoryService
+      .query({ filter: 'companycontainer-is-null' })
+      .pipe(map((res: HttpResponse<IContainerCategory[]>) => res.body ?? []))
+      .pipe(
+        map((containerCategories: IContainerCategory[]) =>
+          this.containerCategoryService.addContainerCategoryToCollectionIfMissing(
+            containerCategories,
+            this.editForm.get('containerCategory')!.value
+          )
+        )
+      )
+      .subscribe((containerCategories: IContainerCategory[]) => (this.containerCategoriesCollection = containerCategories));
+
     this.companyService
       .query()
       .pipe(map((res: HttpResponse<ICompany[]>) => res.body ?? []))
@@ -114,16 +127,6 @@ export class CompanyContainerUpdateComponent implements OnInit {
         map((companies: ICompany[]) => this.companyService.addCompanyToCollectionIfMissing(companies, this.editForm.get('company')!.value))
       )
       .subscribe((companies: ICompany[]) => (this.companiesSharedCollection = companies));
-
-    this.containerService
-      .query()
-      .pipe(map((res: HttpResponse<IContainer[]>) => res.body ?? []))
-      .pipe(
-        map((containers: IContainer[]) =>
-          this.containerService.addContainerToCollectionIfMissing(containers, this.editForm.get('container')!.value)
-        )
-      )
-      .subscribe((containers: IContainer[]) => (this.containersSharedCollection = containers));
   }
 
   protected createFromForm(): ICompanyContainer {
@@ -132,8 +135,8 @@ export class CompanyContainerUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       rfidTag: this.editForm.get(['rfidTag'])!.value,
       color: this.editForm.get(['color'])!.value,
+      containerCategory: this.editForm.get(['containerCategory'])!.value,
       company: this.editForm.get(['company'])!.value,
-      container: this.editForm.get(['container'])!.value,
     };
   }
 }

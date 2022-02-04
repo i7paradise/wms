@@ -1,0 +1,461 @@
+git co src/main/java/com/wms/uhfrfid/service/dto/DeliveryOrderDTOV2.java
+git co src/main/java/com/wms/uhfrfid/service/mapper/v2/DeliveryOrderV2Mapper.java
+git co src/test/java/com/wms/uhfrfid/web/rest/ReceptionResourceIT.java
+git co src/main/java/com/wms/uhfrfid/web/rest/ReceptionResource.java
+git co src/main/java/com/wms/uhfrfid/repository/ReceptionRepository.java
+git co src/main/java/com/wms/uhfrfid/service/ReceptionService.java
+	
+	On branch feat/reception
+Your branch is up to date with 'origin/feat/reception'.
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .jhipster/Area.json
+	modified:   .jhipster/Bay.json
+	modified:   .jhipster/Company.json
+	modified:   .jhipster/CompanyContainer.json
+	modified:   .jhipster/CompanyProduct.json
+	modified:   .jhipster/CompanyUser.json
+	deleted:    .jhipster/Container.json
+	modified:   .jhipster/Customer.json
+	deleted:    .jhipster/DeliveryContainer.json
+	deleted:    .jhipster/DeliveryItemProduct.json
+	deleted:    .jhipster/DeliveryOrder.json
+	deleted:    .jhipster/DeliveryOrderItem.json
+	modified:   .jhipster/Door.json
+	modified:   .jhipster/DoorAntenna.json
+	modified:   .jhipster/Location.json
+	modified:   .jhipster/Position.json
+	modified:   .jhipster/Product.json
+	modified:   .jhipster/ProductCategory.json
+	modified:   .jhipster/UHFRFIDAntenna.json
+	modified:   .jhipster/UHFRFIDReader.json
+	modified:   .jhipster/WHLevel.json
+	modified:   .jhipster/WHRow.json
+	modified:   .jhipster/Warehouse.json
+	modified:   .yo-rc.json
+	modified:   model.jdl
+	modified:   mvnw.cmd
+	modified:   npmw.cmd
+	modified:   src/main/docker/jhipster-control-center.yml
+	modified:   src/main/java/com/wms/uhfrfid/domain/Company.java
+	modified:   src/main/java/com/wms/uhfrfid/domain/CompanyContainer.java
+	modified:   src/main/java/com/wms/uhfrfid/domain/CompanyProduct.java
+	modified:   src/main/java/com/wms/uhfrfid/domain/CompanyUser.java
+	deleted:    src/main/java/com/wms/uhfrfid/domain/Container.java
+	modified:   src/main/java/com/wms/uhfrfid/domain/Customer.java
+	deleted:    src/main/java/com/wms/uhfrfid/domain/DeliveryContainer.java
+	deleted:    src/main/java/com/wms/uhfrfid/domain/DeliveryItemProduct.java
+	deleted:    src/main/java/com/wms/uhfrfid/domain/DeliveryOrder.java
+	deleted:    src/main/java/com/wms/uhfrfid/domain/DeliveryOrderItem.java
+	modified:   src/main/java/com/wms/uhfrfid/domain/UHFRFIDAntenna.java
+	modified:   src/main/java/com/wms/uhfrfid/domain/UHFRFIDReader.java
+	modified:   src/main/java/com/wms/uhfrfid/domain/Warehouse.java
+	deleted:    src/main/java/com/wms/uhfrfid/domain/enumeration/DeliveryOrderItemStatus.java
+	deleted:    src/main/java/com/wms/uhfrfid/domain/enumeration/DeliveryOrderStatus.java
+	deleted:    src/main/java/com/wms/uhfrfid/domain/enumeration/Gender.java
+	deleted:    src/main/java/com/wms/uhfrfid/repository/ContainerRepository.java
+	deleted:    src/main/java/com/wms/uhfrfid/repository/DeliveryContainerRepository.java
+	deleted:    src/main/java/com/wms/uhfrfid/repository/DeliveryItemProductRepository.java
+	deleted:    src/main/java/com/wms/uhfrfid/repository/DeliveryOrderItemRepository.java
+	deleted:    src/main/java/com/wms/uhfrfid/repository/DeliveryOrderRepository.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/ContainerService.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/DeliveryContainerService.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/DeliveryItemProductService.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/DeliveryOrderItemService.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/DeliveryOrderService.java
+	
+	modified:   src/main/java/com/wms/uhfrfid/service/dto/CompanyContainerDTO.java
+	modified:   src/main/java/com/wms/uhfrfid/service/dto/CompanyProductDTO.java
+	modified:   src/main/java/com/wms/uhfrfid/service/dto/CompanyUserDTO.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/dto/ContainerDTO.java
+	modified:   src/main/java/com/wms/uhfrfid/service/dto/CustomerDTO.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/dto/DeliveryContainerDTO.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/dto/DeliveryItemProductDTO.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/dto/DeliveryOrderDTO.java
+
+	deleted:    src/main/java/com/wms/uhfrfid/service/dto/DeliveryOrderItemDTO.java
+	modified:   src/main/java/com/wms/uhfrfid/service/dto/UHFRFIDReaderDTO.java
+	modified:   src/main/java/com/wms/uhfrfid/service/mapper/CompanyContainerMapper.java
+	modified:   src/main/java/com/wms/uhfrfid/service/mapper/CompanyMapper.java
+	modified:   src/main/java/com/wms/uhfrfid/service/mapper/CompanyProductMapper.java
+	modified:   src/main/java/com/wms/uhfrfid/service/mapper/CompanyUserMapper.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/mapper/ContainerMapper.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/mapper/DeliveryContainerMapper.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/mapper/DeliveryItemProductMapper.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/mapper/DeliveryOrderItemMapper.java
+	deleted:    src/main/java/com/wms/uhfrfid/service/mapper/DeliveryOrderMapper.java
+	modified:   src/main/java/com/wms/uhfrfid/service/mapper/UHFRFIDReaderMapper.java
+	deleted:    src/main/java/com/wms/uhfrfid/web/rest/ContainerResource.java
+	deleted:    src/main/java/com/wms/uhfrfid/web/rest/DeliveryContainerResource.java
+	deleted:    src/main/java/com/wms/uhfrfid/web/rest/DeliveryItemProductResource.java
+	deleted:    src/main/java/com/wms/uhfrfid/web/rest/DeliveryOrderItemResource.java
+	deleted:    src/main/java/com/wms/uhfrfid/web/rest/DeliveryOrderResource.java
+	modified:   src/main/resources/config/application-dev.yml
+	modified:   src/main/resources/config/application-prod.yml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215039_added_entity_Company.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215139_added_entity_CompanyUser.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215239_added_entity_Container.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215339_added_entity_CompanyContainer.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215339_added_entity_constraints_CompanyContainer.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215439_added_entity_UHFRFIDReader.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215539_added_entity_UHFRFIDAntenna.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215539_added_entity_constraints_UHFRFIDAntenna.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215639_added_entity_Warehouse.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215639_added_entity_constraints_Warehouse.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215739_added_entity_Area.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215739_added_entity_constraints_Area.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215839_added_entity_Door.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215839_added_entity_constraints_Door.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215939_added_entity_Location.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129215939_added_entity_constraints_Location.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220039_added_entity_WHRow.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220039_added_entity_constraints_WHRow.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220139_added_entity_Bay.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220139_added_entity_constraints_Bay.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220239_added_entity_WHLevel.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220239_added_entity_constraints_WHLevel.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220339_added_entity_Position.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220339_added_entity_constraints_Position.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220439_added_entity_Product.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220439_added_entity_constraints_Product.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220539_added_entity_ProductCategory.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220639_added_entity_CompanyProduct.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220639_added_entity_constraints_CompanyProduct.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220739_added_entity_Customer.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220839_added_entity_DeliveryOrder.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220939_added_entity_DeliveryOrderItem.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129220939_added_entity_constraints_DeliveryOrderItem.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129221039_added_entity_DeliveryContainer.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129221039_added_entity_constraints_DeliveryContainer.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129221139_added_entity_DeliveryItemProduct.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129221139_added_entity_constraints_DeliveryItemProduct.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129221239_added_entity_DoorAntenna.xml
+	deleted:    src/main/resources/config/liquibase/changelog/20220129221239_added_entity_constraints_DoorAntenna.xml
+	modified:   src/main/resources/config/liquibase/fake-data/company_product.csv
+	deleted:    src/main/resources/config/liquibase/fake-data/container.csv
+	modified:   src/main/resources/config/liquibase/fake-data/customer.csv
+	deleted:    src/main/resources/config/liquibase/fake-data/delivery_container.csv
+	deleted:    src/main/resources/config/liquibase/fake-data/delivery_item_product.csv
+	deleted:    src/main/resources/config/liquibase/fake-data/delivery_order.csv
+	deleted:    src/main/resources/config/liquibase/fake-data/delivery_order_item.csv
+	modified:   src/main/resources/config/liquibase/master.xml
+	modified:   src/main/resources/config/tls/keystore.p12
+	modified:   src/main/webapp/app/app-routing.module.ts
+	modified:   src/main/webapp/app/entities/company-container/company-container.model.ts
+	modified:   src/main/webapp/app/entities/company-container/detail/company-container-detail.component.html
+	modified:   src/main/webapp/app/entities/company-container/list/company-container.component.html
+	modified:   src/main/webapp/app/entities/company-container/update/company-container-update.component.html
+	modified:   src/main/webapp/app/entities/company-container/update/company-container-update.component.spec.ts
+	modified:   src/main/webapp/app/entities/company-container/update/company-container-update.component.ts
+	modified:   src/main/webapp/app/entities/company-product/company-product.model.ts
+	modified:   src/main/webapp/app/entities/company-product/detail/company-product-detail.component.html
+	modified:   src/main/webapp/app/entities/company-product/list/company-product.component.html
+	modified:   src/main/webapp/app/entities/company-product/service/company-product.service.spec.ts
+	modified:   src/main/webapp/app/entities/company-product/update/company-product-update.component.html
+	modified:   src/main/webapp/app/entities/company-product/update/company-product-update.component.spec.ts
+	modified:   src/main/webapp/app/entities/company-product/update/company-product-update.component.ts
+	modified:   src/main/webapp/app/entities/company-user/company-user.model.ts
+	modified:   src/main/webapp/app/entities/company-user/detail/company-user-detail.component.html
+	modified:   src/main/webapp/app/entities/company-user/list/company-user.component.html
+	modified:   src/main/webapp/app/entities/company-user/update/company-user-update.component.html
+	modified:   src/main/webapp/app/entities/company-user/update/company-user-update.component.spec.ts
+	modified:   src/main/webapp/app/entities/company-user/update/company-user-update.component.ts
+	modified:   src/main/webapp/app/entities/company/company.model.ts
+	deleted:    src/main/webapp/app/entities/container/container.model.ts
+	deleted:    src/main/webapp/app/entities/container/container.module.ts
+	deleted:    src/main/webapp/app/entities/container/delete/container-delete-dialog.component.html
+	deleted:    src/main/webapp/app/entities/container/delete/container-delete-dialog.component.spec.ts
+	deleted:    src/main/webapp/app/entities/container/delete/container-delete-dialog.component.ts
+	deleted:    src/main/webapp/app/entities/container/detail/container-detail.component.html
+	deleted:    src/main/webapp/app/entities/container/detail/container-detail.component.spec.ts
+	deleted:    src/main/webapp/app/entities/container/detail/container-detail.component.ts
+	deleted:    src/main/webapp/app/entities/container/list/container.component.html
+	deleted:    src/main/webapp/app/entities/container/list/container.component.spec.ts
+	deleted:    src/main/webapp/app/entities/container/list/container.component.ts
+	deleted:    src/main/webapp/app/entities/container/route/container-routing-resolve.service.spec.ts
+	deleted:    src/main/webapp/app/entities/container/route/container-routing-resolve.service.ts
+	deleted:    src/main/webapp/app/entities/container/route/container-routing.module.ts
+	deleted:    src/main/webapp/app/entities/container/service/container.service.spec.ts
+	deleted:    src/main/webapp/app/entities/container/service/container.service.ts
+	deleted:    src/main/webapp/app/entities/container/update/container-update.component.html
+	deleted:    src/main/webapp/app/entities/container/update/container-update.component.spec.ts
+	deleted:    src/main/webapp/app/entities/container/update/container-update.component.ts
+	modified:   src/main/webapp/app/entities/customer/customer.model.ts
+	modified:   src/main/webapp/app/entities/customer/detail/customer-detail.component.html
+	modified:   src/main/webapp/app/entities/customer/list/customer.component.html
+	modified:   src/main/webapp/app/entities/customer/service/customer.service.spec.ts
+	modified:   src/main/webapp/app/entities/customer/update/customer-update.component.html
+	modified:   src/main/webapp/app/entities/customer/update/customer-update.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/delete/delivery-container-delete-dialog.component.html
+	deleted:    src/main/webapp/app/entities/delivery-container/delete/delivery-container-delete-dialog.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/delete/delivery-container-delete-dialog.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/delivery-container.model.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/delivery-container.module.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/detail/delivery-container-detail.component.html
+	deleted:    src/main/webapp/app/entities/delivery-container/detail/delivery-container-detail.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/detail/delivery-container-detail.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/list/delivery-container.component.html
+	deleted:    src/main/webapp/app/entities/delivery-container/list/delivery-container.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/list/delivery-container.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/route/delivery-container-routing-resolve.service.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/route/delivery-container-routing-resolve.service.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/route/delivery-container-routing.module.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/service/delivery-container.service.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/service/delivery-container.service.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/update/delivery-container-update.component.html
+	deleted:    src/main/webapp/app/entities/delivery-container/update/delivery-container-update.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-container/update/delivery-container-update.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/delete/delivery-item-product-delete-dialog.component.html
+	deleted:    src/main/webapp/app/entities/delivery-item-product/delete/delivery-item-product-delete-dialog.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/delete/delivery-item-product-delete-dialog.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/delivery-item-product.model.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/delivery-item-product.module.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/detail/delivery-item-product-detail.component.html
+	deleted:    src/main/webapp/app/entities/delivery-item-product/detail/delivery-item-product-detail.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/detail/delivery-item-product-detail.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/list/delivery-item-product.component.html
+	deleted:    src/main/webapp/app/entities/delivery-item-product/list/delivery-item-product.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/list/delivery-item-product.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/route/delivery-item-product-routing-resolve.service.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/route/delivery-item-product-routing-resolve.service.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/route/delivery-item-product-routing.module.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/service/delivery-item-product.service.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/service/delivery-item-product.service.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/update/delivery-item-product-update.component.html
+	deleted:    src/main/webapp/app/entities/delivery-item-product/update/delivery-item-product-update.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-item-product/update/delivery-item-product-update.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/delete/delivery-order-item-delete-dialog.component.html
+	deleted:    src/main/webapp/app/entities/delivery-order-item/delete/delivery-order-item-delete-dialog.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/delete/delivery-order-item-delete-dialog.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/delivery-order-item.model.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/delivery-order-item.module.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/detail/delivery-order-item-detail.component.html
+	deleted:    src/main/webapp/app/entities/delivery-order-item/detail/delivery-order-item-detail.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/detail/delivery-order-item-detail.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/list/delivery-order-item.component.html
+	deleted:    src/main/webapp/app/entities/delivery-order-item/list/delivery-order-item.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/list/delivery-order-item.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/route/delivery-order-item-routing-resolve.service.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/route/delivery-order-item-routing-resolve.service.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/route/delivery-order-item-routing.module.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/service/delivery-order-item.service.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/service/delivery-order-item.service.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/update/delivery-order-item-update.component.html
+	deleted:    src/main/webapp/app/entities/delivery-order-item/update/delivery-order-item-update.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-order-item/update/delivery-order-item-update.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/delete/delivery-order-delete-dialog.component.html
+	deleted:    src/main/webapp/app/entities/delivery-order/delete/delivery-order-delete-dialog.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/delete/delivery-order-delete-dialog.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/delivery-order.model.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/delivery-order.module.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/detail/delivery-order-detail.component.html
+	deleted:    src/main/webapp/app/entities/delivery-order/detail/delivery-order-detail.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/detail/delivery-order-detail.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/list/delivery-order.component.html
+	deleted:    src/main/webapp/app/entities/delivery-order/list/delivery-order.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/list/delivery-order.component.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/route/delivery-order-routing-resolve.service.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/route/delivery-order-routing-resolve.service.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/route/delivery-order-routing.module.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/service/delivery-order.service.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/service/delivery-order.service.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/update/delivery-order-update.component.html
+	deleted:    src/main/webapp/app/entities/delivery-order/update/delivery-order-update.component.spec.ts
+	deleted:    src/main/webapp/app/entities/delivery-order/update/delivery-order-update.component.ts
+	modified:   src/main/webapp/app/entities/entity-navbar-items.ts
+	modified:   src/main/webapp/app/entities/entity-routing.module.ts
+	deleted:    src/main/webapp/app/entities/enumerations/delivery-order-item-status.model.ts
+	deleted:    src/main/webapp/app/entities/enumerations/delivery-order-status.model.ts
+	deleted:    src/main/webapp/app/entities/enumerations/gender.model.ts
+	modified:   src/main/webapp/app/entities/uhfrfid-reader/detail/uhfrfid-reader-detail.component.html
+	modified:   src/main/webapp/app/entities/uhfrfid-reader/list/uhfrfid-reader.component.html
+	modified:   src/main/webapp/app/entities/uhfrfid-reader/uhfrfid-reader.model.ts
+	modified:   src/main/webapp/app/entities/uhfrfid-reader/update/uhfrfid-reader-update.component.html
+	modified:   src/main/webapp/app/entities/uhfrfid-reader/update/uhfrfid-reader-update.component.spec.ts
+	modified:   src/main/webapp/app/entities/uhfrfid-reader/update/uhfrfid-reader-update.component.ts
+	deleted:    src/main/webapp/app/ihm/ihm.module.ts
+	deleted:    src/main/webapp/app/ihm/ihm.route.ts
+	deleted:    src/main/webapp/app/ihm/reception-detail/reception-detail.component.html
+	deleted:    src/main/webapp/app/ihm/reception-detail/reception-detail.component.scss
+	deleted:    src/main/webapp/app/ihm/reception-detail/reception-detail.component.spec.ts
+	deleted:    src/main/webapp/app/ihm/reception-detail/reception-detail.component.ts
+	deleted:    src/main/webapp/app/ihm/reception-items/reception-items.component.html
+	deleted:    src/main/webapp/app/ihm/reception-items/reception-items.component.scss
+	deleted:    src/main/webapp/app/ihm/reception-items/reception-items.component.spec.ts
+	deleted:    src/main/webapp/app/ihm/reception-items/reception-items.component.ts
+	deleted:    src/main/webapp/app/ihm/reception/reception.component.html
+	deleted:    src/main/webapp/app/ihm/reception/reception.component.scss
+	deleted:    src/main/webapp/app/ihm/reception/reception.component.spec.ts
+	deleted:    src/main/webapp/app/ihm/reception/reception.component.ts
+	deleted:    src/main/webapp/app/ihm/service/reception-routing-resolve.service.spec.ts
+	deleted:    src/main/webapp/app/ihm/service/reception-routing-resolve.service.ts
+	deleted:    src/main/webapp/app/ihm/service/reception.service.spec.ts
+	deleted:    src/main/webapp/app/ihm/service/reception.service.ts
+	modified:   src/main/webapp/app/layouts/navbar/navbar.component.html
+	modified:   src/main/webapp/i18n/en/company.json
+	modified:   src/main/webapp/i18n/en/companyContainer.json
+	modified:   src/main/webapp/i18n/en/companyProduct.json
+	modified:   src/main/webapp/i18n/en/companyUser.json
+	deleted:    src/main/webapp/i18n/en/container.json
+	modified:   src/main/webapp/i18n/en/customer.json
+	deleted:    src/main/webapp/i18n/en/deliveryContainer.json
+	deleted:    src/main/webapp/i18n/en/deliveryItemProduct.json
+	deleted:    src/main/webapp/i18n/en/deliveryOrder.json
+	deleted:    src/main/webapp/i18n/en/deliveryOrderItem.json
+	deleted:    src/main/webapp/i18n/en/deliveryOrderItemStatus.json
+	deleted:    src/main/webapp/i18n/en/deliveryOrderStatus.json
+	deleted:    src/main/webapp/i18n/en/gender.json
+	modified:   src/main/webapp/i18n/en/global.json
+	modified:   src/main/webapp/i18n/en/uHFRFIDReader.json
+	deleted:    src/test/java/com/wms/uhfrfid/domain/ContainerTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/domain/DeliveryContainerTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/domain/DeliveryItemProductTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/domain/DeliveryOrderItemTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/domain/DeliveryOrderTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/service/dto/ContainerDTOTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/service/dto/DeliveryContainerDTOTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/service/dto/DeliveryItemProductDTOTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/service/dto/DeliveryOrderDTOTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/service/dto/DeliveryOrderItemDTOTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/service/mapper/ContainerMapperTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/service/mapper/DeliveryContainerMapperTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/service/mapper/DeliveryItemProductMapperTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/service/mapper/DeliveryOrderItemMapperTest.java
+	deleted:    src/test/java/com/wms/uhfrfid/service/mapper/DeliveryOrderMapperTest.java
+	modified:   src/test/java/com/wms/uhfrfid/web/rest/CompanyProductResourceIT.java
+	deleted:    src/test/java/com/wms/uhfrfid/web/rest/ContainerResourceIT.java
+	modified:   src/test/java/com/wms/uhfrfid/web/rest/CustomerResourceIT.java
+	deleted:    src/test/java/com/wms/uhfrfid/web/rest/DeliveryContainerResourceIT.java
+	deleted:    src/test/java/com/wms/uhfrfid/web/rest/DeliveryItemProductResourceIT.java
+	deleted:    src/test/java/com/wms/uhfrfid/web/rest/DeliveryOrderItemResourceIT.java
+	deleted:    src/test/java/com/wms/uhfrfid/web/rest/DeliveryOrderResourceIT.java
+	modified:   src/test/resources/config/application.yml
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.jhipster/ContainerCategory.json
+	.jhipster/Order.json
+	.jhipster/OrderContainer.json
+	.jhipster/OrderItem.json
+	.jhipster/OrderItemProduct.json
+	diff.txt
+	src/main/java/com/wms/uhfrfid/domain/ContainerCategory.java
+	src/main/java/com/wms/uhfrfid/domain/Order.java
+	src/main/java/com/wms/uhfrfid/domain/OrderContainer.java
+	src/main/java/com/wms/uhfrfid/domain/OrderItem.java
+	src/main/java/com/wms/uhfrfid/domain/OrderItemProduct.java
+	src/main/java/com/wms/uhfrfid/domain/enumeration/OrderItemStatus.java
+	src/main/java/com/wms/uhfrfid/domain/enumeration/OrderStatus.java
+	src/main/java/com/wms/uhfrfid/domain/enumeration/OrderType.java
+	src/main/java/com/wms/uhfrfid/repository/ContainerCategoryRepository.java
+	src/main/java/com/wms/uhfrfid/repository/OrderContainerRepository.java
+	src/main/java/com/wms/uhfrfid/repository/OrderItemProductRepository.java
+	src/main/java/com/wms/uhfrfid/repository/OrderItemRepository.java
+	src/main/java/com/wms/uhfrfid/repository/OrderRepository.java
+	src/main/java/com/wms/uhfrfid/service/ContainerCategoryService.java
+	src/main/java/com/wms/uhfrfid/service/OrderContainerService.java
+	src/main/java/com/wms/uhfrfid/service/OrderItemProductService.java
+	src/main/java/com/wms/uhfrfid/service/OrderItemService.java
+	src/main/java/com/wms/uhfrfid/service/OrderService.java
+	src/main/java/com/wms/uhfrfid/service/dto/ContainerCategoryDTO.java
+	src/main/java/com/wms/uhfrfid/service/dto/OrderContainerDTO.java
+	src/main/java/com/wms/uhfrfid/service/dto/OrderDTO.java
+	src/main/java/com/wms/uhfrfid/service/dto/OrderItemDTO.java
+	src/main/java/com/wms/uhfrfid/service/dto/OrderItemProductDTO.java
+	src/main/java/com/wms/uhfrfid/service/mapper/ContainerCategoryMapper.java
+	src/main/java/com/wms/uhfrfid/service/mapper/OrderContainerMapper.java
+	src/main/java/com/wms/uhfrfid/service/mapper/OrderItemMapper.java
+	src/main/java/com/wms/uhfrfid/service/mapper/OrderItemProductMapper.java
+	src/main/java/com/wms/uhfrfid/service/mapper/OrderMapper.java
+	src/main/java/com/wms/uhfrfid/web/rest/ContainerCategoryResource.java
+	src/main/java/com/wms/uhfrfid/web/rest/OrderContainerResource.java
+	src/main/java/com/wms/uhfrfid/web/rest/OrderItemProductResource.java
+	src/main/java/com/wms/uhfrfid/web/rest/OrderItemResource.java
+	src/main/java/com/wms/uhfrfid/web/rest/OrderResource.java
+	src/main/resources/config/liquibase/changelog/20220204215508_added_entity_Company.xml
+	src/main/resources/config/liquibase/changelog/20220204215608_added_entity_CompanyUser.xml
+	src/main/resources/config/liquibase/changelog/20220204215608_added_entity_constraints_CompanyUser.xml
+	src/main/resources/config/liquibase/changelog/20220204215708_added_entity_ContainerCategory.xml
+	src/main/resources/config/liquibase/changelog/20220204215708_added_entity_constraints_ContainerCategory.xml
+	src/main/resources/config/liquibase/changelog/20220204215808_added_entity_CompanyContainer.xml
+	src/main/resources/config/liquibase/changelog/20220204215808_added_entity_constraints_CompanyContainer.xml
+	src/main/resources/config/liquibase/changelog/20220204215908_added_entity_UHFRFIDReader.xml
+	src/main/resources/config/liquibase/changelog/20220204215908_added_entity_constraints_UHFRFIDReader.xml
+	src/main/resources/config/liquibase/changelog/20220204220008_added_entity_UHFRFIDAntenna.xml
+	src/main/resources/config/liquibase/changelog/20220204220008_added_entity_constraints_UHFRFIDAntenna.xml
+	src/main/resources/config/liquibase/changelog/20220204220108_added_entity_Warehouse.xml
+	src/main/resources/config/liquibase/changelog/20220204220108_added_entity_constraints_Warehouse.xml
+	src/main/resources/config/liquibase/changelog/20220204220208_added_entity_Area.xml
+	src/main/resources/config/liquibase/changelog/20220204220208_added_entity_constraints_Area.xml
+	src/main/resources/config/liquibase/changelog/20220204220308_added_entity_Door.xml
+	src/main/resources/config/liquibase/changelog/20220204220308_added_entity_constraints_Door.xml
+	src/main/resources/config/liquibase/changelog/20220204220408_added_entity_DoorAntenna.xml
+	src/main/resources/config/liquibase/changelog/20220204220408_added_entity_constraints_DoorAntenna.xml
+	src/main/resources/config/liquibase/changelog/20220204220508_added_entity_Location.xml
+	src/main/resources/config/liquibase/changelog/20220204220508_added_entity_constraints_Location.xml
+	src/main/resources/config/liquibase/changelog/20220204220608_added_entity_WHRow.xml
+	src/main/resources/config/liquibase/changelog/20220204220608_added_entity_constraints_WHRow.xml
+	src/main/resources/config/liquibase/changelog/20220204220708_added_entity_Bay.xml
+	src/main/resources/config/liquibase/changelog/20220204220708_added_entity_constraints_Bay.xml
+	src/main/resources/config/liquibase/changelog/20220204220808_added_entity_WHLevel.xml
+	src/main/resources/config/liquibase/changelog/20220204220808_added_entity_constraints_WHLevel.xml
+	src/main/resources/config/liquibase/changelog/20220204220908_added_entity_Position.xml
+	src/main/resources/config/liquibase/changelog/20220204220908_added_entity_constraints_Position.xml
+	src/main/resources/config/liquibase/changelog/20220204221008_added_entity_Product.xml
+	src/main/resources/config/liquibase/changelog/20220204221008_added_entity_constraints_Product.xml
+	src/main/resources/config/liquibase/changelog/20220204221108_added_entity_ProductCategory.xml
+	src/main/resources/config/liquibase/changelog/20220204221208_added_entity_CompanyProduct.xml
+	src/main/resources/config/liquibase/changelog/20220204221208_added_entity_constraints_CompanyProduct.xml
+	src/main/resources/config/liquibase/changelog/20220204221308_added_entity_Customer.xml
+	src/main/resources/config/liquibase/changelog/20220204221408_added_entity_Order.xml
+	src/main/resources/config/liquibase/changelog/20220204221408_added_entity_constraints_Order.xml
+	src/main/resources/config/liquibase/changelog/20220204221508_added_entity_OrderItem.xml
+	src/main/resources/config/liquibase/changelog/20220204221508_added_entity_constraints_OrderItem.xml
+	src/main/resources/config/liquibase/changelog/20220204221608_added_entity_OrderContainer.xml
+	src/main/resources/config/liquibase/changelog/20220204221708_added_entity_OrderItemProduct.xml
+	src/main/resources/config/liquibase/changelog/20220204221708_added_entity_constraints_OrderItemProduct.xml
+	src/main/resources/config/liquibase/fake-data/container_category.csv
+	src/main/resources/config/liquibase/fake-data/jhi_order.csv
+	src/main/resources/config/liquibase/fake-data/order_container.csv
+	src/main/resources/config/liquibase/fake-data/order_item.csv
+	src/main/resources/config/liquibase/fake-data/order_item_product.csv
+	src/main/webapp/app/entities/container-category/
+	src/main/webapp/app/entities/enumerations/order-item-status.model.ts
+	src/main/webapp/app/entities/enumerations/order-status.model.ts
+	src/main/webapp/app/entities/enumerations/order-type.model.ts
+	src/main/webapp/app/entities/order-container/
+	src/main/webapp/app/entities/order-item-product/
+	src/main/webapp/app/entities/order-item/
+	src/main/webapp/app/entities/order/
+	src/main/webapp/i18n/en/containerCategory.json
+	src/main/webapp/i18n/en/order.json
+	src/main/webapp/i18n/en/orderContainer.json
+	src/main/webapp/i18n/en/orderItem.json
+	src/main/webapp/i18n/en/orderItemProduct.json
+	src/main/webapp/i18n/en/orderItemStatus.json
+	src/main/webapp/i18n/en/orderStatus.json
+	src/main/webapp/i18n/en/orderType.json
+	src/test/java/com/wms/uhfrfid/domain/ContainerCategoryTest.java
+	src/test/java/com/wms/uhfrfid/domain/OrderContainerTest.java
+	src/test/java/com/wms/uhfrfid/domain/OrderItemProductTest.java
+	src/test/java/com/wms/uhfrfid/domain/OrderItemTest.java
+	src/test/java/com/wms/uhfrfid/domain/OrderTest.java
+	src/test/java/com/wms/uhfrfid/service/dto/ContainerCategoryDTOTest.java
+	src/test/java/com/wms/uhfrfid/service/dto/OrderContainerDTOTest.java
+	src/test/java/com/wms/uhfrfid/service/dto/OrderDTOTest.java
+	src/test/java/com/wms/uhfrfid/service/dto/OrderItemDTOTest.java
+	src/test/java/com/wms/uhfrfid/service/dto/OrderItemProductDTOTest.java
+	src/test/java/com/wms/uhfrfid/service/mapper/ContainerCategoryMapperTest.java
+	src/test/java/com/wms/uhfrfid/service/mapper/OrderContainerMapperTest.java
+	src/test/java/com/wms/uhfrfid/service/mapper/OrderItemMapperTest.java
+	src/test/java/com/wms/uhfrfid/service/mapper/OrderItemProductMapperTest.java
+	src/test/java/com/wms/uhfrfid/service/mapper/OrderMapperTest.java
+	src/test/java/com/wms/uhfrfid/web/rest/ContainerCategoryResourceIT.java
+	src/test/java/com/wms/uhfrfid/web/rest/OrderContainerResourceIT.java
+	src/test/java/com/wms/uhfrfid/web/rest/OrderItemProductResourceIT.java
+	src/test/java/com/wms/uhfrfid/web/rest/OrderItemResourceIT.java
+	src/test/java/com/wms/uhfrfid/web/rest/OrderResourceIT.java
+
+no changes added to commit (use "git add" and/or "git commit -a")

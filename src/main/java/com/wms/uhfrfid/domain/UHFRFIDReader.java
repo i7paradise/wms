@@ -1,5 +1,6 @@
 package com.wms.uhfrfid.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wms.uhfrfid.domain.enumeration.UHFRFIDReaderStatus;
 import java.io.Serializable;
 import javax.persistence.*;
@@ -36,6 +37,10 @@ public class UHFRFIDReader implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private UHFRFIDReaderStatus status;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "companyUsers", "companyContainers", "orders", "uhfRFIDReaders" }, allowSetters = true)
+    private Company company;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -102,6 +107,19 @@ public class UHFRFIDReader implements Serializable {
 
     public void setStatus(UHFRFIDReaderStatus status) {
         this.status = status;
+    }
+
+    public Company getCompany() {
+        return this.company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public UHFRFIDReader company(Company company) {
+        this.setCompany(company);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

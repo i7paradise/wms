@@ -2,9 +2,9 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ParseLinks } from 'app/core/util/parse-links.service';
-import { IDeliveryOrder } from 'app/entities/delivery-order/delivery-order.model';
-import { DeliveryOrderComponent } from 'app/entities/delivery-order/list/delivery-order.component';
-import { DeliveryOrderService } from 'app/entities/delivery-order/service/delivery-order.service';
+import { IOrder } from 'app/entities/order/order.model';
+import { OrderComponent } from 'app/entities/order/list/order.component';
+import { OrderService } from 'app/entities/order/service/order.service';
 import { ReceptionService } from '../service/reception.service';
 
 @Component({
@@ -12,14 +12,14 @@ import { ReceptionService } from '../service/reception.service';
   templateUrl: './reception.component.html',
   styleUrls: ['./reception.component.scss'],
 })
-export class ReceptionComponent extends DeliveryOrderComponent implements OnInit {
+export class ReceptionComponent extends OrderComponent implements OnInit {
   constructor(
     private receptionService: ReceptionService,
-    protected deliveryOrderService: DeliveryOrderService,
+    protected orderService: OrderService,
     protected modalService: NgbModal,
     protected parseLinks: ParseLinks
   ) {
-    super(deliveryOrderService, modalService, parseLinks);
+    super(orderService, modalService, parseLinks);
   }
 
   ngOnInit(): void {
@@ -36,9 +36,9 @@ export class ReceptionComponent extends DeliveryOrderComponent implements OnInit
         sort: this.sort(),
       })
       .subscribe({
-        next: (res: HttpResponse<IDeliveryOrder[]>) => {
+        next: (res: HttpResponse<IOrder[]>) => {
           this.isLoading = false;
-          this.paginateDeliveryOrders(res.body, res.headers);
+          this.paginateOrders(res.body, res.headers);
         },
         error: () => {
           this.isLoading = false;

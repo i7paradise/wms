@@ -1,5 +1,6 @@
 package com.wms.uhfrfid.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wms.uhfrfid.domain.enumeration.UHFRFIDAntennaStatus;
 import java.io.Serializable;
 import javax.persistence.*;
@@ -34,6 +35,7 @@ public class UHFRFIDAntenna implements Serializable {
     private UHFRFIDAntennaStatus status;
 
     @ManyToOne
+    @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
     private UHFRFIDReader uhfReader;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

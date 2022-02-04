@@ -41,7 +41,7 @@ describe('ReceptionComponent', () => {
 
     // THEN
     expect(service.query).toHaveBeenCalled();
-    expect(comp.deliveryOrders[0]).toEqual(expect.objectContaining({ id: 123 }));
+    expect(comp.orders[0]).toEqual(expect.objectContaining({ id: 123 }));
   });
 
   it('should load a page', () => {
@@ -50,6 +50,6 @@ describe('ReceptionComponent', () => {
 
     // THEN
     expect(service.query).toHaveBeenCalled();
-    expect(comp.deliveryOrders[0]).toEqual(expect.objectContaining({ id: 123 }));
+    expect(comp.orders[0]).toEqual(expect.objectContaining({ id: 123 }));
   });
 });

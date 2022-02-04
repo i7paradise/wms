@@ -7,14 +7,9 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link CompanyContainer} and its DTO {@link CompanyContainerDTO}.
  */
-@Mapper(componentModel = "spring", uses = { CompanyMapper.class, ContainerMapper.class })
+@Mapper(componentModel = "spring", uses = { ContainerCategoryMapper.class, CompanyMapper.class })
 public interface CompanyContainerMapper extends EntityMapper<CompanyContainerDTO, CompanyContainer> {
+    @Mapping(target = "containerCategory", source = "containerCategory", qualifiedByName = "name")
     @Mapping(target = "company", source = "company", qualifiedByName = "name")
-    @Mapping(target = "container", source = "container", qualifiedByName = "name")
     CompanyContainerDTO toDto(CompanyContainer s);
-
-    @Named("id")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    CompanyContainerDTO toDtoId(CompanyContainer companyContainer);
 }

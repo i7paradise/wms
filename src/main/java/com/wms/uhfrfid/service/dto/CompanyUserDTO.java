@@ -10,12 +10,32 @@ public class CompanyUserDTO implements Serializable {
 
     private Long id;
 
+    private UserDTO user;
+
+    private CompanyDTO company;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UserDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UserDTO user) {
+        this.user = user;
+    }
+
+    public CompanyDTO getCompany() {
+        return company;
+    }
+
+    public void setCompany(CompanyDTO company) {
+        this.company = company;
     }
 
     @Override
@@ -44,6 +64,8 @@ public class CompanyUserDTO implements Serializable {
     public String toString() {
         return "CompanyUserDTO{" +
             "id=" + getId() +
+            ", user=" + getUser() +
+            ", company=" + getCompany() +
             "}";
     }
 }

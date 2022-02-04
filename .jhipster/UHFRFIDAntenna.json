@@ -1,6 +1,6 @@
 {
   "applications": ["wms"],
-  "changelogDate": "20220129215539",
+  "changelogDate": "20220204220008",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "uhfrfid_antenna",

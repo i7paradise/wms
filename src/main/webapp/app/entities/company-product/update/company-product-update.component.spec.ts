@@ -8,8 +8,8 @@ import { of, Subject, from } from 'rxjs';
 
 import { CompanyProductService } from '../service/company-product.service';
 import { ICompanyProduct, CompanyProduct } from '../company-product.model';
-import { IContainer } from 'app/entities/container/container.model';
-import { ContainerService } from 'app/entities/container/service/container.service';
+import { IContainerCategory } from 'app/entities/container-category/container-category.model';
+import { ContainerCategoryService } from 'app/entities/container-category/service/container-category.service';
 import { ICompany } from 'app/entities/company/company.model';
 import { CompanyService } from 'app/entities/company/service/company.service';
 import { IProduct } from 'app/entities/product/product.model';
@@ -22,7 +22,7 @@ describe('CompanyProduct Management Update Component', () => {
   let fixture: ComponentFixture<CompanyProductUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let companyProductService: CompanyProductService;
-  let containerService: ContainerService;
+  let containerCategoryService: ContainerCategoryService;
   let companyService: CompanyService;
   let productService: ProductService;
 
@@ -46,7 +46,7 @@ describe('CompanyProduct Management Update Component', () => {
     fixture = TestBed.createComponent(CompanyProductUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     companyProductService = TestBed.inject(CompanyProductService);
-    containerService = TestBed.inject(ContainerService);
+    containerCategoryService = TestBed.inject(ContainerCategoryService);
     companyService = TestBed.inject(CompanyService);
     productService = TestBed.inject(ProductService);
 
@@ -54,22 +54,25 @@ describe('CompanyProduct Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
-    it('Should call container query and add missing value', () => {
+    it('Should call containerCategory query and add missing value', () => {
       const companyProduct: ICompanyProduct = { id: 456 };
-      const container: IContainer = { id: 30441 };
-      companyProduct.container = container;
+      const containerCategory: IContainerCategory = { id: 97560 };
+      companyProduct.containerCategory = containerCategory;
 
-      const containerCollection: IContainer[] = [{ id: 94604 }];
-      jest.spyOn(containerService, 'query').mockReturnValue(of(new HttpResponse({ body: containerCollection })));
-      const expectedCollection: IContainer[] = [container, ...containerCollection];
-      jest.spyOn(containerService, 'addContainerToCollectionIfMissing').mockReturnValue(expectedCollection);
+      const containerCategoryCollection: IContainerCategory[] = [{ id: 58160 }];
+      jest.spyOn(containerCategoryService, 'query').mockReturnValue(of(new HttpResponse({ body: containerCategoryCollection })));
+      const expectedCollection: IContainerCategory[] = [containerCategory, ...containerCategoryCollection];
+      jest.spyOn(containerCategoryService, 'addContainerCategoryToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ companyProduct });
       comp.ngOnInit();
 
-      expect(containerService.query).toHaveBeenCalled();
-      expect(containerService.addContainerToCollectionIfMissing).toHaveBeenCalledWith(containerCollection, container);
-      expect(comp.containersCollection).toEqual(expectedCollection);
+      expect(containerCategoryService.query).toHaveBeenCalled();
+      expect(containerCategoryService.addContainerCategoryToCollectionIfMissing).toHaveBeenCalledWith(
+        containerCategoryCollection,
+        containerCategory
+      );
+      expect(comp.containerCategoriesCollection).toEqual(expectedCollection);
     });
 
     it('Should call Company query and add missing value', () => {
@@ -112,8 +115,8 @@ describe('CompanyProduct Management Update Component', () => {
 
     it('Should update editForm', () => {
       const companyProduct: ICompanyProduct = { id: 456 };
-      const container: IContainer = { id: 25123 };
-      companyProduct.container = container;
+      const containerCategory: IContainerCategory = { id: 83526 };
+      companyProduct.containerCategory = containerCategory;
       const company: ICompany = { id: 74265 };
       companyProduct.company = company;
       const product: IProduct = { id: 23749 };
@@ -123,7 +126,7 @@ describe('CompanyProduct Management Update Component', () => {
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(companyProduct));
-      expect(comp.containersCollection).toContain(container);
+      expect(comp.containerCategoriesCollection).toContain(containerCategory);
       expect(comp.companiesSharedCollection).toContain(company);
       expect(comp.productsSharedCollection).toContain(product);
     });
@@ -194,10 +197,10 @@ describe('CompanyProduct Management Update Component', () => {
   });
 
   describe('Tracking relationships identifiers', () => {
-    describe('trackContainerById', () => {
-      it('Should return tracked Container primary key', () => {
+    describe('trackContainerCategoryById', () => {
+      it('Should return tracked ContainerCategory primary key', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackContainerById(0, entity);
+        const trackResult = comp.trackContainerCategoryById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

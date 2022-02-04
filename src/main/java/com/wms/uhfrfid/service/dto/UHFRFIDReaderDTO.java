@@ -24,6 +24,8 @@ public class UHFRFIDReaderDTO implements Serializable {
     @NotNull
     private UHFRFIDReaderStatus status;
 
+    private CompanyDTO company;
+
     public Long getId() {
         return id;
     }
@@ -64,6 +66,14 @@ public class UHFRFIDReaderDTO implements Serializable {
         this.status = status;
     }
 
+    public CompanyDTO getCompany() {
+        return company;
+    }
+
+    public void setCompany(CompanyDTO company) {
+        this.company = company;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -94,6 +104,7 @@ public class UHFRFIDReaderDTO implements Serializable {
             ", ip='" + getIp() + "'" +
             ", port=" + getPort() +
             ", status='" + getStatus() + "'" +
+            ", company=" + getCompany() +
             "}";
     }
 }

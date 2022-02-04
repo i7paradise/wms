@@ -22,16 +22,18 @@
         <dd>
           <span>{{ companyContainer.color }}</span>
         </dd>
+        <dt><span jhiTranslate="wmsApp.companyContainer.containerCategory">Container Category</span></dt>
+        <dd>
+          <div *ngIf="companyContainer.containerCategory">
+            <a [routerLink]="['/container-category', companyContainer.containerCategory?.id, 'view']">{{
+              companyContainer.containerCategory?.name
+            }}</a>
+          </div>
+        </dd>
         <dt><span jhiTranslate="wmsApp.companyContainer.company">Company</span></dt>
         <dd>
           <div *ngIf="companyContainer.company">
             <a [routerLink]="['/company', companyContainer.company?.id, 'view']">{{ companyContainer.company?.name }}</a>
-          </div>
-        </dd>
-        <dt><span jhiTranslate="wmsApp.companyContainer.container">Container</span></dt>
-        <dd>
-          <div *ngIf="companyContainer.container">
-            <a [routerLink]="['/container', companyContainer.container?.id, 'view']">{{ companyContainer.container?.name }}</a>
           </div>
         </dd>
       </dl>

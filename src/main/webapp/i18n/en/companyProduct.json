@@ -20,8 +20,8 @@
       "id": "ID",
       "quantity": "Quantity",
       "sku": "Sku",
-      "stockingRatio": "Stocking Ratio",
-      "container": "Container",
+      "containerStockingRatio": "Container Stocking Ratio",
+      "containerCategory": "Container Category",
       "company": "Company",
       "product": "Product"
     }

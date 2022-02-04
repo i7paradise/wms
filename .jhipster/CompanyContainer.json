@@ -1,6 +1,6 @@
 {
   "applications": ["wms"],
-  "changelogDate": "20220129215339",
+  "changelogDate": "20220204215808",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "company_container",
@@ -22,16 +22,17 @@
   "relationships": [
     {
       "otherEntityField": "name",
-      "otherEntityName": "company",
+      "otherEntityName": "containerCategory",
       "otherEntityRelationshipName": "companyContainer",
-      "relationshipName": "company",
-      "relationshipType": "many-to-one"
+      "ownerSide": true,
+      "relationshipName": "containerCategory",
+      "relationshipType": "one-to-one"
     },
     {
       "otherEntityField": "name",
-      "otherEntityName": "container",
+      "otherEntityName": "company",
       "otherEntityRelationshipName": "companyContainer",
-      "relationshipName": "container",
+      "relationshipName": "company",
       "relationshipType": "many-to-one"
     }
   ],

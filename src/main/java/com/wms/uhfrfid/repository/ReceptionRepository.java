@@ -1,16 +1,16 @@
 package com.wms.uhfrfid.repository;
 
-import com.wms.uhfrfid.domain.DeliveryOrder;
-import com.wms.uhfrfid.domain.enumeration.DeliveryOrderStatus;
+import com.wms.uhfrfid.domain.Order;
+import com.wms.uhfrfid.domain.enumeration.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 /**
- * Spring Data SQL repository for the DeliveryOrder entity.
+ * Spring Data SQL repository for the Order entity.
  */
 @Repository
-public interface ReceptionRepository extends DeliveryOrderRepository {
+public interface ReceptionRepository extends OrderRepository {
     //TODO define Query
-    Page<DeliveryOrder> findDeliveryOrdersByStatus(DeliveryOrderStatus status, Pageable pageable);
+    Page<Order> findOrdersByStatus(OrderStatus status, Pageable pageable);
 }

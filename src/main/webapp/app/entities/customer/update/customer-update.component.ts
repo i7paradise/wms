@@ -7,7 +7,6 @@ import { finalize } from 'rxjs/operators';
 
 import { ICustomer, Customer } from '../customer.model';
 import { CustomerService } from '../service/customer.service';
-import { Gender } from 'app/entities/enumerations/gender.model';
 
 @Component({
   selector: 'jhi-customer-update',
@@ -15,13 +14,11 @@ import { Gender } from 'app/entities/enumerations/gender.model';
 })
 export class CustomerUpdateComponent implements OnInit {
   isSaving = false;
-  genderValues = Object.keys(Gender);
 
   editForm = this.fb.group({
     id: [],
     firstName: [null, [Validators.required]],
     lastName: [null, [Validators.required]],
-    gender: [null, [Validators.required]],
     email: [null, [Validators.required, Validators.pattern('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')]],
     phone: [null, [Validators.required]],
     addressLine1: [null, [Validators.required]],
@@ -76,7 +73,6 @@ export class CustomerUpdateComponent implements OnInit {
       id: customer.id,
       firstName: customer.firstName,
       lastName: customer.lastName,
-      gender: customer.gender,
       email: customer.email,
       phone: customer.phone,
       addressLine1: customer.addressLine1,
@@ -92,7 +88,6 @@ export class CustomerUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       firstName: this.editForm.get(['firstName'])!.value,
       lastName: this.editForm.get(['lastName'])!.value,
-      gender: this.editForm.get(['gender'])!.value,
       email: this.editForm.get(['email'])!.value,
       phone: this.editForm.get(['phone'])!.value,
       addressLine1: this.editForm.get(['addressLine1'])!.value,

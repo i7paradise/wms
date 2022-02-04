@@ -22,20 +22,10 @@ entity Company {
     description String
 }
 
-//entity Role {
-//	name String required unique
-//    description String
-//}
-
-//entity User {
-//	name String required unique
-//    password String required
-//}
-
 entity CompanyUser {
 }
 
-entity Container {
+entity ContainerCategory {
 	name String required unique
     description String
 }
@@ -81,7 +71,13 @@ entity Area {
 entity Door {
 	 name String required unique
 }
+entity DoorAntenna {
+	type DoorAntennaType required
+}
 
+enum DoorAntennaType {
+	INNER, OUTER
+}
 enum AreaType {
 	RECEIVING, SHIPPING
 }
@@ -126,13 +122,12 @@ entity ProductCategory {
 entity CompanyProduct {
 	quantity BigDecimal required min(0)
 	sku String
-  	stockingRatio BigDecimal required min(0)
+  	containerStockingRatio BigDecimal required min(0)
 }
 
 entity Customer {
 	firstName String required
 	lastName String required
-	gender Gender required
 	email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
 	phone String required
 	addressLine1 String required
@@ -141,61 +136,55 @@ entity Customer {
 	country String required
 }
 
-enum Gender {
-	MALE, FEMALE
-}
-
-entity DeliveryOrder {
-	doNumber String required unique
+entity Order {
+	transactionNumber String required unique
 	placedDate Instant required
-	status DeliveryOrderStatus required
+	status OrderStatus required
 	code String required
+    type OrderType required
 }
 
-enum DeliveryOrderStatus {
+enum OrderStatus {
 	COMPLETED, PENDING, CANCELLED
 }
 
-entity DeliveryOrderItem {
-	unitQuantity BigDecimal required min(0)
-    containerQuantity BigDecimal required min(0)
-	status DeliveryOrderItemStatus required
+enum OrderType {
+	SHIPPING, RECEPTION, INTERNAL
 }
 
-enum DeliveryOrderItemStatus {
+entity OrderItem {
+	quantity BigDecimal required min(0)
+	status OrderItemStatus required
+}
+
+enum OrderItemStatus {
 	IN_PROGRESS, VERIFIED, LABELED, PARTIALLY_PLACED, FULLY_PLACED
 }
 
-entity DeliveryContainer {
+entity OrderContainer {
 	supplierRFIDTag String
 }
 
-entity DeliveryItemProduct {
+entity OrderItemProduct {
 	rfidTAG String required unique
 }
 
-entity DoorAntenna {
-	type DoorAntennaType required
-}
-
-enum DoorAntennaType {
-	INNER, OUTER
-}
-
 relationship OneToOne {
-//	User{role(name)} to Role
-	DeliveryOrderItem{compganyProduct(sku)} to CompanyProduct
+	CompanyUser to User
+
+	OrderItem{compganyProduct(sku)} to CompanyProduct
     
-    CompanyProduct{container(name)} to Container
-//	Door{uhfAndenna(name)} to UHFAntenna{door(name)}
+	CompanyContainer{containerCategory(name)} to ContainerCategory
+	CompanyProduct{containerCategory(name)} to ContainerCategory
+
 }
 
 relationship ManyToOne {
-//	CompanyUser{company(name)} to Company
-//    CompanyUser{user(name)} to User
-
-	CompanyContainer{company(name)} to Company
-    CompanyContainer{container(name)} to Container
+	CompanyUser to Company
+	
+	CompanyContainer{company(name)} to Company{companyContainer}
+    
+	Order to Company
 
 	Warehouse{company(name)} to Company
 
@@ -212,12 +201,13 @@ relationship ManyToOne {
 	CompanyProduct{company(name)} to Company
     CompanyProduct{product(name)} to Product
 
-	DeliveryOrderItem to DeliveryOrder
-    DeliveryContainer{deliveryOrderItem} to DeliveryOrderItem
-    DeliveryContainer{companyContainer} to CompanyContainer
+	OrderItem to Order
+    ContainerCategory to OrderItem
 
-	DeliveryItemProduct{deliveryContainer} to DeliveryContainer
-//    DeliveryItemProduct{deliveryOrderItem} to DeliveryOrderItem
+	OrderItemProduct to ContainerCategory
+	OrderItemProduct{OrderItem} to OrderItem
+
+	UHFRFIDReader{company(name)} to Company{uhfRFIDReader(name)}
 
 	UHFRFIDAntenna{uhfReader(name)} to UHFRFIDReader
 

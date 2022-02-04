@@ -14,7 +14,7 @@ describe('ReceptionDetailComponent', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: { data: of({ deliveryOrder: { id: 123 } }) },
+          useValue: { data: of({ order: { id: 123 } }) },
         },
       ],
     })
@@ -25,12 +25,12 @@ describe('ReceptionDetailComponent', () => {
   });
 
   describe('OnInit', () => {
-    it('Should load deliveryOrder on init', () => {
+    it('Should load order on init', () => {
       // WHEN
       comp.ngOnInit();
 
       // THEN
-      expect(comp.deliveryOrder).toEqual(expect.objectContaining({ id: 123 }));
+      expect(comp.order).toEqual(expect.objectContaining({ id: 123 }));
     });
   });
 });

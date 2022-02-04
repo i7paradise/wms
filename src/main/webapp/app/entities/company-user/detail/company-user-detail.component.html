@@ -14,6 +14,16 @@
         <dd>
           <span>{{ companyUser.id }}</span>
         </dd>
+        <dt><span jhiTranslate="wmsApp.companyUser.user">User</span></dt>
+        <dd>
+          <span>{{ companyUser.user?.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.companyUser.company">Company</span></dt>
+        <dd>
+          <div *ngIf="companyUser.company">
+            <a [routerLink]="['/company', companyUser.company?.id, 'view']">{{ companyUser.company?.id }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

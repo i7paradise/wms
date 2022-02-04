@@ -1,0 +1,44 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="containerCategory">
+      <h2 data-cy="containerCategoryDetailsHeading">
+        <span jhiTranslate="wmsApp.containerCategory.detail.title">Container Category</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ containerCategory.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.containerCategory.name">Name</span></dt>
+        <dd>
+          <span>{{ containerCategory.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.containerCategory.description">Description</span></dt>
+        <dd>
+          <span>{{ containerCategory.description }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.containerCategory.orderItem">Order Item</span></dt>
+        <dd>
+          <div *ngIf="containerCategory.orderItem">
+            <a [routerLink]="['/order-item', containerCategory.orderItem?.id, 'view']">{{ containerCategory.orderItem?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/container-category', containerCategory.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

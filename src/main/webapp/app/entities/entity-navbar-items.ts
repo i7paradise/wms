@@ -10,9 +10,9 @@ export const EntityNavbarItems = [
     translationKey: 'global.menu.entities.companyUser',
   },
   {
-    name: 'Container',
-    route: 'container',
-    translationKey: 'global.menu.entities.container',
+    name: 'ContainerCategory',
+    route: 'container-category',
+    translationKey: 'global.menu.entities.containerCategory',
   },
   {
     name: 'CompanyContainer',
@@ -43,6 +43,11 @@ export const EntityNavbarItems = [
     name: 'Door',
     route: 'door',
     translationKey: 'global.menu.entities.door',
+  },
+  {
+    name: 'DoorAntenna',
+    route: 'door-antenna',
+    translationKey: 'global.menu.entities.doorAntenna',
   },
   {
     name: 'Location',
@@ -90,28 +95,23 @@ export const EntityNavbarItems = [
     translationKey: 'global.menu.entities.customer',
   },
   {
-    name: 'DeliveryOrder',
-    route: 'delivery-order',
-    translationKey: 'global.menu.entities.deliveryOrder',
+    name: 'Order',
+    route: 'order',
+    translationKey: 'global.menu.entities.order',
   },
   {
-    name: 'DeliveryOrderItem',
-    route: 'delivery-order-item',
-    translationKey: 'global.menu.entities.deliveryOrderItem',
+    name: 'OrderItem',
+    route: 'order-item',
+    translationKey: 'global.menu.entities.orderItem',
   },
   {
-    name: 'DeliveryContainer',
-    route: 'delivery-container',
-    translationKey: 'global.menu.entities.deliveryContainer',
+    name: 'OrderContainer',
+    route: 'order-container',
+    translationKey: 'global.menu.entities.orderContainer',
   },
   {
-    name: 'DeliveryItemProduct',
-    route: 'delivery-item-product',
-    translationKey: 'global.menu.entities.deliveryItemProduct',
-  },
-  {
-    name: 'DoorAntenna',
-    route: 'door-antenna',
-    translationKey: 'global.menu.entities.doorAntenna',
+    name: 'OrderItemProduct',
+    route: 'order-item-product',
+    translationKey: 'global.menu.entities.orderItemProduct',
   },
 ];

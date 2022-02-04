@@ -2,8 +2,8 @@ package com.wms.uhfrfid.web.rest;
 
 import com.wms.uhfrfid.security.SecurityUtils;
 import com.wms.uhfrfid.service.ReceptionService;
-import com.wms.uhfrfid.service.dto.DeliveryOrderDTO;
-import com.wms.uhfrfid.service.dto.DeliveryOrderDTOV2;
+import com.wms.uhfrfid.service.dto.OrderDTO;
+import com.wms.uhfrfid.service.dto.OrderDTOV2;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -40,19 +40,19 @@ public class ReceptionResource {
      * GET fetchOpenReceptions
      */
     @GetMapping
-    public ResponseEntity<List<DeliveryOrderDTO>> fetchReceptions(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of DeliveryOrders");
+    public ResponseEntity<List<OrderDTO>> fetchReceptions(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Orders");
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new IllegalArgumentException("TODO 401"));
-        Page<DeliveryOrderDTO> page = receptionService.findAll(userLogin, pageable);
+        Page<OrderDTO> page = receptionService.findAll(userLogin, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DeliveryOrderDTOV2> fetchReception(@PathVariable Long id) {
-        log.debug("REST request to get DeliveryOrder : {}", id);
+    public ResponseEntity<OrderDTOV2> fetchReception(@PathVariable Long id) {
+        log.debug("REST request to get Order : {}", id);
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new IllegalArgumentException("TODO 401"));
-        Optional<DeliveryOrderDTOV2> deliveryOrderDTO = receptionService.findOne(id, userLogin);
-        return ResponseUtil.wrapOrNotFound(deliveryOrderDTO);
+        Optional<OrderDTOV2> orderDTO = receptionService.findOne(id, userLogin);
+        return ResponseUtil.wrapOrNotFound(orderDTO);
     }
 }

@@ -1,6 +1,5 @@
 package com.wms.uhfrfid.domain;
 
-import com.wms.uhfrfid.domain.enumeration.Gender;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -27,11 +26,6 @@ public class Customer implements Serializable {
     @NotNull
     @Column(name = "last_name", nullable = false)
     private String lastName;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "gender", nullable = false)
-    private Gender gender;
 
     @NotNull
     @Pattern(regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
@@ -96,19 +90,6 @@ public class Customer implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Gender getGender() {
-        return this.gender;
-    }
-
-    public Customer gender(Gender gender) {
-        this.setGender(gender);
-        return this;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
     }
 
     public String getEmail() {
@@ -215,7 +196,6 @@ public class Customer implements Serializable {
             "id=" + getId() +
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
-            ", gender='" + getGender() + "'" +
             ", email='" + getEmail() + "'" +
             ", phone='" + getPhone() + "'" +
             ", addressLine1='" + getAddressLine1() + "'" +

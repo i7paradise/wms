@@ -22,14 +22,16 @@
         <dd>
           <span>{{ companyProduct.sku }}</span>
         </dd>
-        <dt><span jhiTranslate="wmsApp.companyProduct.stockingRatio">Stocking Ratio</span></dt>
+        <dt><span jhiTranslate="wmsApp.companyProduct.containerStockingRatio">Container Stocking Ratio</span></dt>
         <dd>
-          <span>{{ companyProduct.stockingRatio }}</span>
+          <span>{{ companyProduct.containerStockingRatio }}</span>
         </dd>
-        <dt><span jhiTranslate="wmsApp.companyProduct.container">Container</span></dt>
+        <dt><span jhiTranslate="wmsApp.companyProduct.containerCategory">Container Category</span></dt>
         <dd>
-          <div *ngIf="companyProduct.container">
-            <a [routerLink]="['/container', companyProduct.container?.id, 'view']">{{ companyProduct.container?.name }}</a>
+          <div *ngIf="companyProduct.containerCategory">
+            <a [routerLink]="['/container-category', companyProduct.containerCategory?.id, 'view']">{{
+              companyProduct.containerCategory?.name
+            }}</a>
           </div>
         </dd>
         <dt><span jhiTranslate="wmsApp.companyProduct.company">Company</span></dt>

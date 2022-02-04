@@ -39,6 +39,9 @@
           <th scope="col" jhiSortBy="status">
             <span jhiTranslate="wmsApp.uHFRFIDReader.status">Status</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="company.name">
+            <span jhiTranslate="wmsApp.uHFRFIDReader.company">Company</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -51,6 +54,11 @@
           <td>{{ uHFRFIDReader.ip }}</td>
           <td>{{ uHFRFIDReader.port }}</td>
           <td jhiTranslate="{{ 'wmsApp.UHFRFIDReaderStatus.' + uHFRFIDReader.status }}">{{ uHFRFIDReader.status }}</td>
+          <td>
+            <div *ngIf="uHFRFIDReader.company">
+              <a [routerLink]="['/company', uHFRFIDReader.company?.id, 'view']">{{ uHFRFIDReader.company?.name }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

@@ -1,0 +1,46 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="orderItemProduct">
+      <h2 data-cy="orderItemProductDetailsHeading"><span jhiTranslate="wmsApp.orderItemProduct.detail.title">Order Item Product</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ orderItemProduct.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.orderItemProduct.rfidTAG">Rfid TAG</span></dt>
+        <dd>
+          <span>{{ orderItemProduct.rfidTAG }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.orderItemProduct.containerCategory">Container Category</span></dt>
+        <dd>
+          <div *ngIf="orderItemProduct.containerCategory">
+            <a [routerLink]="['/container-category', orderItemProduct.containerCategory?.id, 'view']">{{
+              orderItemProduct.containerCategory?.id
+            }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.orderItemProduct.orderItem">Order Item</span></dt>
+        <dd>
+          <div *ngIf="orderItemProduct.orderItem">
+            <a [routerLink]="['/order-item', orderItemProduct.orderItem?.id, 'view']">{{ orderItemProduct.orderItem?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/order-item-product', orderItemProduct.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

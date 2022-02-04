@@ -1,0 +1,20 @@
+{
+  "applications": ["wms"],
+  "changelogDate": "20220204221608",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "order_container",
+  "fields": [
+    {
+      "fieldName": "supplierRFIDTag",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "OrderContainer",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}

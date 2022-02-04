@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.Customer;
-import com.wms.uhfrfid.domain.enumeration.Gender;
 import com.wms.uhfrfid.repository.CustomerRepository;
 import com.wms.uhfrfid.service.dto.CustomerDTO;
 import com.wms.uhfrfid.service.mapper.CustomerMapper;
@@ -37,9 +36,6 @@ class CustomerResourceIT {
 
     private static final String DEFAULT_LAST_NAME = "AAAAAAAAAA";
     private static final String UPDATED_LAST_NAME = "BBBBBBBBBB";
-
-    private static final Gender DEFAULT_GENDER = Gender.MALE;
-    private static final Gender UPDATED_GENDER = Gender.FEMALE;
 
     private static final String DEFAULT_EMAIL = "E&7R(@dZ,.2WD";
     private static final String UPDATED_EMAIL = "k\"@L:m1D.)R";
@@ -89,7 +85,6 @@ class CustomerResourceIT {
         Customer customer = new Customer()
             .firstName(DEFAULT_FIRST_NAME)
             .lastName(DEFAULT_LAST_NAME)
-            .gender(DEFAULT_GENDER)
             .email(DEFAULT_EMAIL)
             .phone(DEFAULT_PHONE)
             .addressLine1(DEFAULT_ADDRESS_LINE_1)
@@ -109,7 +104,6 @@ class CustomerResourceIT {
         Customer customer = new Customer()
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
-            .gender(UPDATED_GENDER)
             .email(UPDATED_EMAIL)
             .phone(UPDATED_PHONE)
             .addressLine1(UPDATED_ADDRESS_LINE_1)
@@ -140,7 +134,6 @@ class CustomerResourceIT {
         Customer testCustomer = customerList.get(customerList.size() - 1);
         assertThat(testCustomer.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
         assertThat(testCustomer.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
-        assertThat(testCustomer.getGender()).isEqualTo(DEFAULT_GENDER);
         assertThat(testCustomer.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testCustomer.getPhone()).isEqualTo(DEFAULT_PHONE);
         assertThat(testCustomer.getAddressLine1()).isEqualTo(DEFAULT_ADDRESS_LINE_1);
@@ -192,24 +185,6 @@ class CustomerResourceIT {
         int databaseSizeBeforeTest = customerRepository.findAll().size();
         // set the field null
         customer.setLastName(null);
-
-        // Create the Customer, which fails.
-        CustomerDTO customerDTO = customerMapper.toDto(customer);
-
-        restCustomerMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(customerDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Customer> customerList = customerRepository.findAll();
-        assertThat(customerList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkGenderIsRequired() throws Exception {
-        int databaseSizeBeforeTest = customerRepository.findAll().size();
-        // set the field null
-        customer.setGender(null);
 
         // Create the Customer, which fails.
         CustomerDTO customerDTO = customerMapper.toDto(customer);
@@ -326,7 +301,6 @@ class CustomerResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(customer.getId().intValue())))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
-            .andExpect(jsonPath("$.[*].gender").value(hasItem(DEFAULT_GENDER.toString())))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
             .andExpect(jsonPath("$.[*].addressLine1").value(hasItem(DEFAULT_ADDRESS_LINE_1)))
@@ -349,7 +323,6 @@ class CustomerResourceIT {
             .andExpect(jsonPath("$.id").value(customer.getId().intValue()))
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME))
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME))
-            .andExpect(jsonPath("$.gender").value(DEFAULT_GENDER.toString()))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
             .andExpect(jsonPath("$.addressLine1").value(DEFAULT_ADDRESS_LINE_1))
@@ -380,7 +353,6 @@ class CustomerResourceIT {
         updatedCustomer
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
-            .gender(UPDATED_GENDER)
             .email(UPDATED_EMAIL)
             .phone(UPDATED_PHONE)
             .addressLine1(UPDATED_ADDRESS_LINE_1)
@@ -403,7 +375,6 @@ class CustomerResourceIT {
         Customer testCustomer = customerList.get(customerList.size() - 1);
         assertThat(testCustomer.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(testCustomer.getLastName()).isEqualTo(UPDATED_LAST_NAME);
-        assertThat(testCustomer.getGender()).isEqualTo(UPDATED_GENDER);
         assertThat(testCustomer.getEmail()).isEqualTo(UPDATED_EMAIL);
         assertThat(testCustomer.getPhone()).isEqualTo(UPDATED_PHONE);
         assertThat(testCustomer.getAddressLine1()).isEqualTo(UPDATED_ADDRESS_LINE_1);
@@ -489,12 +460,7 @@ class CustomerResourceIT {
         Customer partialUpdatedCustomer = new Customer();
         partialUpdatedCustomer.setId(customer.getId());
 
-        partialUpdatedCustomer
-            .lastName(UPDATED_LAST_NAME)
-            .gender(UPDATED_GENDER)
-            .email(UPDATED_EMAIL)
-            .addressLine1(UPDATED_ADDRESS_LINE_1)
-            .country(UPDATED_COUNTRY);
+        partialUpdatedCustomer.lastName(UPDATED_LAST_NAME).email(UPDATED_EMAIL).phone(UPDATED_PHONE).addressLine2(UPDATED_ADDRESS_LINE_2);
 
         restCustomerMockMvc
             .perform(
@@ -510,13 +476,12 @@ class CustomerResourceIT {
         Customer testCustomer = customerList.get(customerList.size() - 1);
         assertThat(testCustomer.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
         assertThat(testCustomer.getLastName()).isEqualTo(UPDATED_LAST_NAME);
-        assertThat(testCustomer.getGender()).isEqualTo(UPDATED_GENDER);
         assertThat(testCustomer.getEmail()).isEqualTo(UPDATED_EMAIL);
-        assertThat(testCustomer.getPhone()).isEqualTo(DEFAULT_PHONE);
-        assertThat(testCustomer.getAddressLine1()).isEqualTo(UPDATED_ADDRESS_LINE_1);
-        assertThat(testCustomer.getAddressLine2()).isEqualTo(DEFAULT_ADDRESS_LINE_2);
+        assertThat(testCustomer.getPhone()).isEqualTo(UPDATED_PHONE);
+        assertThat(testCustomer.getAddressLine1()).isEqualTo(DEFAULT_ADDRESS_LINE_1);
+        assertThat(testCustomer.getAddressLine2()).isEqualTo(UPDATED_ADDRESS_LINE_2);
         assertThat(testCustomer.getCity()).isEqualTo(DEFAULT_CITY);
-        assertThat(testCustomer.getCountry()).isEqualTo(UPDATED_COUNTRY);
+        assertThat(testCustomer.getCountry()).isEqualTo(DEFAULT_COUNTRY);
     }
 
     @Test
@@ -534,7 +499,6 @@ class CustomerResourceIT {
         partialUpdatedCustomer
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
-            .gender(UPDATED_GENDER)
             .email(UPDATED_EMAIL)
             .phone(UPDATED_PHONE)
             .addressLine1(UPDATED_ADDRESS_LINE_1)
@@ -556,7 +520,6 @@ class CustomerResourceIT {
         Customer testCustomer = customerList.get(customerList.size() - 1);
         assertThat(testCustomer.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(testCustomer.getLastName()).isEqualTo(UPDATED_LAST_NAME);
-        assertThat(testCustomer.getGender()).isEqualTo(UPDATED_GENDER);
         assertThat(testCustomer.getEmail()).isEqualTo(UPDATED_EMAIL);
         assertThat(testCustomer.getPhone()).isEqualTo(UPDATED_PHONE);
         assertThat(testCustomer.getAddressLine1()).isEqualTo(UPDATED_ADDRESS_LINE_1);

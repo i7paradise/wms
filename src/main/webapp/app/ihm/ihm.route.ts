@@ -13,7 +13,7 @@ export const ihmRoute: Routes = [
   {
     path: 'reception/:id',
     resolve: {
-      deliveryOrder: ReceptionRoutingResolveService,
+      order: ReceptionRoutingResolveService,
     },
     component: ReceptionDetailComponent,
     canActivate: [UserRouteAccessService],

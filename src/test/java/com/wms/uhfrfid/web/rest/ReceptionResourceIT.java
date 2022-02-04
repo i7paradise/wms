@@ -6,12 +6,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.wms.uhfrfid.IntegrationTest;
-import com.wms.uhfrfid.domain.DeliveryOrder;
-import com.wms.uhfrfid.domain.enumeration.DeliveryOrderStatus;
-import com.wms.uhfrfid.repository.DeliveryOrderItemRepository;
+import com.wms.uhfrfid.domain.Order;
+import com.wms.uhfrfid.domain.enumeration.OrderStatus;
+import com.wms.uhfrfid.repository.OrderItemRepository;
 import com.wms.uhfrfid.repository.ReceptionRepository;
-import com.wms.uhfrfid.service.dto.DeliveryOrderDTOV2;
-import com.wms.uhfrfid.service.mapper.v2.DeliveryOrderV2Mapper;
+import com.wms.uhfrfid.service.dto.OrderDTOV2;
+import com.wms.uhfrfid.service.mapper.v2.OrderV2Mapper;
 import java.time.Instant;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,60 +37,61 @@ class ReceptionResourceIT {
     private ReceptionRepository receptionRepository;
 
     @Autowired //TODO remove
-    private DeliveryOrderItemRepository deliveryOrderItemRepository;
+    private OrderItemRepository orderItemRepository;
 
     @Autowired
-    private DeliveryOrderV2Mapper deliveryOrderMapper;
+    private OrderV2Mapper orderMapper;
 
     @Autowired
     private MockMvc restReceptionMockMvc;
 
-    private DeliveryOrderDTOV2 deliveryOrderDTO;
+    private OrderDTOV2 orderDTO;
 
-    private static DeliveryOrder createEntity() {
-        return new DeliveryOrder()
-            .doNumber(UUID.randomUUID().toString())
+    private static Order createEntity() {
+        return new Order()
+            .transactionNumber(UUID.randomUUID().toString())
             .placedDate(Instant.ofEpochMilli(0L))
-            .status(DeliveryOrderStatus.PENDING)
+            .status(OrderStatus.PENDING)
             .code("AAAAAAAAAA");
     }
 
     @BeforeEach
     @Transactional
     public void initTest() {
-        DeliveryOrder deliveryOrder = createEntity();
-        deliveryOrder.addDeliveryOrderItem(DeliveryOrderItemResourceIT.createEntity(null));
-        receptionRepository.save(deliveryOrder);
-        deliveryOrderDTO = deliveryOrderMapper.toDto(deliveryOrder);
+        Order order = createEntity();
+        order.addOrderItem(OrderItemResourceIT.createEntity(null));
+        receptionRepository.save(order);
+        orderDTO = orderMapper.toDto(order);
     }
 
     @Test
+    @Transactional
     void getAllReceptions() throws Exception {
         restReceptionMockMvc
             .perform(get(ReceptionResource.PATH))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(deliveryOrderDTO.getId().intValue())))
-            .andExpect(jsonPath("$.[*].doNumber").value(hasItem(deliveryOrderDTO.getDoNumber())))
-            .andExpect(jsonPath("$.[*].placedDate").value(hasItem(deliveryOrderDTO.getPlacedDate().toString())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(deliveryOrderDTO.getStatus().toString())))
-            .andExpect(jsonPath("$.[*].code").value(hasItem(deliveryOrderDTO.getCode())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(orderDTO.getId().intValue())))
+            .andExpect(jsonPath("$.[*].transactionNumber").value(hasItem(orderDTO.getTransactionNumber())))
+            .andExpect(jsonPath("$.[*].placedDate").value(hasItem(orderDTO.getPlacedDate().toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(orderDTO.getStatus().toString())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(orderDTO.getCode())));
     }
 
     @Test
     @Transactional
     void getReception() throws Exception {
         restReceptionMockMvc
-            .perform(get(ReceptionResource.PATH + "/{id}", deliveryOrderDTO.getId()))
+            .perform(get(ReceptionResource.PATH + "/{id}", orderDTO.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andDo(print())
-            .andExpect(jsonPath("$.id").value(deliveryOrderDTO.getId().intValue()))
-            .andExpect(jsonPath("$.doNumber").value(deliveryOrderDTO.getDoNumber()))
-            .andExpect(jsonPath("$.placedDate").value(deliveryOrderDTO.getPlacedDate().toString()))
-            .andExpect(jsonPath("$.status").value(deliveryOrderDTO.getStatus().toString()))
-            .andExpect(jsonPath("$.code").value(deliveryOrderDTO.getCode()))
-            .andExpect(jsonPath("$.deliveryOrderItems").isArray())//            .andExpect(jsonPath())
+            .andExpect(jsonPath("$.id").value(orderDTO.getId().intValue()))
+            .andExpect(jsonPath("$.transactionNumber").value(orderDTO.getTransactionNumber()))
+            .andExpect(jsonPath("$.placedDate").value(orderDTO.getPlacedDate().toString()))
+            .andExpect(jsonPath("$.status").value(orderDTO.getStatus().toString()))
+            .andExpect(jsonPath("$.code").value(orderDTO.getCode()))
+            .andExpect(jsonPath("$.orderItems").isArray())//            .andExpect(jsonPath())
         ;
     }
 }

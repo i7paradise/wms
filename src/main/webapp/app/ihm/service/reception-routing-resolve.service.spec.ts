@@ -6,15 +6,15 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { ReceptionService } from './reception.service';
-import { DeliveryOrder, IDeliveryOrder } from 'app/entities/delivery-order/delivery-order.model';
+import { Order, IOrder } from 'app/entities/order/order.model';
 import { ReceptionRoutingResolveService } from './reception-routing-resolve.service';
 
-describe('DeliveryOrder routing resolve service', () => {
+describe('Order routing resolve service', () => {
   let mockRouter: Router;
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: ReceptionRoutingResolveService;
   let service: ReceptionService;
-  let resultDeliveryOrder: IDeliveryOrder | undefined;
+  let resultOrder: IOrder | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -35,53 +35,53 @@ describe('DeliveryOrder routing resolve service', () => {
     mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(ReceptionRoutingResolveService);
     service = TestBed.inject(ReceptionService);
-    resultDeliveryOrder = undefined;
+    resultOrder = undefined;
   });
 
   describe('resolve', () => {
-    it('should return IDeliveryOrder returned by find', () => {
+    it('should return IOrder returned by find', () => {
       // GIVEN
       service.find = jest.fn(id => of(new HttpResponse({ body: { id } })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN
       routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-        resultDeliveryOrder = result;
+        resultOrder = result;
       });
 
       // THEN
       expect(service.find).toBeCalledWith(123);
-      expect(resultDeliveryOrder).toEqual({ id: 123 });
+      expect(resultOrder).toEqual({ id: 123 });
     });
 
-    it('should return new IDeliveryOrder if id is not provided', () => {
+    it('should return new IOrder if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};
 
       // WHEN
       routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-        resultDeliveryOrder = result;
+        resultOrder = result;
       });
 
       // THEN
       expect(service.find).not.toBeCalled();
-      expect(resultDeliveryOrder).toEqual(new DeliveryOrder());
+      expect(resultOrder).toEqual(new Order());
     });
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as DeliveryOrder })));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as Order })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN
       routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-        resultDeliveryOrder = result;
+        resultOrder = result;
       });
 
       // THEN
       expect(service.find).toBeCalledWith(123);
-      expect(resultDeliveryOrder).toEqual(undefined);
+      expect(resultOrder).toEqual(undefined);
       expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
     });
   });

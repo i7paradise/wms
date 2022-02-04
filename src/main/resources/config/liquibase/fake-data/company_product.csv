@@ -1,4 +1,4 @@
-id;quantity;sku;stocking_ratio
+id;quantity;sku;container_stocking_ratio
 1;8288;navigating AGP alarm;70798
 2;41973;Functionality;35923
 3;47290;Auto;64633

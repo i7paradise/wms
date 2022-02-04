@@ -14,9 +14,9 @@ public class CompanyContainerDTO implements Serializable {
 
     private String color;
 
-    private CompanyDTO company;
+    private ContainerCategoryDTO containerCategory;
 
-    private ContainerDTO container;
+    private CompanyDTO company;
 
     public Long getId() {
         return id;
@@ -42,20 +42,20 @@ public class CompanyContainerDTO implements Serializable {
         this.color = color;
     }
 
+    public ContainerCategoryDTO getContainerCategory() {
+        return containerCategory;
+    }
+
+    public void setContainerCategory(ContainerCategoryDTO containerCategory) {
+        this.containerCategory = containerCategory;
+    }
+
     public CompanyDTO getCompany() {
         return company;
     }
 
     public void setCompany(CompanyDTO company) {
         this.company = company;
-    }
-
-    public ContainerDTO getContainer() {
-        return container;
-    }
-
-    public void setContainer(ContainerDTO container) {
-        this.container = container;
     }
 
     @Override
@@ -86,8 +86,8 @@ public class CompanyContainerDTO implements Serializable {
             "id=" + getId() +
             ", rfidTag='" + getRfidTag() + "'" +
             ", color='" + getColor() + "'" +
+            ", containerCategory=" + getContainerCategory() +
             ", company=" + getCompany() +
-            ", container=" + getContainer() +
             "}";
     }
 }

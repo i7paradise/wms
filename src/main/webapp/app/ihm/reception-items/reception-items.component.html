@@ -1,36 +1,32 @@
 <div class="reception-items">
-  <div class="alert alert-warning" id="no-result" *ngIf="deliveryOrderItems?.length === 0">
-    <span jhiTranslate="wmsApp.deliveryOrderItem.home.notFound">No deliveryOrderItems found</span>
+  <div class="alert alert-warning" id="no-result" *ngIf="orderItems?.length === 0">
+    <span jhiTranslate="wmsApp.orderItem.home.notFound">No orderItems found</span>
   </div>
 
-  <div class="table-responsive" *ngIf="deliveryOrderItems && deliveryOrderItems.length > 0">
+  <div class="table-responsive" *ngIf="orderItems && orderItems.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
           <th scope="col">
-            <span jhiTranslate="wmsApp.deliveryOrderItem.unitQuantity">Unit Quantity</span>
+            <span jhiTranslate="wmsApp.orderItem.quantity">Unit Quantity</span>
           </th>
           <th scope="col">
-            <span jhiTranslate="wmsApp.deliveryOrderItem.containerQuantity">Container Quantity</span>
+            <span jhiTranslate="wmsApp.orderItem.status">Status</span>
           </th>
           <th scope="col">
-            <span jhiTranslate="wmsApp.deliveryOrderItem.status">Status</span>
-          </th>
-          <th scope="col">
-            <span jhiTranslate="wmsApp.deliveryOrderItem.compganyProduct">Compgany Product</span>
+            <span jhiTranslate="wmsApp.orderItem.compganyProduct">Compgany Product</span>
           </th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let deliveryOrderItem of deliveryOrderItems" data-cy="entityTable">
-          <td>{{ deliveryOrderItem.unitQuantity }}</td>
-          <td>{{ deliveryOrderItem.containerQuantity }}</td>
-          <td jhiTranslate="{{ 'wmsApp.DeliveryOrderItemStatus.' + deliveryOrderItem.status }}">{{ deliveryOrderItem.status }}</td>
+        <tr *ngFor="let orderItem of orderItems" data-cy="entityTable">
+          <td>{{ orderItem.quantity }}</td>
+          <td jhiTranslate="{{ 'wmsApp.OrderItemStatus.' + orderItem.status }}">{{ orderItem.status }}</td>
           <td>
-            <div *ngIf="deliveryOrderItem.compganyProduct">
-              <a [routerLink]="['/company-product', deliveryOrderItem.compganyProduct?.id, 'view']">{{
-                deliveryOrderItem.compganyProduct?.sku
+            <div *ngIf="orderItem.compganyProduct">
+              <a [routerLink]="['/company-product', orderItem.compganyProduct?.id, 'view']">{{
+                orderItem.compganyProduct?.sku
               }}</a>
             </div>
           </td>
@@ -38,7 +34,7 @@
             <div class="btn-group">
               <button
                 type="submit"
-                [routerLink]="['/delivery-order-item', deliveryOrderItem.id, 'view']"
+                [routerLink]="['/order-item', orderItem.id, 'view']"
                 class="btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
@@ -48,7 +44,7 @@
 
               <button
                 type="submit"
-                [routerLink]="['/delivery-order-item', deliveryOrderItem.id, 'edit']"
+                [routerLink]="['/order-item', orderItem.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
@@ -56,7 +52,7 @@
                 <span class="d-none d-md-inline"></span>
               </button>
 
-              <button type="submit" (click)="delete(deliveryOrderItem)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <button type="submit" (click)="delete(orderItem)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline"></span>
               </button>

@@ -37,11 +37,12 @@
             <span jhiTranslate="wmsApp.companyProduct.quantity">Quantity</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="sku"><span jhiTranslate="wmsApp.companyProduct.sku">Sku</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="stockingRatio">
-            <span jhiTranslate="wmsApp.companyProduct.stockingRatio">Stocking Ratio</span> <fa-icon icon="sort"></fa-icon>
+          <th scope="col" jhiSortBy="containerStockingRatio">
+            <span jhiTranslate="wmsApp.companyProduct.containerStockingRatio">Container Stocking Ratio</span>
+            <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="container.name">
-            <span jhiTranslate="wmsApp.companyProduct.container">Container</span> <fa-icon icon="sort"></fa-icon>
+          <th scope="col" jhiSortBy="containerCategory.name">
+            <span jhiTranslate="wmsApp.companyProduct.containerCategory">Container Category</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="company.name">
             <span jhiTranslate="wmsApp.companyProduct.company">Company</span> <fa-icon icon="sort"></fa-icon>
@@ -59,10 +60,12 @@
           </td>
           <td>{{ companyProduct.quantity }}</td>
           <td>{{ companyProduct.sku }}</td>
-          <td>{{ companyProduct.stockingRatio }}</td>
+          <td>{{ companyProduct.containerStockingRatio }}</td>
           <td>
-            <div *ngIf="companyProduct.container">
-              <a [routerLink]="['/container', companyProduct.container?.id, 'view']">{{ companyProduct.container?.name }}</a>
+            <div *ngIf="companyProduct.containerCategory">
+              <a [routerLink]="['/container-category', companyProduct.containerCategory?.id, 'view']">{{
+                companyProduct.containerCategory?.name
+              }}</a>
             </div>
           </td>
           <td>

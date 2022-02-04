@@ -3,16 +3,16 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import dayjs from 'dayjs/esm';
 
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
-import { DeliveryOrderStatus } from 'app/entities/enumerations/delivery-order-status.model';
-import { IDeliveryOrder, DeliveryOrder } from 'app/entities/delivery-order/delivery-order.model';
+import { OrderStatus } from 'app/entities/enumerations/order-status.model';
+import { IOrder, Order } from 'app/entities/order/order.model';
 
 import { ReceptionService } from './reception.service';
 
 describe('ReceptionService Service', () => {
   let service: ReceptionService;
   let httpMock: HttpTestingController;
-  let elemDefault: IDeliveryOrder;
-  let expectedResult: IDeliveryOrder | IDeliveryOrder[] | boolean | null;
+  let elemDefault: IOrder;
+  let expectedResult: IOrder | IOrder[] | boolean | null;
   let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
@@ -26,9 +26,9 @@ describe('ReceptionService Service', () => {
 
     elemDefault = {
       id: 0,
-      doNumber: 'AAAAAAA',
+      transactionNumber: 'AAAAAAA',
       placedDate: currentDate,
-      status: DeliveryOrderStatus.COMPLETED,
+      status: OrderStatus.COMPLETED,
       code: 'AAAAAAA',
     };
   });
@@ -49,11 +49,11 @@ describe('ReceptionService Service', () => {
       expect(expectedResult).toMatchObject(elemDefault);
     });
 
-    it('should return a list of DeliveryOrder', () => {
+    it('should return a list of Order', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          doNumber: 'BBBBBB',
+          transactionNumber: 'BBBBBB',
           placedDate: currentDate.format(DATE_TIME_FORMAT),
           status: 'BBBBBB',
           code: 'BBBBBB',

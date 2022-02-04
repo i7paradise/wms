@@ -3,8 +3,6 @@ package com.wms.uhfrfid.web.rest;
 import com.wms.uhfrfid.security.SecurityUtils;
 import com.wms.uhfrfid.service.ReceptionService;
 import com.wms.uhfrfid.service.XSPSUHFRFIDReaderService;
-import com.wms.uhfrfid.service.dto.DeliveryOrderDTO;
-import com.wms.uhfrfid.service.dto.DeliveryOrderDTOV2;
 import com.wms.uhfrfid.service.dto.UHFRFIDReaderDTO;
 import com.wms.uhfrfid.service.dto.UHFRFIDReaderDTOV2;
 

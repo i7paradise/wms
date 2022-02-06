@@ -5,8 +5,8 @@ import { SharedModule } from 'app/shared/shared.module';
 import { OrderModule } from 'app/entities/order/order.module';
 import { ihmRoute } from './ihm.route';
 import { RouterModule } from '@angular/router';
-import { ReceptionDetailComponent } from './reception-detail/reception-detail.component';
-import { ReceptionItemsComponent } from './reception-items/reception-items.component';
+import { ReceptionDetailComponent } from './reception/reception-detail/reception-detail.component';
+import { ReceptionItemsComponent } from './reception/reception-items/reception-items.component';
 
 @NgModule({
   declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent],

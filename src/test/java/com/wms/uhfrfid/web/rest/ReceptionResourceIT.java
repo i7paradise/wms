@@ -1,19 +1,12 @@
 package com.wms.uhfrfid.web.rest;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.Order;
 import com.wms.uhfrfid.domain.enumeration.OrderStatus;
-import com.wms.uhfrfid.repository.OrderItemRepository;
+import com.wms.uhfrfid.domain.enumeration.OrderType;
 import com.wms.uhfrfid.repository.ReceptionRepository;
 import com.wms.uhfrfid.service.dto.OrderDTOV2;
 import com.wms.uhfrfid.service.mapper.v2.OrderV2Mapper;
-import java.time.Instant;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +15,14 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.util.UUID;
+
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Test class for the ReceptionResource REST controller.
@@ -36,9 +37,6 @@ class ReceptionResourceIT {
     @Autowired
     private ReceptionRepository receptionRepository;
 
-    @Autowired //TODO remove
-    private OrderItemRepository orderItemRepository;
-
     @Autowired
     private OrderV2Mapper orderMapper;
 
@@ -49,6 +47,7 @@ class ReceptionResourceIT {
 
     private static Order createEntity() {
         return new Order()
+            .type(OrderType.RECEPTION)
             .transactionNumber(UUID.randomUUID().toString())
             .placedDate(Instant.ofEpochMilli(0L))
             .status(OrderStatus.PENDING)
@@ -75,7 +74,9 @@ class ReceptionResourceIT {
             .andExpect(jsonPath("$.[*].transactionNumber").value(hasItem(orderDTO.getTransactionNumber())))
             .andExpect(jsonPath("$.[*].placedDate").value(hasItem(orderDTO.getPlacedDate().toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(orderDTO.getStatus().toString())))
-            .andExpect(jsonPath("$.[*].code").value(hasItem(orderDTO.getCode())));
+            .andExpect(jsonPath("$.[*].code").value(hasItem(orderDTO.getCode())))
+            .andExpect(jsonPath("$.orderItems").doesNotExist())
+        ;
     }
 
     @Test

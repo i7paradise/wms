@@ -1,13 +1,15 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ICompanyProduct } from 'app/entities/company-product/company-product.model';
 import { CompanyProductService } from 'app/entities/company-product/service/company-product.service';
 import { OrderItemStatus } from 'app/entities/enumerations/order-item-status.model';
 import { OrderItemDeleteDialogComponent } from 'app/entities/order-item/delete/order-item-delete-dialog.component';
-import { IOrderItem } from 'app/entities/order-item/order-item.model';
-import { map } from 'rxjs';
+import { IOrderItem, OrderItem } from 'app/entities/order-item/order-item.model';
+import { OrderItemService } from 'app/entities/order-item/service/order-item.service';
+import { Order } from 'app/entities/order/order.model';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'jhi-reception-items',
@@ -16,23 +18,18 @@ import { map } from 'rxjs';
 })
 export class ReceptionItemsComponent {
   @Input() orderItems?: IOrderItem[] | null;
+  @Input() order!: Order;
   isSaving = false;
   addMode = false;
+  editForm!: FormGroup;
 
   orderItemStatusValues = Object.keys(OrderItemStatus);
   compganyProductsCollection: ICompanyProduct[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    quantity: [null, [Validators.required, Validators.min(0)]],
-    status: [null, [Validators.required]],
-    compganyProduct: [],
-    order: [],
-  });
-
   constructor(private modalService: NgbModal,
     private companyProductService: CompanyProductService,
-    protected fb: FormBuilder
+    private orderItemService: OrderItemService,
+    private fb: FormBuilder
     ) {
     this.orderItems = [];
   }
@@ -49,7 +46,9 @@ export class ReceptionItemsComponent {
   }
 
   save(): void {
-    // TODO
+    this.isSaving = true;
+    const orderItem = this.createFromForm();
+    this.subscribeToSaveResponse(this.orderItemService.create(orderItem));
     this.addMode = false;
   }
 
@@ -67,6 +66,11 @@ export class ReceptionItemsComponent {
 
   startAddMode(): void {
     this.addMode = true;
+    this.editForm = this.fb.group({
+      quantity: [null, [Validators.required, Validators.min(0)]],
+      status: [null, [Validators.required]],
+      compganyProduct: [null, [Validators.required]],
+    });
     this.loadAddOrderElementOptions();
   }
 
@@ -84,5 +88,24 @@ export class ReceptionItemsComponent {
       .subscribe((companyProducts: ICompanyProduct[]) => (this.compganyProductsCollection = companyProducts));
 
     }
+  }
+
+  private subscribeToSaveResponse(result: Observable<HttpResponse<IOrderItem>>): void {
+    result.subscribe(e => console.warn("## new order item", e.body));
+    //TODO push e.body to parent component
+  }
+
+  private onSaveFinalize(): void {
+    this.isSaving = false;
+  }
+
+  private createFromForm(): IOrderItem {
+    return {
+      ...new OrderItem(),
+      quantity: this.editForm.get(['quantity'])!.value,
+      status: this.editForm.get(['status'])!.value,
+      compganyProduct: this.editForm.get(['compganyProduct'])!.value,
+      order: this.order
+    };
   }
 }

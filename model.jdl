@@ -172,7 +172,7 @@ entity OrderItemProduct {
 relationship OneToOne {
 	CompanyUser to User
 
-	OrderItem{compganyProduct(sku)} to CompanyProduct
+	OrderItem{compganyProduct(sku)} to CompanyProduct //TODO correct typo companyProduct
 
 	CompanyContainer{containerCategory(name)} to ContainerCategory
 	CompanyProduct{containerCategory(name)} to ContainerCategory

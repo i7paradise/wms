@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { OrderStatus } from 'app/entities/enumerations/order-status.model';
@@ -24,15 +24,7 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
   orderStatusValues = Object.keys(OrderStatus);
   orderTypeValues = Object.keys(OrderType);
 
-  editForm = this.fb.group({
-    id: [],
-    transactionNumber: [null, [Validators.required]],
-    placedDate: [null, [Validators.required]],
-    status: [null, [Validators.required]],
-    code: [null, [Validators.required]],
-    type: [null, [Validators.required]],
-    company: [],
-  });
+  editForm!: FormGroup;
 
   constructor(protected orderService: OrderService,
     protected activatedRoute: ActivatedRoute,
@@ -70,6 +62,15 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
   }
 
   protected updateForm(): void {
+    this.editForm = this.fb.group({
+      id: [],
+      transactionNumber: [null, [Validators.required]],
+      placedDate: [null, [Validators.required]],
+      status: [null, [Validators.required]],
+      code: [null, [Validators.required]],
+      type: [null, [Validators.required]],
+      company: [],
+    });
     this.editForm.patchValue({
       id: this.order?.id,
       transactionNumber: this.order?.transactionNumber,

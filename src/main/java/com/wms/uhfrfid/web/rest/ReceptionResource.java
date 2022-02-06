@@ -4,8 +4,6 @@ import com.wms.uhfrfid.security.SecurityUtils;
 import com.wms.uhfrfid.service.ReceptionService;
 import com.wms.uhfrfid.service.dto.OrderDTO;
 import com.wms.uhfrfid.service.dto.OrderDTOV2;
-import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -19,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * ReceptionResource controller
@@ -40,7 +41,7 @@ public class ReceptionResource {
      * GET fetchOpenReceptions
      */
     @GetMapping
-    public ResponseEntity<List<OrderDTO>> fetchReceptions(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<OrderDTO>> getReceptions(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Orders");
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new IllegalArgumentException("TODO 401"));
         Page<OrderDTO> page = receptionService.findAll(userLogin, pageable);
@@ -49,7 +50,7 @@ public class ReceptionResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDTOV2> fetchReception(@PathVariable Long id) {
+    public ResponseEntity<OrderDTOV2> getReception(@PathVariable Long id) {
         log.debug("REST request to get Order : {}", id);
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new IllegalArgumentException("TODO 401"));
         Optional<OrderDTOV2> orderDTO = receptionService.findOne(id, userLogin);

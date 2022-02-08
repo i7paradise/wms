@@ -8,7 +8,7 @@
 
   <div class="add-order-item-form row justify-content-center border rounded" *ngIf="addMode">
     <div class="col-10">
-      <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <form name="editForm" role="form" novalidate [formGroup]="editForm">
         <h2 id="jhi-order-item-heading" data-cy="OrderItemCreateUpdateHeading" jhiTranslate="wmsApp.orderItem.home.createOrEditLabel">
           Add Order Item
         </h2>
@@ -94,6 +94,7 @@
           <button
             type="submit"
             data-cy="entityCreateSaveButton"
+            (click)="save()"
             [disabled]="editForm.invalid || isSaving"
             class="btn btn-primary"
           >

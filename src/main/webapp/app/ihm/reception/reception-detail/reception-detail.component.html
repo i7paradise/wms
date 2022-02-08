@@ -38,11 +38,6 @@
            
             <div>
       
-              <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-                <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-                <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-              </div>
-      
               <div class="form-group">
                 <label class="form-control-label" jhiTranslate="wmsApp.order.transactionNumber" for="field_transactionNumber"
                   >Transaction Number</label
@@ -170,7 +165,7 @@
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
 
-      <jhi-reception-items [orderItems]="order.orderItems" [order]="order"></jhi-reception-items>
+      <jhi-reception-items [order]="order"></jhi-reception-items>
     </div>
   </div>
 </div>

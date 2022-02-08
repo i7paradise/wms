@@ -37,6 +37,11 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
     super.ngOnInit();
   }
 
+  addNewOrderItem(orderItem: IOrderItem): void {
+    console.warn('####' , orderItem, this.orderItems);
+    this.orderItems.push(orderItem);
+  }
+
   save(): void {
     this.isSaving = true;
     const order = this.createFromForm();
@@ -45,11 +50,12 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
       this.orderService
           .update(order)
           .pipe(finalize(() => this.onSaveFinalize())).subscribe({
-            next: () => this.onSaveSuccess(order),
-            error: () => this.onSaveError(),
+            next: (response) => this.onSaveSuccess(response.body ?? {}),
           });
-    }    
-    this.editMode = false;
+    } else {
+      this.isSaving = false;
+      this.editMode = false;
+    }
   }
 
   startEdit(): void {
@@ -63,22 +69,12 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
 
   protected updateForm(): void {
     this.editForm = this.fb.group({
-      id: [],
-      transactionNumber: [null, [Validators.required]],
-      placedDate: [null, [Validators.required]],
-      status: [null, [Validators.required]],
-      code: [null, [Validators.required]],
-      type: [null, [Validators.required]],
-      company: [],
-    });
-    this.editForm.patchValue({
-      id: this.order?.id,
-      transactionNumber: this.order?.transactionNumber,
-      placedDate: this.order?.placedDate ? this.order.placedDate.format(DATE_TIME_FORMAT) : null,
-      status: this.order?.status,
-      code: this.order?.code,
-      type: this.order?.type,
-      company: this.order?.company,
+      id: [this.order?.id],
+      transactionNumber: [this.order?.transactionNumber, [Validators.required]],
+      placedDate: [this.order?.placedDate ? this.order.placedDate.format(DATE_TIME_FORMAT) : null, [Validators.required]],
+      status: [this.order?.status, [Validators.required]],
+      code: [this.order?.code, [Validators.required]],
+      type: [this.order?.type, [Validators.required]],
     });
   }
 
@@ -91,7 +87,7 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
       status: this.editForm.get(['status'])!.value,
       code: this.editForm.get(['code'])!.value,
       type: this.editForm.get(['type'])!.value,
-      company: this.editForm.get(['company'])!.value,
+      company: this.order?.company,
     };
   }
 
@@ -101,7 +97,7 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
     return JSON.stringify(order) !== JSON.stringify(originalOrder);
   }
 
-  private onSaveSuccess(order: Order): void {
+  private onSaveSuccess(order: IOrder): void {
     this.order = {...order,
       "orderItems": this.order?.orderItems
     };
@@ -109,11 +105,6 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
   }
 
   private onSaveFinalize(): void {
-    this.isSaving = false;
-  }
-
-  private onSaveError(): void {
-    // TODO handle error
     this.isSaving = false;
   }
 }

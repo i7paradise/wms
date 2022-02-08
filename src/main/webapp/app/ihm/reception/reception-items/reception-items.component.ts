@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ICompanyProduct } from 'app/entities/company-product/company-product.model';
@@ -16,9 +16,9 @@ import { map, Observable } from 'rxjs';
   templateUrl: './reception-items.component.html',
   styleUrls: ['./reception-items.component.scss'],
 })
-export class ReceptionItemsComponent {
-  @Input() orderItems?: IOrderItem[] | null;
+export class ReceptionItemsComponent implements OnInit {
   @Input() order!: Order;
+  orderItems: IOrderItem[] = [];
   isSaving = false;
   addMode = false;
   editForm!: FormGroup;
@@ -26,12 +26,15 @@ export class ReceptionItemsComponent {
   orderItemStatusValues = Object.keys(OrderItemStatus);
   compganyProductsCollection: ICompanyProduct[] = [];
 
-  constructor(private modalService: NgbModal,
+  constructor(
+    private modalService: NgbModal,
     private companyProductService: CompanyProductService,
     private orderItemService: OrderItemService,
     private fb: FormBuilder
-    ) {
-    this.orderItems = [];
+  ) {}
+
+  ngOnInit(): void {
+    this.orderItems = this.order.orderItems ?? [];
   }
 
   delete(orderItem: IOrderItem): void {
@@ -40,7 +43,8 @@ export class ReceptionItemsComponent {
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
-        this.orderItems = this.orderItems?.filter(e => orderItem !== e);
+        this.orderItems = this.orderItems.filter(e => orderItem !== e);
+        this.addCompanyProductToCollection(orderItem.compganyProduct);
       }
     });
   }
@@ -66,37 +70,43 @@ export class ReceptionItemsComponent {
 
   startAddMode(): void {
     this.addMode = true;
+    this.loadAddOrderElementOptions();
     this.editForm = this.fb.group({
       quantity: [null, [Validators.required, Validators.min(0)]],
       status: [null, [Validators.required]],
       compganyProduct: [null, [Validators.required]],
     });
-    this.loadAddOrderElementOptions();
   }
 
   private loadAddOrderElementOptions(): void {
-    // TODO test diff with get with no filter!!
     if (this.compganyProductsCollection.length === 0) {
-      this.companyProductService
-      .query({ filter: 'orderitem-is-null' })
-      .pipe(map((res: HttpResponse<ICompanyProduct[]>) => res.body ?? []))
-      .pipe(
-        map((companyProducts: ICompanyProduct[]) =>
-          this.companyProductService.addCompanyProductToCollectionIfMissing(companyProducts, this.editForm.get('compganyProduct')!.value)
-        )
-      )
-      .subscribe((companyProducts: ICompanyProduct[]) => (this.compganyProductsCollection = companyProducts));
+      const existCompanyProducts = this.orderItems.map(e => e.compganyProduct).map(e => e?.id);
 
+      this.companyProductService
+        .query()
+        .pipe(map((res: HttpResponse<ICompanyProduct[]>) => res.body ?? []))
+        .pipe(map((companyProducts: ICompanyProduct[]) => companyProducts.filter(e => existCompanyProducts.indexOf(e.id) === -1)))
+        .pipe(
+          map((companyProducts: ICompanyProduct[]) =>
+            this.companyProductService.addCompanyProductToCollectionIfMissing(companyProducts, this.editForm.get('compganyProduct')!.value)
+          )
+        )
+        .subscribe((companyProducts: ICompanyProduct[]) => {
+          this.compganyProductsCollection = companyProducts;
+          this.sortCompanyProduct();
+        });
     }
   }
 
   private subscribeToSaveResponse(result: Observable<HttpResponse<IOrderItem>>): void {
-    result.subscribe(e => console.warn("## new order item", e.body));
-    //TODO push e.body to parent component
-  }
-
-  private onSaveFinalize(): void {
     this.isSaving = false;
+    result.pipe(map(response => response.body ?? null)).subscribe(orderItem => {
+      if (orderItem === null) {
+        return;
+      }
+      this.orderItems.unshift(orderItem);
+      this.removeCompanyProductFromCollection(orderItem.compganyProduct);
+    });
   }
 
   private createFromForm(): IOrderItem {
@@ -105,7 +115,26 @@ export class ReceptionItemsComponent {
       quantity: this.editForm.get(['quantity'])!.value,
       status: this.editForm.get(['status'])!.value,
       compganyProduct: this.editForm.get(['compganyProduct'])!.value,
-      order: this.order
+      order: this.order,
     };
+  }
+
+  private addCompanyProductToCollection(compganyProduct?: ICompanyProduct | null): void {
+    if (!compganyProduct) {
+      return;
+    }
+    this.compganyProductsCollection.push(compganyProduct);
+    this.sortCompanyProduct();
+  }
+  private removeCompanyProductFromCollection(compganyProduct?: ICompanyProduct | null): void {
+    if (!compganyProduct) {
+      return;
+    }
+    this.compganyProductsCollection = this.compganyProductsCollection.filter(e => compganyProduct.id !== e.id);
+    this.sortCompanyProduct();
+  }
+
+  private sortCompanyProduct(): void {
+    this.compganyProductsCollection = this.compganyProductsCollection.sort((a, b) => a.sku?.localeCompare(b.sku ?? '') ?? 0);
   }
 }

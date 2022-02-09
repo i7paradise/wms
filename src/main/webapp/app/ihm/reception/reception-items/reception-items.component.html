@@ -60,24 +60,24 @@
           </div>
   
           <div class="form-group col-4">
-            <label class="form-control-label" jhiTranslate="wmsApp.orderItem.compganyProduct" for="field_compganyProduct"
+            <label class="form-control-label" jhiTranslate="wmsApp.orderItem.companyProduct" for="field_companyProduct"
               >Compgany Product</label
             >
             <select
               class="form-control"
-              id="field_compganyProduct"
-              data-cy="compganyProduct"
-              name="compganyProduct"
-              formControlName="compganyProduct"
+              id="field_companyProduct"
+              data-cy="companyProduct"
+              name="companyProduct"
+              formControlName="companyProduct"
             >
               <option [ngValue]="null"></option>
               <option
                 [ngValue]="
-                  companyProductOption.id === editForm.get('compganyProduct')!.value?.id
-                    ? editForm.get('compganyProduct')!.value
+                  companyProductOption.id === editForm.get('companyProduct')!.value?.id
+                    ? editForm.get('companyProduct')!.value
                     : companyProductOption
                 "
-                *ngFor="let companyProductOption of compganyProductsCollection; trackBy: trackCompanyProductById"
+                *ngFor="let companyProductOption of companyProductsCollection; trackBy: trackCompanyProductById"
               >
                 {{ companyProductOption.sku }}
               </option>
@@ -120,7 +120,7 @@
             <span jhiTranslate="wmsApp.orderItem.status">Status</span>
           </th>
           <th scope="col">
-            <span jhiTranslate="wmsApp.orderItem.compganyProduct">Compgany Product</span>
+            <span jhiTranslate="wmsApp.orderItem.companyProduct">Compgany Product</span>
           </th>
           <th scope="col"></th>
         </tr>
@@ -130,9 +130,9 @@
           <td>{{ orderItem.quantity }}</td>
           <td jhiTranslate="{{ 'wmsApp.OrderItemStatus.' + orderItem.status }}">{{ orderItem.status }}</td>
           <td>
-            <div *ngIf="orderItem.compganyProduct">
-              <a [routerLink]="['/company-product', orderItem.compganyProduct?.id, 'view']">{{
-                orderItem.compganyProduct?.sku
+            <div *ngIf="orderItem.companyProduct">
+              <a [routerLink]="['/company-product', orderItem.companyProduct?.id, 'view']">{{
+                orderItem.companyProduct?.sku
               }}</a>
             </div>
           </td>

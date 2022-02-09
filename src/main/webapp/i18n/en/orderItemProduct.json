@@ -19,7 +19,6 @@
       },
       "id": "ID",
       "rfidTAG": "Rfid TAG",
-      "containerCategory": "Container Category",
       "orderItem": "Order Item"
     }
   }

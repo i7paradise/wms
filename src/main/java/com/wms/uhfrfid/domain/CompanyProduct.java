@@ -34,7 +34,6 @@ public class CompanyProduct implements Serializable {
     @Column(name = "container_stocking_ratio", precision = 21, scale = 2, nullable = false)
     private BigDecimal containerStockingRatio;
 
-    @JsonIgnoreProperties(value = { "orderItem", "orderItemProducts" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private ContainerCategory containerCategory;

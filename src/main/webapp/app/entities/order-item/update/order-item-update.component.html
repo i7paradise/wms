@@ -58,31 +58,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="wmsApp.orderItem.compganyProduct" for="field_compganyProduct"
-            >Compgany Product</label
-          >
-          <select
-            class="form-control"
-            id="field_compganyProduct"
-            data-cy="compganyProduct"
-            name="compganyProduct"
-            formControlName="compganyProduct"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                companyProductOption.id === editForm.get('compganyProduct')!.value?.id
-                  ? editForm.get('compganyProduct')!.value
-                  : companyProductOption
-              "
-              *ngFor="let companyProductOption of compganyProductsCollection; trackBy: trackCompanyProductById"
-            >
-              {{ companyProductOption.sku }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" jhiTranslate="wmsApp.orderItem.order" for="field_order">Order</label>
           <select class="form-control" id="field_order" data-cy="order" name="order" formControlName="order">
             <option [ngValue]="null"></option>
@@ -91,6 +66,31 @@
               *ngFor="let orderOption of ordersSharedCollection; trackBy: trackOrderById"
             >
               {{ orderOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.orderItem.companyProduct" for="field_companyProduct"
+            >Company Product</label
+          >
+          <select
+            class="form-control"
+            id="field_companyProduct"
+            data-cy="companyProduct"
+            name="companyProduct"
+            formControlName="companyProduct"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                companyProductOption.id === editForm.get('companyProduct')!.value?.id
+                  ? editForm.get('companyProduct')!.value
+                  : companyProductOption
+              "
+              *ngFor="let companyProductOption of companyProductsSharedCollection; trackBy: trackCompanyProductById"
+            >
+              {{ companyProductOption.sku }}
             </option>
           </select>
         </div>

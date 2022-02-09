@@ -36,9 +36,6 @@
           <th scope="col" jhiSortBy="rfidTAG">
             <span jhiTranslate="wmsApp.orderItemProduct.rfidTAG">Rfid TAG</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="containerCategory.id">
-            <span jhiTranslate="wmsApp.orderItemProduct.containerCategory">Container Category</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col" jhiSortBy="orderItem.id">
             <span jhiTranslate="wmsApp.orderItemProduct.orderItem">Order Item</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -52,15 +49,8 @@
           </td>
           <td>{{ orderItemProduct.rfidTAG }}</td>
           <td>
-            <div *ngIf="orderItemProduct.containerCategory">
-              <a [routerLink]="['/container-category', orderItemProduct.containerCategory?.id, 'view']">{{
-                orderItemProduct.containerCategory?.id
-              }}</a>
-            </div>
-          </td>
-          <td>
             <div *ngIf="orderItemProduct.orderItem">
-              <a [routerLink]="['/order-item', orderItemProduct.orderItem?.id, 'view']">{{ orderItemProduct.orderItem?.id }}</a>
+              <a [routerLink]="['/order-container', orderItemProduct.orderItem?.id, 'view']">{{ orderItemProduct.orderItem?.id }}</a>
             </div>
           </td>
           <td class="text-right">

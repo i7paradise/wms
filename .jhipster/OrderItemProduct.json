@@ -18,13 +18,7 @@
   "readOnly": false,
   "relationships": [
     {
-      "otherEntityName": "containerCategory",
-      "otherEntityRelationshipName": "orderItemProduct",
-      "relationshipName": "containerCategory",
-      "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityName": "orderItem",
+      "otherEntityName": "orderContainer",
       "otherEntityRelationshipName": "orderItemProduct",
       "relationshipName": "orderItem",
       "relationshipType": "many-to-one"

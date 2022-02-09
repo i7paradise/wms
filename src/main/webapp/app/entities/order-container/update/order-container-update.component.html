@@ -30,6 +30,44 @@
             formControlName="supplierRFIDTag"
           />
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.orderContainer.companyContainer" for="field_companyContainer"
+            >Company Container</label
+          >
+          <select
+            class="form-control"
+            id="field_companyContainer"
+            data-cy="companyContainer"
+            name="companyContainer"
+            formControlName="companyContainer"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                companyContainerOption.id === editForm.get('companyContainer')!.value?.id
+                  ? editForm.get('companyContainer')!.value
+                  : companyContainerOption
+              "
+              *ngFor="let companyContainerOption of companyContainersCollection; trackBy: trackCompanyContainerById"
+            >
+              {{ companyContainerOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.orderContainer.orderItem" for="field_orderItem">Order Item</label>
+          <select class="form-control" id="field_orderItem" data-cy="orderItem" name="orderItem" formControlName="orderItem">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="orderItemOption.id === editForm.get('orderItem')!.value?.id ? editForm.get('orderItem')!.value : orderItemOption"
+              *ngFor="let orderItemOption of orderItemsSharedCollection; trackBy: trackOrderItemById"
+            >
+              {{ orderItemOption.id }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

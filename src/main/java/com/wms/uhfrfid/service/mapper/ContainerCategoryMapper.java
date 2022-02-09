@@ -7,16 +7,8 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ContainerCategory} and its DTO {@link ContainerCategoryDTO}.
  */
-@Mapper(componentModel = "spring", uses = { OrderItemMapper.class })
+@Mapper(componentModel = "spring", uses = {})
 public interface ContainerCategoryMapper extends EntityMapper<ContainerCategoryDTO, ContainerCategory> {
-    @Mapping(target = "orderItem", source = "orderItem", qualifiedByName = "id")
-    ContainerCategoryDTO toDto(ContainerCategory s);
-
-    @Named("id")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    ContainerCategoryDTO toDtoId(ContainerCategory containerCategory);
-
     @Named("name")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

@@ -18,6 +18,20 @@
         <dd>
           <span>{{ orderContainer.supplierRFIDTag }}</span>
         </dd>
+        <dt><span jhiTranslate="wmsApp.orderContainer.companyContainer">Company Container</span></dt>
+        <dd>
+          <div *ngIf="orderContainer.companyContainer">
+            <a [routerLink]="['/company-container', orderContainer.companyContainer?.id, 'view']">{{
+              orderContainer.companyContainer?.id
+            }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.orderContainer.orderItem">Order Item</span></dt>
+        <dd>
+          <div *ngIf="orderContainer.orderItem">
+            <a [routerLink]="['/order-item', orderContainer.orderItem?.id, 'view']">{{ orderContainer.orderItem?.id }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

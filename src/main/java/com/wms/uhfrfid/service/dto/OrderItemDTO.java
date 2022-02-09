@@ -20,9 +20,9 @@ public class OrderItemDTO implements Serializable {
     @NotNull
     private OrderItemStatus status;
 
-    private CompanyProductDTO compganyProduct;
-
     private OrderDTO order;
+
+    private CompanyProductDTO companyProduct;
 
     public Long getId() {
         return id;
@@ -48,20 +48,20 @@ public class OrderItemDTO implements Serializable {
         this.status = status;
     }
 
-    public CompanyProductDTO getCompganyProduct() {
-        return compganyProduct;
-    }
-
-    public void setCompganyProduct(CompanyProductDTO compganyProduct) {
-        this.compganyProduct = compganyProduct;
-    }
-
     public OrderDTO getOrder() {
         return order;
     }
 
     public void setOrder(OrderDTO order) {
         this.order = order;
+    }
+
+    public CompanyProductDTO getCompanyProduct() {
+        return companyProduct;
+    }
+
+    public void setCompanyProduct(CompanyProductDTO companyProduct) {
+        this.companyProduct = companyProduct;
     }
 
     @Override
@@ -92,8 +92,8 @@ public class OrderItemDTO implements Serializable {
             "id=" + getId() +
             ", quantity=" + getQuantity() +
             ", status='" + getStatus() + "'" +
-            ", compganyProduct=" + getCompganyProduct() +
             ", order=" + getOrder() +
+            ", companyProduct=" + getCompanyProduct() +
             "}";
     }
 }

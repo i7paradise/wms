@@ -24,7 +24,7 @@ export class ReceptionItemsComponent implements OnInit {
   editForm!: FormGroup;
 
   orderItemStatusValues = Object.keys(OrderItemStatus);
-  compganyProductsCollection: ICompanyProduct[] = [];
+  companyProductsCollection: ICompanyProduct[] = [];
 
   constructor(
     private modalService: NgbModal,
@@ -44,7 +44,7 @@ export class ReceptionItemsComponent implements OnInit {
     modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
         this.orderItems = this.orderItems.filter(e => orderItem !== e);
-        this.addCompanyProductToCollection(orderItem.compganyProduct);
+        this.addCompanyProductToCollection(orderItem.companyProduct);
       }
     });
   }
@@ -74,13 +74,13 @@ export class ReceptionItemsComponent implements OnInit {
     this.editForm = this.fb.group({
       quantity: [null, [Validators.required, Validators.min(0)]],
       status: [null, [Validators.required]],
-      compganyProduct: [null, [Validators.required]],
+      companyProduct: [null, [Validators.required]],
     });
   }
 
   private loadAddOrderElementOptions(): void {
-    if (this.compganyProductsCollection.length === 0) {
-      const existCompanyProducts = this.orderItems.map(e => e.compganyProduct).map(e => e?.id);
+    if (this.companyProductsCollection.length === 0) {
+      const existCompanyProducts = this.orderItems.map(e => e.companyProduct).map(e => e?.id);
 
       this.companyProductService
         .query()
@@ -88,11 +88,11 @@ export class ReceptionItemsComponent implements OnInit {
         .pipe(map((companyProducts: ICompanyProduct[]) => companyProducts.filter(e => existCompanyProducts.indexOf(e.id) === -1)))
         .pipe(
           map((companyProducts: ICompanyProduct[]) =>
-            this.companyProductService.addCompanyProductToCollectionIfMissing(companyProducts, this.editForm.get('compganyProduct')!.value)
+            this.companyProductService.addCompanyProductToCollectionIfMissing(companyProducts, this.editForm.get('companyProduct')!.value)
           )
         )
         .subscribe((companyProducts: ICompanyProduct[]) => {
-          this.compganyProductsCollection = companyProducts;
+          this.companyProductsCollection = companyProducts;
           this.sortCompanyProduct();
         });
     }
@@ -105,7 +105,7 @@ export class ReceptionItemsComponent implements OnInit {
         return;
       }
       this.orderItems.unshift(orderItem);
-      this.removeCompanyProductFromCollection(orderItem.compganyProduct);
+      this.removeCompanyProductFromCollection(orderItem.companyProduct);
     });
   }
 
@@ -114,27 +114,27 @@ export class ReceptionItemsComponent implements OnInit {
       ...new OrderItem(),
       quantity: this.editForm.get(['quantity'])!.value,
       status: this.editForm.get(['status'])!.value,
-      compganyProduct: this.editForm.get(['compganyProduct'])!.value,
+      companyProduct: this.editForm.get(['companyProduct'])!.value,
       order: this.order,
     };
   }
 
-  private addCompanyProductToCollection(compganyProduct?: ICompanyProduct | null): void {
-    if (!compganyProduct) {
+  private addCompanyProductToCollection(companyProduct?: ICompanyProduct | null): void {
+    if (!companyProduct) {
       return;
     }
-    this.compganyProductsCollection.push(compganyProduct);
+    this.companyProductsCollection.push(companyProduct);
     this.sortCompanyProduct();
   }
-  private removeCompanyProductFromCollection(compganyProduct?: ICompanyProduct | null): void {
-    if (!compganyProduct) {
+  private removeCompanyProductFromCollection(companyProduct?: ICompanyProduct | null): void {
+    if (!companyProduct) {
       return;
     }
-    this.compganyProductsCollection = this.compganyProductsCollection.filter(e => compganyProduct.id !== e.id);
+    this.companyProductsCollection = this.companyProductsCollection.filter(e => companyProduct.id !== e.id);
     this.sortCompanyProduct();
   }
 
   private sortCompanyProduct(): void {
-    this.compganyProductsCollection = this.compganyProductsCollection.sort((a, b) => a.sku?.localeCompare(b.sku ?? '') ?? 0);
+    this.companyProductsCollection = this.companyProductsCollection.sort((a, b) => a.sku?.localeCompare(b.sku ?? '') ?? 0);
   }
 }

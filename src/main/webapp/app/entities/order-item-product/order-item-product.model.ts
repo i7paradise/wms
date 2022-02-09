@@ -1,20 +1,13 @@
-import { IContainerCategory } from 'app/entities/container-category/container-category.model';
-import { IOrderItem } from 'app/entities/order-item/order-item.model';
+import { IOrderContainer } from 'app/entities/order-container/order-container.model';
 
 export interface IOrderItemProduct {
   id?: number;
   rfidTAG?: string;
-  containerCategory?: IContainerCategory | null;
-  orderItem?: IOrderItem | null;
+  orderItem?: IOrderContainer | null;
 }
 
 export class OrderItemProduct implements IOrderItemProduct {
-  constructor(
-    public id?: number,
-    public rfidTAG?: string,
-    public containerCategory?: IContainerCategory | null,
-    public orderItem?: IOrderItem | null
-  ) {}
+  constructor(public id?: number, public rfidTAG?: string, public orderItem?: IOrderContainer | null) {}
 }
 
 export function getOrderItemProductIdentifier(orderItemProduct: IOrderItemProduct): number | undefined {

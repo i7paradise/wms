@@ -19,9 +19,7 @@
       },
       "id": "ID",
       "name": "Name",
-      "description": "Description",
-      "orderItem": "Order Item",
-      "orderItemProduct": "Order Item Product"
+      "description": "Description"
     }
   }
 }

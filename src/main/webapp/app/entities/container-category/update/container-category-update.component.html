@@ -38,19 +38,6 @@
             formControlName="description"
           />
         </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="wmsApp.containerCategory.orderItem" for="field_orderItem">Order Item</label>
-          <select class="form-control" id="field_orderItem" data-cy="orderItem" name="orderItem" formControlName="orderItem">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="orderItemOption.id === editForm.get('orderItem')!.value?.id ? editForm.get('orderItem')!.value : orderItemOption"
-              *ngFor="let orderItemOption of orderItemsSharedCollection; trackBy: trackOrderItemById"
-            >
-              {{ orderItemOption.id }}
-            </option>
-          </select>
-        </div>
       </div>
 
       <div>

@@ -25,7 +25,6 @@ public class CompanyContainer implements Serializable {
     @Column(name = "color")
     private String color;
 
-    @JsonIgnoreProperties(value = { "orderItem", "orderItemProducts" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private ContainerCategory containerCategory;

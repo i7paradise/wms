@@ -36,6 +36,12 @@
           <th scope="col" jhiSortBy="supplierRFIDTag">
             <span jhiTranslate="wmsApp.orderContainer.supplierRFIDTag">Supplier RFID Tag</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="companyContainer.id">
+            <span jhiTranslate="wmsApp.orderContainer.companyContainer">Company Container</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="orderItem.id">
+            <span jhiTranslate="wmsApp.orderContainer.orderItem">Order Item</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -45,6 +51,18 @@
             <a [routerLink]="['/order-container', orderContainer.id, 'view']">{{ orderContainer.id }}</a>
           </td>
           <td>{{ orderContainer.supplierRFIDTag }}</td>
+          <td>
+            <div *ngIf="orderContainer.companyContainer">
+              <a [routerLink]="['/company-container', orderContainer.companyContainer?.id, 'view']">{{
+                orderContainer.companyContainer?.id
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="orderContainer.orderItem">
+              <a [routerLink]="['/order-item', orderContainer.orderItem?.id, 'view']">{{ orderContainer.orderItem?.id }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

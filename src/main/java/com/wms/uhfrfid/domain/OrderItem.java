@@ -34,6 +34,14 @@ public class OrderItem implements Serializable {
     @Column(name = "status", nullable = false)
     private OrderItemStatus status;
 
+    @Min(value = 0)
+    @Column(name = "containers_count")
+    private Integer containersCount;
+
+    @Min(value = 0)
+    @Column(name = "products_per_container_count")
+    private Integer productsPerContainerCount;
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "company", "orderItems" }, allowSetters = true)
     private Order order;
@@ -85,6 +93,32 @@ public class OrderItem implements Serializable {
 
     public void setStatus(OrderItemStatus status) {
         this.status = status;
+    }
+
+    public Integer getContainersCount() {
+        return this.containersCount;
+    }
+
+    public OrderItem containersCount(Integer containersCount) {
+        this.setContainersCount(containersCount);
+        return this;
+    }
+
+    public void setContainersCount(Integer containersCount) {
+        this.containersCount = containersCount;
+    }
+
+    public Integer getProductsPerContainerCount() {
+        return this.productsPerContainerCount;
+    }
+
+    public OrderItem productsPerContainerCount(Integer productsPerContainerCount) {
+        this.setProductsPerContainerCount(productsPerContainerCount);
+        return this;
+    }
+
+    public void setProductsPerContainerCount(Integer productsPerContainerCount) {
+        this.productsPerContainerCount = productsPerContainerCount;
     }
 
     public Order getOrder() {
@@ -170,6 +204,8 @@ public class OrderItem implements Serializable {
             "id=" + getId() +
             ", quantity=" + getQuantity() +
             ", status='" + getStatus() + "'" +
+            ", containersCount=" + getContainersCount() +
+            ", productsPerContainerCount=" + getProductsPerContainerCount() +
             "}";
     }
 }

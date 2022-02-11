@@ -28,6 +28,8 @@ export class OrderItemUpdateComponent implements OnInit {
     id: [],
     quantity: [null, [Validators.required, Validators.min(0)]],
     status: [null, [Validators.required]],
+    containersCount: [null, [Validators.min(0)]],
+    productsPerContainerCount: [null, [Validators.min(0)]],
     order: [],
     companyProduct: [],
   });
@@ -94,6 +96,8 @@ export class OrderItemUpdateComponent implements OnInit {
       id: orderItem.id,
       quantity: orderItem.quantity,
       status: orderItem.status,
+      containersCount: orderItem.containersCount,
+      productsPerContainerCount: orderItem.productsPerContainerCount,
       order: orderItem.order,
       companyProduct: orderItem.companyProduct,
     });
@@ -129,6 +133,8 @@ export class OrderItemUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       quantity: this.editForm.get(['quantity'])!.value,
       status: this.editForm.get(['status'])!.value,
+      containersCount: this.editForm.get(['containersCount'])!.value,
+      productsPerContainerCount: this.editForm.get(['productsPerContainerCount'])!.value,
       order: this.editForm.get(['order'])!.value,
       companyProduct: this.editForm.get(['companyProduct'])!.value,
     };

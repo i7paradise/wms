@@ -155,6 +155,8 @@ enum OrderType {
 entity OrderItem {
 	quantity BigDecimal required min(0)
 	status OrderItemStatus required
+	containersCount Integer min(0)
+	productsPerContainerCount Integer min(0)
 }
 
 enum OrderItemStatus {

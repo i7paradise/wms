@@ -22,6 +22,14 @@
         <dd>
           <span jhiTranslate="{{ 'wmsApp.OrderItemStatus.' + orderItem.status }}">{{ orderItem.status }}</span>
         </dd>
+        <dt><span jhiTranslate="wmsApp.orderItem.containersCount">Containers Count</span></dt>
+        <dd>
+          <span>{{ orderItem.containersCount }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.orderItem.productsPerContainerCount">Products Per Container Count</span></dt>
+        <dd>
+          <span>{{ orderItem.productsPerContainerCount }}</span>
+        </dd>
         <dt><span jhiTranslate="wmsApp.orderItem.order">Order</span></dt>
         <dd>
           <div *ngIf="orderItem.order">

@@ -20,6 +20,8 @@
       "id": "ID",
       "quantity": "Quantity",
       "status": "Status",
+      "containersCount": "Containers Count",
+      "productsPerContainerCount": "Products Per Container Count",
       "order": "Order",
       "companyProduct": "Company Product",
       "orderContainer": "Order Container"

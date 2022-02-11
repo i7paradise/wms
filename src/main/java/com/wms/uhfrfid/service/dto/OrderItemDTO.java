@@ -20,6 +20,12 @@ public class OrderItemDTO implements Serializable {
     @NotNull
     private OrderItemStatus status;
 
+    @Min(value = 0)
+    private Integer containersCount;
+
+    @Min(value = 0)
+    private Integer productsPerContainerCount;
+
     private OrderDTO order;
 
     private CompanyProductDTO companyProduct;
@@ -46,6 +52,22 @@ public class OrderItemDTO implements Serializable {
 
     public void setStatus(OrderItemStatus status) {
         this.status = status;
+    }
+
+    public Integer getContainersCount() {
+        return containersCount;
+    }
+
+    public void setContainersCount(Integer containersCount) {
+        this.containersCount = containersCount;
+    }
+
+    public Integer getProductsPerContainerCount() {
+        return productsPerContainerCount;
+    }
+
+    public void setProductsPerContainerCount(Integer productsPerContainerCount) {
+        this.productsPerContainerCount = productsPerContainerCount;
     }
 
     public OrderDTO getOrder() {
@@ -92,6 +114,8 @@ public class OrderItemDTO implements Serializable {
             "id=" + getId() +
             ", quantity=" + getQuantity() +
             ", status='" + getStatus() + "'" +
+            ", containersCount=" + getContainersCount() +
+            ", productsPerContainerCount=" + getProductsPerContainerCount() +
             ", order=" + getOrder() +
             ", companyProduct=" + getCompanyProduct() +
             "}";

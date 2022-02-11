@@ -7,6 +7,8 @@ export interface IOrderItem {
   id?: number;
   quantity?: number;
   status?: OrderItemStatus;
+  containersCount?: number | null;
+  productsPerContainerCount?: number | null;
   order?: IOrder | null;
   companyProduct?: ICompanyProduct | null;
   orderContainers?: IOrderContainer[] | null;
@@ -17,6 +19,8 @@ export class OrderItem implements IOrderItem {
     public id?: number,
     public quantity?: number,
     public status?: OrderItemStatus,
+    public containersCount?: number | null,
+    public productsPerContainerCount?: number | null,
     public order?: IOrder | null,
     public companyProduct?: ICompanyProduct | null,
     public orderContainers?: IOrderContainer[] | null

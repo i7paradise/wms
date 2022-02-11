@@ -24,6 +24,8 @@ describe('OrderItem Service', () => {
       id: 0,
       quantity: 0,
       status: OrderItemStatus.IN_PROGRESS,
+      containersCount: 0,
+      productsPerContainerCount: 0,
     };
   });
 
@@ -61,6 +63,8 @@ describe('OrderItem Service', () => {
           id: 1,
           quantity: 1,
           status: 'BBBBBB',
+          containersCount: 1,
+          productsPerContainerCount: 1,
         },
         elemDefault
       );
@@ -79,6 +83,7 @@ describe('OrderItem Service', () => {
         {
           quantity: 1,
           status: 'BBBBBB',
+          containersCount: 1,
         },
         new OrderItem()
       );
@@ -100,6 +105,8 @@ describe('OrderItem Service', () => {
           id: 1,
           quantity: 1,
           status: 'BBBBBB',
+          containersCount: 1,
+          productsPerContainerCount: 1,
         },
         elemDefault
       );
@@ -151,7 +158,7 @@ describe('OrderItem Service', () => {
       });
 
       it('should add only unique OrderItem to an array', () => {
-        const orderItemArray: IOrderItem[] = [{ id: 123 }, { id: 456 }, { id: 85444 }];
+        const orderItemArray: IOrderItem[] = [{ id: 123 }, { id: 456 }, { id: 40946 }];
         const orderItemCollection: IOrderItem[] = [{ id: 123 }];
         expectedResult = service.addOrderItemToCollectionIfMissing(orderItemCollection, ...orderItemArray);
         expect(expectedResult).toHaveLength(3);

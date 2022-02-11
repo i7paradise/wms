@@ -22,6 +22,7 @@ export class ReceptionItemsComponent implements OnInit {
   isSaving = false;
   addMode = false;
   editForm!: FormGroup;
+  orderItemForTags: OrderItem | null = null;
 
   orderItemStatusValues = Object.keys(OrderItemStatus);
   companyProductsCollection: ICompanyProduct[] = [];
@@ -76,6 +77,10 @@ export class ReceptionItemsComponent implements OnInit {
       status: [null, [Validators.required]],
       companyProduct: [null, [Validators.required]],
     });
+  }
+
+  defineOrderTags(orderItem: OrderItem): void {
+    this.orderItemForTags = this.orderItemForTags === orderItem ? null : orderItem;
   }
 
   private loadAddOrderElementOptions(): void {

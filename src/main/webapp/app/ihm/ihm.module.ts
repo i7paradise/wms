@@ -7,9 +7,10 @@ import { ihmRoute } from './ihm.route';
 import { RouterModule } from '@angular/router';
 import { ReceptionDetailComponent } from './reception/reception-detail/reception-detail.component';
 import { ReceptionItemsComponent } from './reception/reception-items/reception-items.component';
+import { ReceptionTagsComponent } from './reception/reception-tags/reception-tags.component';
 
 @NgModule({
-  declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent],
+  declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent],
   imports: [CommonModule, SharedModule, RouterModule.forChild(ihmRoute), OrderModule],
 })
 export class IhmModule {}

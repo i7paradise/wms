@@ -164,8 +164,10 @@
         (click)="startEdit()" *ngIf="!editMode">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
-
-      <jhi-reception-items [order]="order"></jhi-reception-items>
+      
+      <div class="col-6">
+        <jhi-reception-items [order]="order"></jhi-reception-items>
+      </div>
     </div>
   </div>
 </div>

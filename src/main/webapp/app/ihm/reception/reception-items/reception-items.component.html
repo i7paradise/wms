@@ -126,45 +126,55 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let orderItem of orderItems" data-cy="entityTable">
-          <td>{{ orderItem.quantity }}</td>
-          <td jhiTranslate="{{ 'wmsApp.OrderItemStatus.' + orderItem.status }}">{{ orderItem.status }}</td>
-          <td>
-            <div *ngIf="orderItem.companyProduct">
-              <a [routerLink]="['/company-product', orderItem.companyProduct?.id, 'view']">{{
-                orderItem.companyProduct?.sku
-              }}</a>
-            </div>
-          </td>
-          <td class="text-right">
-            <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/order-item', orderItem.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline"></span>
-              </button>
-
-              <button
-                type="submit"
-                [routerLink]="['/order-item', orderItem.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline"></span>
-              </button>
-
-              <button type="submit" (click)="delete(orderItem)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline"></span>
-              </button>
-            </div>
-          </td>
-        </tr>
+        <ng-container *ngFor="let orderItem of orderItems">
+          <tr data-cy="entityTable" (click)="defineOrderTags(orderItem)">
+            <td>{{ orderItem.quantity }}</td>
+            <td jhiTranslate="{{ 'wmsApp.OrderItemStatus.' + orderItem.status }}">{{ orderItem.status }}</td>
+            <td>
+              <div *ngIf="orderItem.companyProduct">
+                <a [routerLink]="['/company-product', orderItem.companyProduct?.id, 'view']">{{
+                  orderItem.companyProduct?.sku
+                }}</a>
+              </div>
+            </td>
+            <td class="text-right">
+              <div class="btn-group">
+                <button
+                  type="submit"
+                  [routerLink]="['/order-item', orderItem.id, 'view']"
+                  class="btn btn-info btn-sm"
+                  data-cy="entityDetailsButton"
+                >
+                  <fa-icon icon="eye"></fa-icon>
+                  <span class="d-none d-md-inline"></span>
+                </button>
+  
+                <button
+                  type="submit"
+                  [routerLink]="['/order-item', orderItem.id, 'edit']"
+                  class="btn btn-primary btn-sm"
+                  data-cy="entityEditButton"
+                >
+                  <fa-icon icon="pencil-alt"></fa-icon>
+                  <span class="d-none d-md-inline"></span>
+                </button>
+  
+                <button type="submit" (click)="delete(orderItem)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                  <fa-icon icon="times"></fa-icon>
+                  <span class="d-none d-md-inline"></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="orderItemForTags == orderItem" class="order-tags bg-light text-dark">
+            <td colspan="4">
+              <jhi-reception-tags ></jhi-reception-tags>
+            </td>
+          </tr>
+          <tr *ngIf="orderItemForTags == orderItem" >
+            <!-- this <tr> to keep css odd/even -->
+          </tr>
+        </ng-container>
       </tbody>
     </table>
   </div>

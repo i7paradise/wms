@@ -1,18 +1,43 @@
-<div class="container shadow p-3 mb-3 bg-body rounded">
-    <div class="row">
-            <div class="col-md">
-                <span class="input-group-text"><fa-icon icon="truck-loading"></fa-icon>&nbsp;container</span>
-                <input type="number" class="form-control">
-            </div>
-            <div class="col-md">
-                <span class="input-group-text"><fa-icon icon="boxes"></fa-icon>&nbsp;boxes/container</span>
-                <input type="number" class="form-control">
-            </div>
-            <div class="col-md">
-                <button class="btn btn-sm btn-success">
-                    <fa-icon icon="search"></fa-icon>
-                    start scan
-                </button>
-            </div>
+<div *ngIf="orderItem">
+
+  <div class="row" *ngIf="remainsContainerToScan() > 0">
+    <div class="col">
+      <button class="btn btn-success" (click)="scanContainer()">
+        <i class="bi bi-upc-scan"></i>&nbsp;Scan container
+      </button>
+      <h4>{{ remainsContainerToScan() }} containers remaining</h4>
     </div>
+
+    <div class="col">
+    </div>
+  </div>
+
+
+  <div class="table-responsive" *ngIf="getOrderContainers() && getOrderContainers().length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col">container TAG</th>
+          <th scope="col">packages scanned</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cy="entityTable" *ngFor="let container of getOrderContainers()">
+          <td>{{ container.supplierRFIDTag }}</td>
+          <td>
+            <button class="btn btn-success" (click)="scanPackages(container)">
+              <i class="bi bi-upc-scan"></i>&nbsp;Packages</button>
+          </td>
+          <td class="text-right">
+            <button type="submit" (click)="clearScan(container)" class="btn btn-danger btn-sm">
+              <fa-icon icon="times"></fa-icon>
+              <span class="d-none d-md-inline"></span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
 </div>

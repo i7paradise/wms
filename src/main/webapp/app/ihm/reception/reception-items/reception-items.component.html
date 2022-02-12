@@ -26,7 +26,7 @@
       </thead>
       <tbody>
         <ng-container *ngFor="let orderItem of orderItems">
-          <tr data-cy="entityTable">
+          <tr data-cy="entityTable" (click)="uiService.setOrderItem(orderItem)">
             <td>{{ orderItem.quantity }}</td>
             <td jhiTranslate="{{ 'wmsApp.OrderItemStatus.' + orderItem.status }}">{{ orderItem.status }}</td>
             <td>

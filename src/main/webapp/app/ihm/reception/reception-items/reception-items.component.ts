@@ -6,6 +6,7 @@ import { OrderItemDeleteDialogComponent } from 'app/entities/order-item/delete/o
 import { IOrderItem } from 'app/entities/order-item/order-item.model';
 import { OrderItemService } from 'app/entities/order-item/service/order-item.service';
 import { Order } from 'app/entities/order/order.model';
+import { UiService } from '../service/ui.service';
 
 @Component({
   selector: 'jhi-reception-items',
@@ -21,7 +22,8 @@ export class ReceptionItemsComponent implements OnInit {
     private modalService: NgbModal,
     private companyProductService: CompanyProductService,
     private orderItemService: OrderItemService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public uiService: UiService
   ) {}
 
   ngOnInit(): void {

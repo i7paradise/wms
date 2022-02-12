@@ -1,18 +1,10 @@
-<div class="container shadow p-3 mb-3 bg-body rounded">
-    <div class="row">
-            <div class="col-md">
-                <span class="input-group-text"><fa-icon icon="truck-loading"></fa-icon>&nbsp;container</span>
-                <input type="number" class="form-control">
-            </div>
-            <div class="col-md">
-                <span class="input-group-text"><fa-icon icon="boxes"></fa-icon>&nbsp;boxes/container</span>
-                <input type="number" class="form-control">
-            </div>
-            <div class="col-md">
-                <button class="btn btn-sm btn-success">
-                    <fa-icon icon="search"></fa-icon>
-                    start scan
-                </button>
-            </div>
+<div *ngIf="orderItem">
+  <div class="row text-right">
+    <div class="col">
+      <button class="btn btn-success"><fa-icon icon="search"></fa-icon>Scan RFID</button>
     </div>
+  </div>
+  <div class="row">
+    {{ orderItem.quantity + ' of ' + orderItem.companyProduct?.product }}
+  </div>
 </div>

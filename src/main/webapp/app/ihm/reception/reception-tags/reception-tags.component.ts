@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { OrderItem } from 'app/entities/order-item/order-item.model';
+import { Component } from '@angular/core';
+import { IOrderItem, OrderItem } from 'app/entities/order-item/order-item.model';
+import { UiService } from '../service/ui.service';
 
 @Component({
   selector: 'jhi-reception-tags',
@@ -7,5 +8,9 @@ import { OrderItem } from 'app/entities/order-item/order-item.model';
   styleUrls: ['./reception-tags.component.scss']
 })
 export class ReceptionTagsComponent {
-  @Input() orderItem: OrderItem | null = null;
+  orderItem!: OrderItem;
+
+  constructor(public uiService: UiService) {
+    uiService.onSetOrderItem().subscribe((orderItem: IOrderItem) => this.orderItem = orderItem);
+  }
 }

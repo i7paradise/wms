@@ -9,9 +9,16 @@ import { ReceptionDetailComponent } from './reception/reception-detail/reception
 import { ReceptionItemsComponent } from './reception/reception-items/reception-items.component';
 import { ReceptionTagsComponent } from './reception/reception-tags/reception-tags.component';
 import { AddItemComponent } from './reception/add-item/add-item.component';
+import { ReaderComponent } from './rfid/reader/reader.component';
+import { ReaderDetailComponent } from './rfid/reader/reader-detail/reader-detail.component';
+import { AntennasComponent } from './rfid/reader/antennas/antennas.component';
 
 @NgModule({
-  declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent, AddItemComponent],
+  declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent, AddItemComponent,
+    ReaderComponent,
+    ReaderDetailComponent,
+    AntennasComponent],
+
   imports: [CommonModule, SharedModule, RouterModule.forChild(ihmRoute), OrderModule],
 })
 export class IhmModule {}

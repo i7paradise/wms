@@ -8,9 +8,10 @@ import { RouterModule } from '@angular/router';
 import { ReceptionDetailComponent } from './reception/reception-detail/reception-detail.component';
 import { ReceptionItemsComponent } from './reception/reception-items/reception-items.component';
 import { ReceptionTagsComponent } from './reception/reception-tags/reception-tags.component';
+import { AddItemComponent } from './reception/add-item/add-item.component';
 
 @NgModule({
-  declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent],
+  declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent, AddItemComponent],
   imports: [CommonModule, SharedModule, RouterModule.forChild(ihmRoute), OrderModule],
 })
 export class IhmModule {}

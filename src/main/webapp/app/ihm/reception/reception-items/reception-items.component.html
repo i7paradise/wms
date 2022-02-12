@@ -1,109 +1,6 @@
 <div class="reception-items">
 
-  <div class="add-order-item" *ngIf="canAddItems()">
-    <button type="submit" (click)="startAddMode()" class="btn btn-primary btn-md" data-cy="entityDeleteButton">
-      <fa-icon icon="plus"></fa-icon>&nbsp;<span>Add order item</span>
-    </button>
-  </div>
-
-  <div class="add-order-item-form row justify-content-center border rounded" *ngIf="addMode">
-    <div class="col-10">
-      <form name="editForm" role="form" novalidate [formGroup]="editForm">
-        <h2 id="jhi-order-item-heading" data-cy="OrderItemCreateUpdateHeading" jhiTranslate="wmsApp.orderItem.home.createOrEditLabel">
-          Add Order Item
-        </h2>
-  
-        <div class="row">
-
-          <div class="form-group col-4">
-            <label class="form-control-label" jhiTranslate="wmsApp.orderItem.quantity" for="field_quantity">Quantity</label>
-            <input type="number" class="form-control" name="quantity" id="field_quantity" data-cy="quantity" formControlName="quantity" />
-            <div *ngIf="editForm.get('quantity')!.invalid && (editForm.get('quantity')!.dirty || editForm.get('quantity')!.touched)">
-              <small
-                class="form-text text-danger"
-                *ngIf="editForm.get('quantity')?.errors?.required"
-                jhiTranslate="entity.validation.required"
-              >
-                This field is required.
-              </small>
-              <small
-                class="form-text text-danger"
-                *ngIf="editForm.get('quantity')?.errors?.min"
-                jhiTranslate="entity.validation.min"
-                [translateValues]="{ min: 0 }"
-              >
-                This field should be at least 0.
-              </small>
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('quantity')?.errors?.number"
-                jhiTranslate="entity.validation.number"
-              >
-                This field should be a number.
-              </small>
-            </div>
-          </div>
-  
-          <div class="form-group col-4">
-            <label class="form-control-label" jhiTranslate="wmsApp.orderItem.status" for="field_status">Status</label>
-            <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
-              <option [ngValue]="null">{{ 'wmsApp.OrderItemStatus.null' | translate }}</option>
-              <option *ngFor="let orderItemStatus of orderItemStatusValues" [value]="orderItemStatus">
-                {{ 'wmsApp.OrderItemStatus.' + orderItemStatus | translate }}
-              </option>
-            </select>
-            <div *ngIf="editForm.get('status')!.invalid && (editForm.get('status')!.dirty || editForm.get('status')!.touched)">
-              <small class="form-text text-danger" *ngIf="editForm.get('status')?.errors?.required" jhiTranslate="entity.validation.required">
-                This field is required.
-              </small>
-            </div>
-          </div>
-  
-          <div class="form-group col-4">
-            <label class="form-control-label" jhiTranslate="wmsApp.orderItem.companyProduct" for="field_companyProduct"
-              >Compgany Product</label
-            >
-            <select
-              class="form-control"
-              id="field_companyProduct"
-              data-cy="companyProduct"
-              name="companyProduct"
-              formControlName="companyProduct"
-            >
-              <option [ngValue]="null"></option>
-              <option
-                [ngValue]="
-                  companyProductOption.id === editForm.get('companyProduct')!.value?.id
-                    ? editForm.get('companyProduct')!.value
-                    : companyProductOption
-                "
-                *ngFor="let companyProductOption of companyProductsCollection; trackBy: trackCompanyProductById"
-              >
-                {{ companyProductOption.sku }}
-              </option>
-            </select>
-          </div>
-  
-        </div>
-  
-        <div>
-          <button type="button" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="cancel()">
-            <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-          </button>
-  
-          <button
-            type="submit"
-            data-cy="entityCreateSaveButton"
-            (click)="save()"
-            [disabled]="editForm.invalid || isSaving"
-            class="btn btn-primary"
-          >
-            <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
+  <jhi-add-item [order]="order" (createdOrderItemEvt)="onAddOrderItem($event)"></jhi-add-item>
 
   <div class="alert alert-warning" id="no-result" *ngIf="orderItems?.length === 0">
     <span jhiTranslate="wmsApp.orderItem.home.notFound">No orderItems found</span>
@@ -120,14 +17,16 @@
             <span jhiTranslate="wmsApp.orderItem.status">Status</span>
           </th>
           <th scope="col">
-            <span jhiTranslate="wmsApp.orderItem.companyProduct">Compgany Product</span>
+            <span >Product</span>
           </th>
+          <th scope="col">Containers</th>
+          <th scope="col">boxes</th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <ng-container *ngFor="let orderItem of orderItems">
-          <tr data-cy="entityTable" (click)="defineOrderTags(orderItem)">
+          <tr data-cy="entityTable">
             <td>{{ orderItem.quantity }}</td>
             <td jhiTranslate="{{ 'wmsApp.OrderItemStatus.' + orderItem.status }}">{{ orderItem.status }}</td>
             <td>
@@ -137,6 +36,8 @@
                 }}</a>
               </div>
             </td>
+            <td>{{ orderItem.containersCount }} </td>
+            <td>{{ orderItem.productsPerContainerCount }} </td>
             <td class="text-right">
               <div class="btn-group">
                 <button
@@ -165,14 +66,6 @@
                 </button>
               </div>
             </td>
-          </tr>
-          <tr *ngIf="orderItemForTags == orderItem" class="order-tags bg-light text-dark">
-            <td colspan="4">
-              <jhi-reception-tags ></jhi-reception-tags>
-            </td>
-          </tr>
-          <tr *ngIf="orderItemForTags == orderItem" >
-            <!-- this <tr> to keep css odd/even -->
           </tr>
         </ng-container>
       </tbody>

@@ -30,7 +30,7 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
     ) {
-    super(activatedRoute);    
+    super(activatedRoute);
   }
 
   ngOnInit(): void {
@@ -38,7 +38,6 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
   }
 
   addNewOrderItem(orderItem: IOrderItem): void {
-    console.warn('####' , orderItem, this.orderItems);
     this.orderItems.push(orderItem);
   }
 

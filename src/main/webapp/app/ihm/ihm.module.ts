@@ -10,10 +10,12 @@ import { ReceptionItemsComponent } from './reception/reception-items/reception-i
 import { ReceptionTagsComponent } from './reception/reception-tags/reception-tags.component';
 import { AddItemComponent } from './reception/add-item/add-item.component';
 import { ReaderComponent } from './rfid/reader/reader.component';
+import { ReaderDetailComponent } from './rfid/reader/reader-detail/reader-detail.component';
 
 @NgModule({
   declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent, AddItemComponent,
-    ReaderComponent],
+    ReaderComponent,
+    ReaderDetailComponent],
 
   imports: [CommonModule, SharedModule, RouterModule.forChild(ihmRoute), OrderModule],
 })

@@ -46,7 +46,8 @@
           </tr>
         </thead>
         <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
-          <tr *ngFor="let uHFRFIDReader of uHFRFIDReaders; trackBy: trackId" data-cy="entityTable">
+          <tr *ngFor="let uHFRFIDReader of uHFRFIDReaders; trackBy: trackId" data-cy="entityTable"
+            [routerLink]="['/mgmt/reader', uHFRFIDReader.id]">
             <td>
               <a [routerLink]="['/uhfrfid-reader', uHFRFIDReader.id, 'view']">{{ uHFRFIDReader.id }}</a>
             </td>

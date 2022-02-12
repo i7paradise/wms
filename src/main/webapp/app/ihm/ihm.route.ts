@@ -3,6 +3,8 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
 import { ReceptionDetailComponent } from './reception/reception-detail/reception-detail.component';
 import { ReceptionComponent } from './reception/reception.component';
 import { ReceptionRoutingResolveService } from './reception/service/reception-routing-resolve.service';
+import { ReaderDetailComponent } from './rfid/reader/reader-detail/reader-detail.component';
+import { ReaderRoutingResolveService } from './rfid/reader/reader-routing-resolve.service';
 import { ReaderComponent } from './rfid/reader/reader.component';
 
 export const ihmRoute: Routes = [
@@ -22,6 +24,14 @@ export const ihmRoute: Routes = [
   {
     path: 'reader',
     component: ReaderComponent,
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'reader/:id',
+    resolve: {
+      order: ReaderRoutingResolveService,
+    },
+    component: ReaderDetailComponent,
     canActivate: [UserRouteAccessService],
   },
 ];

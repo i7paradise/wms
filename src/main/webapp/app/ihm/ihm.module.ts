@@ -11,11 +11,13 @@ import { ReceptionTagsComponent } from './reception/reception-tags/reception-tag
 import { AddItemComponent } from './reception/add-item/add-item.component';
 import { ReaderComponent } from './rfid/reader/reader.component';
 import { ReaderDetailComponent } from './rfid/reader/reader-detail/reader-detail.component';
+import { AntennasComponent } from './rfid/reader/antennas/antennas.component';
 
 @NgModule({
   declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent, AddItemComponent,
     ReaderComponent,
-    ReaderDetailComponent],
+    ReaderDetailComponent,
+    AntennasComponent],
 
   imports: [CommonModule, SharedModule, RouterModule.forChild(ihmRoute), OrderModule],
 })

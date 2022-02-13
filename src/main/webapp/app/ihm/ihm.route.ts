@@ -29,7 +29,7 @@ export const ihmRoute: Routes = [
   {
     path: 'reader/:id',
     resolve: {
-      order: ReaderRoutingResolveService,
+      uHFRFIDReader: ReaderRoutingResolveService,
     },
     component: ReaderDetailComponent,
     canActivate: [UserRouteAccessService],

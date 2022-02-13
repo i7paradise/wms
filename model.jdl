@@ -58,7 +58,7 @@ enum UHFRFIDAntennaStatus {
 
 /** Warehouse of the company */
 entity Warehouse {
-	name String required unique											
+	name String required unique
 	note String
 	phone String required
 	contactPerson String required
@@ -155,6 +155,8 @@ enum OrderType {
 entity OrderItem {
 	quantity BigDecimal required min(0)
 	status OrderItemStatus required
+	containersCount Integer min(0)
+	productsPerContainerCount Integer min(0)
 }
 
 enum OrderItemStatus {
@@ -172,18 +174,18 @@ entity OrderItemProduct {
 relationship OneToOne {
 	CompanyUser to User
 
-	OrderItem{compganyProduct(sku)} to CompanyProduct
-    
 	CompanyContainer{containerCategory(name)} to ContainerCategory
 	CompanyProduct{containerCategory(name)} to ContainerCategory
+
+    OrderContainer{companyContainer} to CompanyContainer
 
 }
 
 relationship ManyToOne {
 	CompanyUser to Company
-	
+
 	CompanyContainer{company(name)} to Company{companyContainer}
-    
+
 	Order to Company
 
 	Warehouse{company(name)} to Company
@@ -202,10 +204,11 @@ relationship ManyToOne {
     CompanyProduct{product(name)} to Product
 
 	OrderItem to Order
-    ContainerCategory to OrderItem
+	OrderItem{companyProduct(sku)} to CompanyProduct
 
-	OrderItemProduct to ContainerCategory
-	OrderItemProduct{OrderItem} to OrderItem
+	OrderItemProduct{OrderItem} to OrderContainer
+
+	OrderContainer to OrderItem
 
 	UHFRFIDReader{company(name)} to Company{uhfRFIDReader(name)}
 

@@ -17,6 +17,12 @@
             <column name="supplier_rfid_tag" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="company_container_id" type="bigint">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_order_container__company_container_id" />
+            </column>
+            <column name="order_item_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>

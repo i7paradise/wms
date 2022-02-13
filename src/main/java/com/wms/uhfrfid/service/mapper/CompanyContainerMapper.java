@@ -12,4 +12,9 @@ public interface CompanyContainerMapper extends EntityMapper<CompanyContainerDTO
     @Mapping(target = "containerCategory", source = "containerCategory", qualifiedByName = "name")
     @Mapping(target = "company", source = "company", qualifiedByName = "name")
     CompanyContainerDTO toDto(CompanyContainer s);
+
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    CompanyContainerDTO toDtoId(CompanyContainer companyContainer);
 }

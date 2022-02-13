@@ -1,5 +1,6 @@
 package com.wms.uhfrfid.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -20,6 +21,15 @@ public class OrderContainer implements Serializable {
 
     @Column(name = "supplier_rfid_tag")
     private String supplierRFIDTag;
+
+    @JsonIgnoreProperties(value = { "containerCategory", "company" }, allowSetters = true)
+    @OneToOne
+    @JoinColumn(unique = true)
+    private CompanyContainer companyContainer;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "order", "companyProduct", "orderContainers" }, allowSetters = true)
+    private OrderItem orderItem;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -47,6 +57,32 @@ public class OrderContainer implements Serializable {
 
     public void setSupplierRFIDTag(String supplierRFIDTag) {
         this.supplierRFIDTag = supplierRFIDTag;
+    }
+
+    public CompanyContainer getCompanyContainer() {
+        return this.companyContainer;
+    }
+
+    public void setCompanyContainer(CompanyContainer companyContainer) {
+        this.companyContainer = companyContainer;
+    }
+
+    public OrderContainer companyContainer(CompanyContainer companyContainer) {
+        this.setCompanyContainer(companyContainer);
+        return this;
+    }
+
+    public OrderItem getOrderItem() {
+        return this.orderItem;
+    }
+
+    public void setOrderItem(OrderItem orderItem) {
+        this.orderItem = orderItem;
+    }
+
+    public OrderContainer orderItem(OrderItem orderItem) {
+        this.setOrderItem(orderItem);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

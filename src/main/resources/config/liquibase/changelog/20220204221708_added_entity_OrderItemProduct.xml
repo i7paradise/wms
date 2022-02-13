@@ -17,9 +17,6 @@
             <column name="rfid_tag" type="varchar(255)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_order_item_product__rfid_tag" />
             </column>
-            <column name="container_category_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <column name="order_item_id" type="bigint">
                 <constraints nullable="true" />
             </column>

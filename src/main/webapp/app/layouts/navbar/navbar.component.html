@@ -38,6 +38,18 @@
           <span>Reception</span>
         </a>
       </li>
+      <li
+        *ngSwitchCase="true"
+        ngbDropdown
+        class="nav-item dropdown pointer"
+        display="dynamic"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link" routerLink="mgmt/reader" (click)="collapseNavbar()">
+          <span>Readers</span>
+        </a>
+      </li>
       <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
       <li
         *ngSwitchCase="true"
@@ -76,18 +88,6 @@
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
               <span jhiTranslate="global.menu.entities.companyUser">Company User</span>
-            </a>
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              routerLink="container"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="collapseNavbar()"
-            >
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.container">Container</span>
             </a>
           </li>
           <li>
@@ -279,7 +279,7 @@
               (click)="collapseNavbar()"
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.order">Delivery Order</span>
+              <span jhiTranslate="global.menu.entities.order">Order</span>
             </a>
           </li>
           <li>
@@ -291,31 +291,31 @@
               (click)="collapseNavbar()"
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.orderItem">Delivery Order Item</span>
+              <span jhiTranslate="global.menu.entities.orderItem">Order Item</span>
             </a>
           </li>
           <li>
             <a
               class="dropdown-item"
-              routerLink="container"
+              routerLink="order-container"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
               (click)="collapseNavbar()"
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.deliveryContainer">Delivery Container</span>
+              <span jhiTranslate="global.menu.entities.orderContainer">Order Container</span>
             </a>
           </li>
           <li>
             <a
               class="dropdown-item"
-              routerLink="item-product"
+              routerLink="order-item-product"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
               (click)="collapseNavbar()"
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.deliveryItemProduct">Delivery Item Product</span>
+              <span jhiTranslate="global.menu.entities.orderItemProduct">Order Item Product</span>
             </a>
           </li>
           <li>

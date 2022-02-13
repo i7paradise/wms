@@ -37,10 +37,17 @@
             <span jhiTranslate="wmsApp.orderItem.quantity">Quantity</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="status"><span jhiTranslate="wmsApp.orderItem.status">Status</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="compganyProduct.sku">
-            <span jhiTranslate="wmsApp.orderItem.compganyProduct">Compgany Product</span> <fa-icon icon="sort"></fa-icon>
+          <th scope="col" jhiSortBy="containersCount">
+            <span jhiTranslate="wmsApp.orderItem.containersCount">Containers Count</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="productsPerContainerCount">
+            <span jhiTranslate="wmsApp.orderItem.productsPerContainerCount">Products Per Container Count</span>
+            <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="order.id"><span jhiTranslate="wmsApp.orderItem.order">Order</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="companyProduct.sku">
+            <span jhiTranslate="wmsApp.orderItem.companyProduct">Company Product</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -51,14 +58,16 @@
           </td>
           <td>{{ orderItem.quantity }}</td>
           <td jhiTranslate="{{ 'wmsApp.OrderItemStatus.' + orderItem.status }}">{{ orderItem.status }}</td>
-          <td>
-            <div *ngIf="orderItem.compganyProduct">
-              <a [routerLink]="['/company-product', orderItem.compganyProduct?.id, 'view']">{{ orderItem.compganyProduct?.sku }}</a>
-            </div>
-          </td>
+          <td>{{ orderItem.containersCount }}</td>
+          <td>{{ orderItem.productsPerContainerCount }}</td>
           <td>
             <div *ngIf="orderItem.order">
               <a [routerLink]="['/order', orderItem.order?.id, 'view']">{{ orderItem.order?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="orderItem.companyProduct">
+              <a [routerLink]="['/company-product', orderItem.companyProduct?.id, 'view']">{{ orderItem.companyProduct?.sku }}</a>
             </div>
           </td>
           <td class="text-right">

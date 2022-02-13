@@ -16,8 +16,6 @@ public class ContainerCategoryDTO implements Serializable {
 
     private String description;
 
-    private OrderItemDTO orderItem;
-
     public Long getId() {
         return id;
     }
@@ -40,14 +38,6 @@ public class ContainerCategoryDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public OrderItemDTO getOrderItem() {
-        return orderItem;
-    }
-
-    public void setOrderItem(OrderItemDTO orderItem) {
-        this.orderItem = orderItem;
     }
 
     @Override
@@ -78,7 +68,6 @@ public class ContainerCategoryDTO implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
-            ", orderItem=" + getOrderItem() +
             "}";
     }
 }

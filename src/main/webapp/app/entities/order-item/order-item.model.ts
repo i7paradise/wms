@@ -1,15 +1,17 @@
-import { ICompanyProduct } from 'app/entities/company-product/company-product.model';
 import { IOrder } from 'app/entities/order/order.model';
-import { IContainerCategory } from 'app/entities/container-category/container-category.model';
+import { ICompanyProduct } from 'app/entities/company-product/company-product.model';
+import { IOrderContainer } from 'app/entities/order-container/order-container.model';
 import { OrderItemStatus } from 'app/entities/enumerations/order-item-status.model';
 
 export interface IOrderItem {
   id?: number;
   quantity?: number;
   status?: OrderItemStatus;
-  compganyProduct?: ICompanyProduct | null;
+  containersCount?: number | null;
+  productsPerContainerCount?: number | null;
   order?: IOrder | null;
-  containerCategories?: IContainerCategory[] | null;
+  companyProduct?: ICompanyProduct | null;
+  orderContainers?: IOrderContainer[] | null;
 }
 
 export class OrderItem implements IOrderItem {
@@ -17,9 +19,11 @@ export class OrderItem implements IOrderItem {
     public id?: number,
     public quantity?: number,
     public status?: OrderItemStatus,
-    public compganyProduct?: ICompanyProduct | null,
+    public containersCount?: number | null,
+    public productsPerContainerCount?: number | null,
     public order?: IOrder | null,
-    public containerCategories?: IContainerCategory[] | null
+    public companyProduct?: ICompanyProduct | null,
+    public orderContainers?: IOrderContainer[] | null
   ) {}
 }
 

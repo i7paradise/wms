@@ -7,10 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IOrderItemProduct, OrderItemProduct } from '../order-item-product.model';
 import { OrderItemProductService } from '../service/order-item-product.service';
-import { IContainerCategory } from 'app/entities/container-category/container-category.model';
-import { ContainerCategoryService } from 'app/entities/container-category/service/container-category.service';
-import { IOrderItem } from 'app/entities/order-item/order-item.model';
-import { OrderItemService } from 'app/entities/order-item/service/order-item.service';
+import { IOrderContainer } from 'app/entities/order-container/order-container.model';
+import { OrderContainerService } from 'app/entities/order-container/service/order-container.service';
 
 @Component({
   selector: 'jhi-order-item-product-update',
@@ -19,20 +17,17 @@ import { OrderItemService } from 'app/entities/order-item/service/order-item.ser
 export class OrderItemProductUpdateComponent implements OnInit {
   isSaving = false;
 
-  containerCategoriesSharedCollection: IContainerCategory[] = [];
-  orderItemsSharedCollection: IOrderItem[] = [];
+  orderContainersSharedCollection: IOrderContainer[] = [];
 
   editForm = this.fb.group({
     id: [],
     rfidTAG: [null, [Validators.required]],
-    containerCategory: [],
     orderItem: [],
   });
 
   constructor(
     protected orderItemProductService: OrderItemProductService,
-    protected containerCategoryService: ContainerCategoryService,
-    protected orderItemService: OrderItemService,
+    protected orderContainerService: OrderContainerService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -59,11 +54,7 @@ export class OrderItemProductUpdateComponent implements OnInit {
     }
   }
 
-  trackContainerCategoryById(index: number, item: IContainerCategory): number {
-    return item.id!;
-  }
-
-  trackOrderItemById(index: number, item: IOrderItem): number {
+  trackOrderContainerById(index: number, item: IOrderContainer): number {
     return item.id!;
   }
 
@@ -90,43 +81,25 @@ export class OrderItemProductUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: orderItemProduct.id,
       rfidTAG: orderItemProduct.rfidTAG,
-      containerCategory: orderItemProduct.containerCategory,
       orderItem: orderItemProduct.orderItem,
     });
 
-    this.containerCategoriesSharedCollection = this.containerCategoryService.addContainerCategoryToCollectionIfMissing(
-      this.containerCategoriesSharedCollection,
-      orderItemProduct.containerCategory
-    );
-    this.orderItemsSharedCollection = this.orderItemService.addOrderItemToCollectionIfMissing(
-      this.orderItemsSharedCollection,
+    this.orderContainersSharedCollection = this.orderContainerService.addOrderContainerToCollectionIfMissing(
+      this.orderContainersSharedCollection,
       orderItemProduct.orderItem
     );
   }
 
   protected loadRelationshipsOptions(): void {
-    this.containerCategoryService
+    this.orderContainerService
       .query()
-      .pipe(map((res: HttpResponse<IContainerCategory[]>) => res.body ?? []))
+      .pipe(map((res: HttpResponse<IOrderContainer[]>) => res.body ?? []))
       .pipe(
-        map((containerCategories: IContainerCategory[]) =>
-          this.containerCategoryService.addContainerCategoryToCollectionIfMissing(
-            containerCategories,
-            this.editForm.get('containerCategory')!.value
-          )
+        map((orderContainers: IOrderContainer[]) =>
+          this.orderContainerService.addOrderContainerToCollectionIfMissing(orderContainers, this.editForm.get('orderItem')!.value)
         )
       )
-      .subscribe((containerCategories: IContainerCategory[]) => (this.containerCategoriesSharedCollection = containerCategories));
-
-    this.orderItemService
-      .query()
-      .pipe(map((res: HttpResponse<IOrderItem[]>) => res.body ?? []))
-      .pipe(
-        map((orderItems: IOrderItem[]) =>
-          this.orderItemService.addOrderItemToCollectionIfMissing(orderItems, this.editForm.get('orderItem')!.value)
-        )
-      )
-      .subscribe((orderItems: IOrderItem[]) => (this.orderItemsSharedCollection = orderItems));
+      .subscribe((orderContainers: IOrderContainer[]) => (this.orderContainersSharedCollection = orderContainers));
   }
 
   protected createFromForm(): IOrderItemProduct {
@@ -134,7 +107,6 @@ export class OrderItemProductUpdateComponent implements OnInit {
       ...new OrderItemProduct(),
       id: this.editForm.get(['id'])!.value,
       rfidTAG: this.editForm.get(['rfidTAG'])!.value,
-      containerCategory: this.editForm.get(['containerCategory'])!.value,
       orderItem: this.editForm.get(['orderItem'])!.value,
     };
   }

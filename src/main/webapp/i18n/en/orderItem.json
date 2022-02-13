@@ -20,9 +20,11 @@
       "id": "ID",
       "quantity": "Quantity",
       "status": "Status",
-      "compganyProduct": "Compgany Product",
+      "containersCount": "Containers Count",
+      "productsPerContainerCount": "Products Per Container Count",
       "order": "Order",
-      "containerCategory": "Container Category"
+      "companyProduct": "Company Product",
+      "orderContainer": "Order Container"
     }
   }
 }

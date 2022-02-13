@@ -39,9 +39,6 @@
           <th scope="col" jhiSortBy="description">
             <span jhiTranslate="wmsApp.containerCategory.description">Description</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="orderItem.id">
-            <span jhiTranslate="wmsApp.containerCategory.orderItem">Order Item</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -52,11 +49,6 @@
           </td>
           <td>{{ containerCategory.name }}</td>
           <td>{{ containerCategory.description }}</td>
-          <td>
-            <div *ngIf="containerCategory.orderItem">
-              <a [routerLink]="['/order-item', containerCategory.orderItem?.id, 'view']">{{ containerCategory.orderItem?.id }}</a>
-            </div>
-          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

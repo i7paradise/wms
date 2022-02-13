@@ -34,18 +34,25 @@ public class OrderItem implements Serializable {
     @Column(name = "status", nullable = false)
     private OrderItemStatus status;
 
-    @JsonIgnoreProperties(value = { "containerCategory", "company", "product" }, allowSetters = true)
-    @OneToOne
-    @JoinColumn(unique = true)
-    private CompanyProduct compganyProduct;
+    @Min(value = 0)
+    @Column(name = "containers_count")
+    private Integer containersCount;
+
+    @Min(value = 0)
+    @Column(name = "products_per_container_count")
+    private Integer productsPerContainerCount;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "company", "orderItems" }, allowSetters = true)
     private Order order;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "containerCategory", "company", "product" }, allowSetters = true)
+    private CompanyProduct companyProduct;
+
     @OneToMany(mappedBy = "orderItem")
-    @JsonIgnoreProperties(value = { "orderItem", "orderItemProducts" }, allowSetters = true)
-    private Set<ContainerCategory> containerCategories = new HashSet<>();
+    @JsonIgnoreProperties(value = { "companyContainer", "orderItem" }, allowSetters = true)
+    private Set<OrderContainer> orderContainers = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -88,17 +95,30 @@ public class OrderItem implements Serializable {
         this.status = status;
     }
 
-    public CompanyProduct getCompganyProduct() {
-        return this.compganyProduct;
+    public Integer getContainersCount() {
+        return this.containersCount;
     }
 
-    public void setCompganyProduct(CompanyProduct companyProduct) {
-        this.compganyProduct = companyProduct;
-    }
-
-    public OrderItem compganyProduct(CompanyProduct companyProduct) {
-        this.setCompganyProduct(companyProduct);
+    public OrderItem containersCount(Integer containersCount) {
+        this.setContainersCount(containersCount);
         return this;
+    }
+
+    public void setContainersCount(Integer containersCount) {
+        this.containersCount = containersCount;
+    }
+
+    public Integer getProductsPerContainerCount() {
+        return this.productsPerContainerCount;
+    }
+
+    public OrderItem productsPerContainerCount(Integer productsPerContainerCount) {
+        this.setProductsPerContainerCount(productsPerContainerCount);
+        return this;
+    }
+
+    public void setProductsPerContainerCount(Integer productsPerContainerCount) {
+        this.productsPerContainerCount = productsPerContainerCount;
     }
 
     public Order getOrder() {
@@ -114,34 +134,47 @@ public class OrderItem implements Serializable {
         return this;
     }
 
-    public Set<ContainerCategory> getContainerCategories() {
-        return this.containerCategories;
+    public CompanyProduct getCompanyProduct() {
+        return this.companyProduct;
     }
 
-    public void setContainerCategories(Set<ContainerCategory> containerCategories) {
-        if (this.containerCategories != null) {
-            this.containerCategories.forEach(i -> i.setOrderItem(null));
-        }
-        if (containerCategories != null) {
-            containerCategories.forEach(i -> i.setOrderItem(this));
-        }
-        this.containerCategories = containerCategories;
+    public void setCompanyProduct(CompanyProduct companyProduct) {
+        this.companyProduct = companyProduct;
     }
 
-    public OrderItem containerCategories(Set<ContainerCategory> containerCategories) {
-        this.setContainerCategories(containerCategories);
+    public OrderItem companyProduct(CompanyProduct companyProduct) {
+        this.setCompanyProduct(companyProduct);
         return this;
     }
 
-    public OrderItem addContainerCategory(ContainerCategory containerCategory) {
-        this.containerCategories.add(containerCategory);
-        containerCategory.setOrderItem(this);
+    public Set<OrderContainer> getOrderContainers() {
+        return this.orderContainers;
+    }
+
+    public void setOrderContainers(Set<OrderContainer> orderContainers) {
+        if (this.orderContainers != null) {
+            this.orderContainers.forEach(i -> i.setOrderItem(null));
+        }
+        if (orderContainers != null) {
+            orderContainers.forEach(i -> i.setOrderItem(this));
+        }
+        this.orderContainers = orderContainers;
+    }
+
+    public OrderItem orderContainers(Set<OrderContainer> orderContainers) {
+        this.setOrderContainers(orderContainers);
         return this;
     }
 
-    public OrderItem removeContainerCategory(ContainerCategory containerCategory) {
-        this.containerCategories.remove(containerCategory);
-        containerCategory.setOrderItem(null);
+    public OrderItem addOrderContainer(OrderContainer orderContainer) {
+        this.orderContainers.add(orderContainer);
+        orderContainer.setOrderItem(this);
+        return this;
+    }
+
+    public OrderItem removeOrderContainer(OrderContainer orderContainer) {
+        this.orderContainers.remove(orderContainer);
+        orderContainer.setOrderItem(null);
         return this;
     }
 
@@ -171,6 +204,8 @@ public class OrderItem implements Serializable {
             "id=" + getId() +
             ", quantity=" + getQuantity() +
             ", status='" + getStatus() + "'" +
+            ", containersCount=" + getContainersCount() +
+            ", productsPerContainerCount=" + getProductsPerContainerCount() +
             "}";
     }
 }

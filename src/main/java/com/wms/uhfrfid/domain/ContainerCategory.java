@@ -1,9 +1,6 @@
 package com.wms.uhfrfid.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -28,14 +25,6 @@ public class ContainerCategory implements Serializable {
 
     @Column(name = "description")
     private String description;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "compganyProduct", "order", "containerCategories" }, allowSetters = true)
-    private OrderItem orderItem;
-
-    @OneToMany(mappedBy = "containerCategory")
-    @JsonIgnoreProperties(value = { "containerCategory", "orderItem" }, allowSetters = true)
-    private Set<OrderItemProduct> orderItemProducts = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -76,50 +65,6 @@ public class ContainerCategory implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public OrderItem getOrderItem() {
-        return this.orderItem;
-    }
-
-    public void setOrderItem(OrderItem orderItem) {
-        this.orderItem = orderItem;
-    }
-
-    public ContainerCategory orderItem(OrderItem orderItem) {
-        this.setOrderItem(orderItem);
-        return this;
-    }
-
-    public Set<OrderItemProduct> getOrderItemProducts() {
-        return this.orderItemProducts;
-    }
-
-    public void setOrderItemProducts(Set<OrderItemProduct> orderItemProducts) {
-        if (this.orderItemProducts != null) {
-            this.orderItemProducts.forEach(i -> i.setContainerCategory(null));
-        }
-        if (orderItemProducts != null) {
-            orderItemProducts.forEach(i -> i.setContainerCategory(this));
-        }
-        this.orderItemProducts = orderItemProducts;
-    }
-
-    public ContainerCategory orderItemProducts(Set<OrderItemProduct> orderItemProducts) {
-        this.setOrderItemProducts(orderItemProducts);
-        return this;
-    }
-
-    public ContainerCategory addOrderItemProduct(OrderItemProduct orderItemProduct) {
-        this.orderItemProducts.add(orderItemProduct);
-        orderItemProduct.setContainerCategory(this);
-        return this;
-    }
-
-    public ContainerCategory removeOrderItemProduct(OrderItemProduct orderItemProduct) {
-        this.orderItemProducts.remove(orderItemProduct);
-        orderItemProduct.setContainerCategory(null);
-        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

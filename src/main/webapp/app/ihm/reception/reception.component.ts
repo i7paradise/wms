@@ -5,7 +5,7 @@ import { ParseLinks } from 'app/core/util/parse-links.service';
 import { IOrder } from 'app/entities/order/order.model';
 import { OrderComponent } from 'app/entities/order/list/order.component';
 import { OrderService } from 'app/entities/order/service/order.service';
-import { ReceptionService } from '../service/reception.service';
+import { ReceptionService } from './service/reception.service';
 
 @Component({
   selector: 'jhi-reception',

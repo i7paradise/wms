@@ -40,6 +40,12 @@ class OrderItemResourceIT {
     private static final OrderItemStatus DEFAULT_STATUS = OrderItemStatus.IN_PROGRESS;
     private static final OrderItemStatus UPDATED_STATUS = OrderItemStatus.VERIFIED;
 
+    private static final Integer DEFAULT_CONTAINERS_COUNT = 0;
+    private static final Integer UPDATED_CONTAINERS_COUNT = 1;
+
+    private static final Integer DEFAULT_PRODUCTS_PER_CONTAINER_COUNT = 0;
+    private static final Integer UPDATED_PRODUCTS_PER_CONTAINER_COUNT = 1;
+
     private static final String ENTITY_API_URL = "/api/order-items";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -67,7 +73,11 @@ class OrderItemResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static OrderItem createEntity(EntityManager em) {
-        OrderItem orderItem = new OrderItem().quantity(DEFAULT_QUANTITY).status(DEFAULT_STATUS);
+        OrderItem orderItem = new OrderItem()
+            .quantity(DEFAULT_QUANTITY)
+            .status(DEFAULT_STATUS)
+            .containersCount(DEFAULT_CONTAINERS_COUNT)
+            .productsPerContainerCount(DEFAULT_PRODUCTS_PER_CONTAINER_COUNT);
         return orderItem;
     }
 
@@ -78,7 +88,11 @@ class OrderItemResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static OrderItem createUpdatedEntity(EntityManager em) {
-        OrderItem orderItem = new OrderItem().quantity(UPDATED_QUANTITY).status(UPDATED_STATUS);
+        OrderItem orderItem = new OrderItem()
+            .quantity(UPDATED_QUANTITY)
+            .status(UPDATED_STATUS)
+            .containersCount(UPDATED_CONTAINERS_COUNT)
+            .productsPerContainerCount(UPDATED_PRODUCTS_PER_CONTAINER_COUNT);
         return orderItem;
     }
 
@@ -103,6 +117,8 @@ class OrderItemResourceIT {
         OrderItem testOrderItem = orderItemList.get(orderItemList.size() - 1);
         assertThat(testOrderItem.getQuantity()).isEqualByComparingTo(DEFAULT_QUANTITY);
         assertThat(testOrderItem.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testOrderItem.getContainersCount()).isEqualTo(DEFAULT_CONTAINERS_COUNT);
+        assertThat(testOrderItem.getProductsPerContainerCount()).isEqualTo(DEFAULT_PRODUCTS_PER_CONTAINER_COUNT);
     }
 
     @Test
@@ -173,7 +189,9 @@ class OrderItemResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(orderItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(sameNumber(DEFAULT_QUANTITY))))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].containersCount").value(hasItem(DEFAULT_CONTAINERS_COUNT)))
+            .andExpect(jsonPath("$.[*].productsPerContainerCount").value(hasItem(DEFAULT_PRODUCTS_PER_CONTAINER_COUNT)));
     }
 
     @Test
@@ -189,7 +207,9 @@ class OrderItemResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(orderItem.getId().intValue()))
             .andExpect(jsonPath("$.quantity").value(sameNumber(DEFAULT_QUANTITY)))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
+            .andExpect(jsonPath("$.containersCount").value(DEFAULT_CONTAINERS_COUNT))
+            .andExpect(jsonPath("$.productsPerContainerCount").value(DEFAULT_PRODUCTS_PER_CONTAINER_COUNT));
     }
 
     @Test
@@ -211,7 +231,11 @@ class OrderItemResourceIT {
         OrderItem updatedOrderItem = orderItemRepository.findById(orderItem.getId()).get();
         // Disconnect from session so that the updates on updatedOrderItem are not directly saved in db
         em.detach(updatedOrderItem);
-        updatedOrderItem.quantity(UPDATED_QUANTITY).status(UPDATED_STATUS);
+        updatedOrderItem
+            .quantity(UPDATED_QUANTITY)
+            .status(UPDATED_STATUS)
+            .containersCount(UPDATED_CONTAINERS_COUNT)
+            .productsPerContainerCount(UPDATED_PRODUCTS_PER_CONTAINER_COUNT);
         OrderItemDTO orderItemDTO = orderItemMapper.toDto(updatedOrderItem);
 
         restOrderItemMockMvc
@@ -228,6 +252,8 @@ class OrderItemResourceIT {
         OrderItem testOrderItem = orderItemList.get(orderItemList.size() - 1);
         assertThat(testOrderItem.getQuantity()).isEqualByComparingTo(UPDATED_QUANTITY);
         assertThat(testOrderItem.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testOrderItem.getContainersCount()).isEqualTo(UPDATED_CONTAINERS_COUNT);
+        assertThat(testOrderItem.getProductsPerContainerCount()).isEqualTo(UPDATED_PRODUCTS_PER_CONTAINER_COUNT);
     }
 
     @Test
@@ -307,7 +333,10 @@ class OrderItemResourceIT {
         OrderItem partialUpdatedOrderItem = new OrderItem();
         partialUpdatedOrderItem.setId(orderItem.getId());
 
-        partialUpdatedOrderItem.quantity(UPDATED_QUANTITY);
+        partialUpdatedOrderItem
+            .quantity(UPDATED_QUANTITY)
+            .containersCount(UPDATED_CONTAINERS_COUNT)
+            .productsPerContainerCount(UPDATED_PRODUCTS_PER_CONTAINER_COUNT);
 
         restOrderItemMockMvc
             .perform(
@@ -323,6 +352,8 @@ class OrderItemResourceIT {
         OrderItem testOrderItem = orderItemList.get(orderItemList.size() - 1);
         assertThat(testOrderItem.getQuantity()).isEqualByComparingTo(UPDATED_QUANTITY);
         assertThat(testOrderItem.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testOrderItem.getContainersCount()).isEqualTo(UPDATED_CONTAINERS_COUNT);
+        assertThat(testOrderItem.getProductsPerContainerCount()).isEqualTo(UPDATED_PRODUCTS_PER_CONTAINER_COUNT);
     }
 
     @Test
@@ -337,7 +368,11 @@ class OrderItemResourceIT {
         OrderItem partialUpdatedOrderItem = new OrderItem();
         partialUpdatedOrderItem.setId(orderItem.getId());
 
-        partialUpdatedOrderItem.quantity(UPDATED_QUANTITY).status(UPDATED_STATUS);
+        partialUpdatedOrderItem
+            .quantity(UPDATED_QUANTITY)
+            .status(UPDATED_STATUS)
+            .containersCount(UPDATED_CONTAINERS_COUNT)
+            .productsPerContainerCount(UPDATED_PRODUCTS_PER_CONTAINER_COUNT);
 
         restOrderItemMockMvc
             .perform(
@@ -353,6 +388,8 @@ class OrderItemResourceIT {
         OrderItem testOrderItem = orderItemList.get(orderItemList.size() - 1);
         assertThat(testOrderItem.getQuantity()).isEqualByComparingTo(UPDATED_QUANTITY);
         assertThat(testOrderItem.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testOrderItem.getContainersCount()).isEqualTo(UPDATED_CONTAINERS_COUNT);
+        assertThat(testOrderItem.getProductsPerContainerCount()).isEqualTo(UPDATED_PRODUCTS_PER_CONTAINER_COUNT);
     }
 
     @Test

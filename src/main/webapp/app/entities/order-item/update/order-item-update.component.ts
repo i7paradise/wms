@@ -7,10 +7,10 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IOrderItem, OrderItem } from '../order-item.model';
 import { OrderItemService } from '../service/order-item.service';
-import { ICompanyProduct } from 'app/entities/company-product/company-product.model';
-import { CompanyProductService } from 'app/entities/company-product/service/company-product.service';
 import { IOrder } from 'app/entities/order/order.model';
 import { OrderService } from 'app/entities/order/service/order.service';
+import { ICompanyProduct } from 'app/entities/company-product/company-product.model';
+import { CompanyProductService } from 'app/entities/company-product/service/company-product.service';
 import { OrderItemStatus } from 'app/entities/enumerations/order-item-status.model';
 
 @Component({
@@ -21,26 +21,29 @@ export class OrderItemUpdateComponent implements OnInit {
   isSaving = false;
   orderItemStatusValues = Object.keys(OrderItemStatus);
 
-  compganyProductsCollection: ICompanyProduct[] = [];
   ordersSharedCollection: IOrder[] = [];
+  companyProductsSharedCollection: ICompanyProduct[] = [];
 
   editForm = this.fb.group({
     id: [],
     quantity: [null, [Validators.required, Validators.min(0)]],
     status: [null, [Validators.required]],
-    compganyProduct: [],
+    containersCount: [null, [Validators.min(0)]],
+    productsPerContainerCount: [null, [Validators.min(0)]],
     order: [],
+    companyProduct: [],
   });
 
   constructor(
     protected orderItemService: OrderItemService,
-    protected companyProductService: CompanyProductService,
     protected orderService: OrderService,
+    protected companyProductService: CompanyProductService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    console.error('calling init from entity component');
     this.activatedRoute.data.subscribe(({ orderItem }) => {
       this.updateForm(orderItem);
 
@@ -62,11 +65,11 @@ export class OrderItemUpdateComponent implements OnInit {
     }
   }
 
-  trackCompanyProductById(index: number, item: ICompanyProduct): number {
+  trackOrderById(index: number, item: IOrder): number {
     return item.id!;
   }
 
-  trackOrderById(index: number, item: IOrder): number {
+  trackCompanyProductById(index: number, item: ICompanyProduct): number {
     return item.id!;
   }
 
@@ -94,33 +97,35 @@ export class OrderItemUpdateComponent implements OnInit {
       id: orderItem.id,
       quantity: orderItem.quantity,
       status: orderItem.status,
-      compganyProduct: orderItem.compganyProduct,
+      containersCount: orderItem.containersCount,
+      productsPerContainerCount: orderItem.productsPerContainerCount,
       order: orderItem.order,
+      companyProduct: orderItem.companyProduct,
     });
 
-    this.compganyProductsCollection = this.companyProductService.addCompanyProductToCollectionIfMissing(
-      this.compganyProductsCollection,
-      orderItem.compganyProduct
-    );
     this.ordersSharedCollection = this.orderService.addOrderToCollectionIfMissing(this.ordersSharedCollection, orderItem.order);
+    this.companyProductsSharedCollection = this.companyProductService.addCompanyProductToCollectionIfMissing(
+      this.companyProductsSharedCollection,
+      orderItem.companyProduct
+    );
   }
 
   protected loadRelationshipsOptions(): void {
-    this.companyProductService
-      .query({ filter: 'orderitem-is-null' })
-      .pipe(map((res: HttpResponse<ICompanyProduct[]>) => res.body ?? []))
-      .pipe(
-        map((companyProducts: ICompanyProduct[]) =>
-          this.companyProductService.addCompanyProductToCollectionIfMissing(companyProducts, this.editForm.get('compganyProduct')!.value)
-        )
-      )
-      .subscribe((companyProducts: ICompanyProduct[]) => (this.compganyProductsCollection = companyProducts));
-
     this.orderService
       .query()
       .pipe(map((res: HttpResponse<IOrder[]>) => res.body ?? []))
       .pipe(map((orders: IOrder[]) => this.orderService.addOrderToCollectionIfMissing(orders, this.editForm.get('order')!.value)))
       .subscribe((orders: IOrder[]) => (this.ordersSharedCollection = orders));
+
+    this.companyProductService
+      .query()
+      .pipe(map((res: HttpResponse<ICompanyProduct[]>) => res.body ?? []))
+      .pipe(
+        map((companyProducts: ICompanyProduct[]) =>
+          this.companyProductService.addCompanyProductToCollectionIfMissing(companyProducts, this.editForm.get('companyProduct')!.value)
+        )
+      )
+      .subscribe((companyProducts: ICompanyProduct[]) => (this.companyProductsSharedCollection = companyProducts));
   }
 
   protected createFromForm(): IOrderItem {
@@ -129,8 +134,10 @@ export class OrderItemUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       quantity: this.editForm.get(['quantity'])!.value,
       status: this.editForm.get(['status'])!.value,
-      compganyProduct: this.editForm.get(['compganyProduct'])!.value,
+      containersCount: this.editForm.get(['containersCount'])!.value,
+      productsPerContainerCount: this.editForm.get(['productsPerContainerCount'])!.value,
       order: this.editForm.get(['order'])!.value,
+      companyProduct: this.editForm.get(['companyProduct'])!.value,
     };
   }
 }

@@ -15,6 +15,20 @@
   "name": "OrderContainer",
   "pagination": "infinite-scroll",
   "readOnly": false,
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityName": "companyContainer",
+      "otherEntityRelationshipName": "orderContainer",
+      "ownerSide": true,
+      "relationshipName": "companyContainer",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "orderItem",
+      "otherEntityRelationshipName": "orderContainer",
+      "relationshipName": "orderItem",
+      "relationshipType": "many-to-one"
+    }
+  ],
   "service": "serviceClass"
 }

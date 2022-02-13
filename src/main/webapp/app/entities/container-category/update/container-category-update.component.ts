@@ -3,12 +3,10 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import { IContainerCategory, ContainerCategory } from '../container-category.model';
 import { ContainerCategoryService } from '../service/container-category.service';
-import { IOrderItem } from 'app/entities/order-item/order-item.model';
-import { OrderItemService } from 'app/entities/order-item/service/order-item.service';
 
 @Component({
   selector: 'jhi-container-category-update',
@@ -17,18 +15,14 @@ import { OrderItemService } from 'app/entities/order-item/service/order-item.ser
 export class ContainerCategoryUpdateComponent implements OnInit {
   isSaving = false;
 
-  orderItemsSharedCollection: IOrderItem[] = [];
-
   editForm = this.fb.group({
     id: [],
     name: [null, [Validators.required]],
     description: [],
-    orderItem: [],
   });
 
   constructor(
     protected containerCategoryService: ContainerCategoryService,
-    protected orderItemService: OrderItemService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -36,8 +30,6 @@ export class ContainerCategoryUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ containerCategory }) => {
       this.updateForm(containerCategory);
-
-      this.loadRelationshipsOptions();
     });
   }
 
@@ -53,10 +45,6 @@ export class ContainerCategoryUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.containerCategoryService.create(containerCategory));
     }
-  }
-
-  trackOrderItemById(index: number, item: IOrderItem): number {
-    return item.id!;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IContainerCategory>>): void {
@@ -83,25 +71,7 @@ export class ContainerCategoryUpdateComponent implements OnInit {
       id: containerCategory.id,
       name: containerCategory.name,
       description: containerCategory.description,
-      orderItem: containerCategory.orderItem,
     });
-
-    this.orderItemsSharedCollection = this.orderItemService.addOrderItemToCollectionIfMissing(
-      this.orderItemsSharedCollection,
-      containerCategory.orderItem
-    );
-  }
-
-  protected loadRelationshipsOptions(): void {
-    this.orderItemService
-      .query()
-      .pipe(map((res: HttpResponse<IOrderItem[]>) => res.body ?? []))
-      .pipe(
-        map((orderItems: IOrderItem[]) =>
-          this.orderItemService.addOrderItemToCollectionIfMissing(orderItems, this.editForm.get('orderItem')!.value)
-        )
-      )
-      .subscribe((orderItems: IOrderItem[]) => (this.orderItemsSharedCollection = orderItems));
   }
 
   protected createFromForm(): IContainerCategory {
@@ -110,7 +80,6 @@ export class ContainerCategoryUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
       description: this.editForm.get(['description'])!.value,
-      orderItem: this.editForm.get(['orderItem'])!.value,
     };
   }
 }

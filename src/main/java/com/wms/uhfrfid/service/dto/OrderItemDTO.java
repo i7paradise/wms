@@ -20,9 +20,15 @@ public class OrderItemDTO implements Serializable {
     @NotNull
     private OrderItemStatus status;
 
-    private CompanyProductDTO compganyProduct;
+    @Min(value = 0)
+    private Integer containersCount;
+
+    @Min(value = 0)
+    private Integer productsPerContainerCount;
 
     private OrderDTO order;
+
+    private CompanyProductDTO companyProduct;
 
     public Long getId() {
         return id;
@@ -48,12 +54,20 @@ public class OrderItemDTO implements Serializable {
         this.status = status;
     }
 
-    public CompanyProductDTO getCompganyProduct() {
-        return compganyProduct;
+    public Integer getContainersCount() {
+        return containersCount;
     }
 
-    public void setCompganyProduct(CompanyProductDTO compganyProduct) {
-        this.compganyProduct = compganyProduct;
+    public void setContainersCount(Integer containersCount) {
+        this.containersCount = containersCount;
+    }
+
+    public Integer getProductsPerContainerCount() {
+        return productsPerContainerCount;
+    }
+
+    public void setProductsPerContainerCount(Integer productsPerContainerCount) {
+        this.productsPerContainerCount = productsPerContainerCount;
     }
 
     public OrderDTO getOrder() {
@@ -62,6 +76,14 @@ public class OrderItemDTO implements Serializable {
 
     public void setOrder(OrderDTO order) {
         this.order = order;
+    }
+
+    public CompanyProductDTO getCompanyProduct() {
+        return companyProduct;
+    }
+
+    public void setCompanyProduct(CompanyProductDTO companyProduct) {
+        this.companyProduct = companyProduct;
     }
 
     @Override
@@ -92,8 +114,10 @@ public class OrderItemDTO implements Serializable {
             "id=" + getId() +
             ", quantity=" + getQuantity() +
             ", status='" + getStatus() + "'" +
-            ", compganyProduct=" + getCompganyProduct() +
+            ", containersCount=" + getContainersCount() +
+            ", productsPerContainerCount=" + getProductsPerContainerCount() +
             ", order=" + getOrder() +
+            ", companyProduct=" + getCompanyProduct() +
             "}";
     }
 }

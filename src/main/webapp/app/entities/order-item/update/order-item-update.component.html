@@ -58,28 +58,75 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="wmsApp.orderItem.compganyProduct" for="field_compganyProduct"
-            >Compgany Product</label
+          <label class="form-control-label" jhiTranslate="wmsApp.orderItem.containersCount" for="field_containersCount"
+            >Containers Count</label
           >
-          <select
+          <input
+            type="number"
             class="form-control"
-            id="field_compganyProduct"
-            data-cy="compganyProduct"
-            name="compganyProduct"
-            formControlName="compganyProduct"
+            name="containersCount"
+            id="field_containersCount"
+            data-cy="containersCount"
+            formControlName="containersCount"
+          />
+          <div
+            *ngIf="
+              editForm.get('containersCount')!.invalid &&
+              (editForm.get('containersCount')!.dirty || editForm.get('containersCount')!.touched)
+            "
           >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                companyProductOption.id === editForm.get('compganyProduct')!.value?.id
-                  ? editForm.get('compganyProduct')!.value
-                  : companyProductOption
-              "
-              *ngFor="let companyProductOption of compganyProductsCollection; trackBy: trackCompanyProductById"
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('containersCount')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 0 }"
             >
-              {{ companyProductOption.sku }}
-            </option>
-          </select>
+              This field should be at least 0.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('containersCount')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.orderItem.productsPerContainerCount" for="field_productsPerContainerCount"
+            >Products Per Container Count</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="productsPerContainerCount"
+            id="field_productsPerContainerCount"
+            data-cy="productsPerContainerCount"
+            formControlName="productsPerContainerCount"
+          />
+          <div
+            *ngIf="
+              editForm.get('productsPerContainerCount')!.invalid &&
+              (editForm.get('productsPerContainerCount')!.dirty || editForm.get('productsPerContainerCount')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('productsPerContainerCount')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 0 }"
+            >
+              This field should be at least 0.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('productsPerContainerCount')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
+            </small>
+          </div>
         </div>
 
         <div class="form-group">
@@ -91,6 +138,31 @@
               *ngFor="let orderOption of ordersSharedCollection; trackBy: trackOrderById"
             >
               {{ orderOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="wmsApp.orderItem.companyProduct" for="field_companyProduct"
+            >Company Product</label
+          >
+          <select
+            class="form-control"
+            id="field_companyProduct"
+            data-cy="companyProduct"
+            name="companyProduct"
+            formControlName="companyProduct"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                companyProductOption.id === editForm.get('companyProduct')!.value?.id
+                  ? editForm.get('companyProduct')!.value
+                  : companyProductOption
+              "
+              *ngFor="let companyProductOption of companyProductsSharedCollection; trackBy: trackCompanyProductById"
+            >
+              {{ companyProductOption.sku }}
             </option>
           </select>
         </div>

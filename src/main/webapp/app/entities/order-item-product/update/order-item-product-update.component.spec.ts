@@ -8,10 +8,8 @@ import { of, Subject, from } from 'rxjs';
 
 import { OrderItemProductService } from '../service/order-item-product.service';
 import { IOrderItemProduct, OrderItemProduct } from '../order-item-product.model';
-import { IContainerCategory } from 'app/entities/container-category/container-category.model';
-import { ContainerCategoryService } from 'app/entities/container-category/service/container-category.service';
-import { IOrderItem } from 'app/entities/order-item/order-item.model';
-import { OrderItemService } from 'app/entities/order-item/service/order-item.service';
+import { IOrderContainer } from 'app/entities/order-container/order-container.model';
+import { OrderContainerService } from 'app/entities/order-container/service/order-container.service';
 
 import { OrderItemProductUpdateComponent } from './order-item-product-update.component';
 
@@ -20,8 +18,7 @@ describe('OrderItemProduct Management Update Component', () => {
   let fixture: ComponentFixture<OrderItemProductUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let orderItemProductService: OrderItemProductService;
-  let containerCategoryService: ContainerCategoryService;
-  let orderItemService: OrderItemService;
+  let orderContainerService: OrderContainerService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,67 +40,44 @@ describe('OrderItemProduct Management Update Component', () => {
     fixture = TestBed.createComponent(OrderItemProductUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     orderItemProductService = TestBed.inject(OrderItemProductService);
-    containerCategoryService = TestBed.inject(ContainerCategoryService);
-    orderItemService = TestBed.inject(OrderItemService);
+    orderContainerService = TestBed.inject(OrderContainerService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should call ContainerCategory query and add missing value', () => {
+    it('Should call OrderContainer query and add missing value', () => {
       const orderItemProduct: IOrderItemProduct = { id: 456 };
-      const containerCategory: IContainerCategory = { id: 71591 };
-      orderItemProduct.containerCategory = containerCategory;
-
-      const containerCategoryCollection: IContainerCategory[] = [{ id: 8325 }];
-      jest.spyOn(containerCategoryService, 'query').mockReturnValue(of(new HttpResponse({ body: containerCategoryCollection })));
-      const additionalContainerCategories = [containerCategory];
-      const expectedCollection: IContainerCategory[] = [...additionalContainerCategories, ...containerCategoryCollection];
-      jest.spyOn(containerCategoryService, 'addContainerCategoryToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ orderItemProduct });
-      comp.ngOnInit();
-
-      expect(containerCategoryService.query).toHaveBeenCalled();
-      expect(containerCategoryService.addContainerCategoryToCollectionIfMissing).toHaveBeenCalledWith(
-        containerCategoryCollection,
-        ...additionalContainerCategories
-      );
-      expect(comp.containerCategoriesSharedCollection).toEqual(expectedCollection);
-    });
-
-    it('Should call OrderItem query and add missing value', () => {
-      const orderItemProduct: IOrderItemProduct = { id: 456 };
-      const orderItem: IOrderItem = { id: 82141 };
+      const orderItem: IOrderContainer = { id: 13366 };
       orderItemProduct.orderItem = orderItem;
 
-      const orderItemCollection: IOrderItem[] = [{ id: 3948 }];
-      jest.spyOn(orderItemService, 'query').mockReturnValue(of(new HttpResponse({ body: orderItemCollection })));
-      const additionalOrderItems = [orderItem];
-      const expectedCollection: IOrderItem[] = [...additionalOrderItems, ...orderItemCollection];
-      jest.spyOn(orderItemService, 'addOrderItemToCollectionIfMissing').mockReturnValue(expectedCollection);
+      const orderContainerCollection: IOrderContainer[] = [{ id: 90464 }];
+      jest.spyOn(orderContainerService, 'query').mockReturnValue(of(new HttpResponse({ body: orderContainerCollection })));
+      const additionalOrderContainers = [orderItem];
+      const expectedCollection: IOrderContainer[] = [...additionalOrderContainers, ...orderContainerCollection];
+      jest.spyOn(orderContainerService, 'addOrderContainerToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ orderItemProduct });
       comp.ngOnInit();
 
-      expect(orderItemService.query).toHaveBeenCalled();
-      expect(orderItemService.addOrderItemToCollectionIfMissing).toHaveBeenCalledWith(orderItemCollection, ...additionalOrderItems);
-      expect(comp.orderItemsSharedCollection).toEqual(expectedCollection);
+      expect(orderContainerService.query).toHaveBeenCalled();
+      expect(orderContainerService.addOrderContainerToCollectionIfMissing).toHaveBeenCalledWith(
+        orderContainerCollection,
+        ...additionalOrderContainers
+      );
+      expect(comp.orderContainersSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const orderItemProduct: IOrderItemProduct = { id: 456 };
-      const containerCategory: IContainerCategory = { id: 26639 };
-      orderItemProduct.containerCategory = containerCategory;
-      const orderItem: IOrderItem = { id: 92801 };
+      const orderItem: IOrderContainer = { id: 52780 };
       orderItemProduct.orderItem = orderItem;
 
       activatedRoute.data = of({ orderItemProduct });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(orderItemProduct));
-      expect(comp.containerCategoriesSharedCollection).toContain(containerCategory);
-      expect(comp.orderItemsSharedCollection).toContain(orderItem);
+      expect(comp.orderContainersSharedCollection).toContain(orderItem);
     });
   });
 
@@ -172,18 +146,10 @@ describe('OrderItemProduct Management Update Component', () => {
   });
 
   describe('Tracking relationships identifiers', () => {
-    describe('trackContainerCategoryById', () => {
-      it('Should return tracked ContainerCategory primary key', () => {
+    describe('trackOrderContainerById', () => {
+      it('Should return tracked OrderContainer primary key', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackContainerCategoryById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-
-    describe('trackOrderItemById', () => {
-      it('Should return tracked OrderItem primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackOrderItemById(0, entity);
+        const trackResult = comp.trackOrderContainerById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

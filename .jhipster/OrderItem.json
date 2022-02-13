@@ -16,6 +16,18 @@
       "fieldType": "OrderItemStatus",
       "fieldValidateRules": ["required"],
       "fieldValues": "IN_PROGRESS,VERIFIED,LABELED,PARTIALLY_PLACED,FULLY_PLACED"
+    },
+    {
+      "fieldName": "containersCount",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "productsPerContainerCount",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
     }
   ],
   "fluentMethods": true,
@@ -25,23 +37,22 @@
   "readOnly": false,
   "relationships": [
     {
-      "otherEntityField": "sku",
-      "otherEntityName": "companyProduct",
-      "otherEntityRelationshipName": "orderItem",
-      "ownerSide": true,
-      "relationshipName": "compganyProduct",
-      "relationshipType": "one-to-one"
-    },
-    {
       "otherEntityName": "order",
       "otherEntityRelationshipName": "orderItem",
       "relationshipName": "order",
       "relationshipType": "many-to-one"
     },
     {
-      "otherEntityName": "containerCategory",
+      "otherEntityField": "sku",
+      "otherEntityName": "companyProduct",
       "otherEntityRelationshipName": "orderItem",
-      "relationshipName": "containerCategory",
+      "relationshipName": "companyProduct",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "orderContainer",
+      "otherEntityRelationshipName": "orderItem",
+      "relationshipName": "orderContainer",
       "relationshipType": "one-to-many"
     }
   ],

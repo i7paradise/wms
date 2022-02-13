@@ -1,0 +1,10 @@
+<div *ngIf="orderItem">
+  <div class="row text-right">
+    <div class="col">
+      <button class="btn btn-success"><fa-icon icon="search"></fa-icon>Scan RFID</button>
+    </div>
+  </div>
+  <div class="row">
+    {{ orderItem.quantity + ' of ' + orderItem.companyProduct?.product }}
+  </div>
+</div>

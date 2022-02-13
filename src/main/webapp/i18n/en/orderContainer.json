@@ -18,7 +18,9 @@
         "title": "Order Container"
       },
       "id": "ID",
-      "supplierRFIDTag": "Supplier RFID Tag"
+      "supplierRFIDTag": "Supplier RFID Tag",
+      "companyContainer": "Company Container",
+      "orderItem": "Order Item"
     }
   }
 }

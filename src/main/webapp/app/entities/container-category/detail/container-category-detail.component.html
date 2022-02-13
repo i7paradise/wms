@@ -24,12 +24,6 @@
         <dd>
           <span>{{ containerCategory.description }}</span>
         </dd>
-        <dt><span jhiTranslate="wmsApp.containerCategory.orderItem">Order Item</span></dt>
-        <dd>
-          <div *ngIf="containerCategory.orderItem">
-            <a [routerLink]="['/order-item', containerCategory.orderItem?.id, 'view']">{{ containerCategory.orderItem?.id }}</a>
-          </div>
-        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

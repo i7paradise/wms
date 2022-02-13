@@ -20,19 +20,6 @@
   "name": "ContainerCategory",
   "pagination": "infinite-scroll",
   "readOnly": false,
-  "relationships": [
-    {
-      "otherEntityName": "orderItem",
-      "otherEntityRelationshipName": "containerCategory",
-      "relationshipName": "orderItem",
-      "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityName": "orderItemProduct",
-      "otherEntityRelationshipName": "containerCategory",
-      "relationshipName": "orderItemProduct",
-      "relationshipType": "one-to-many"
-    }
-  ],
+  "relationships": [],
   "service": "serviceClass"
 }

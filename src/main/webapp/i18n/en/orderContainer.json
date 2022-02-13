@@ -20,7 +20,8 @@
       "id": "ID",
       "supplierRFIDTag": "Supplier RFID Tag",
       "companyContainer": "Company Container",
-      "orderItem": "Order Item"
+      "orderItem": "Order Item",
+      "orderItemProduct": "Order Item Product"
     }
   }
 }

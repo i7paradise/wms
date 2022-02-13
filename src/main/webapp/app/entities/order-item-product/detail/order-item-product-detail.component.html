@@ -18,10 +18,12 @@
         <dd>
           <span>{{ orderItemProduct.rfidTAG }}</span>
         </dd>
-        <dt><span jhiTranslate="wmsApp.orderItemProduct.orderItem">Order Item</span></dt>
+        <dt><span jhiTranslate="wmsApp.orderItemProduct.orderContainer">Order Container</span></dt>
         <dd>
-          <div *ngIf="orderItemProduct.orderItem">
-            <a [routerLink]="['/order-container', orderItemProduct.orderItem?.id, 'view']">{{ orderItemProduct.orderItem?.id }}</a>
+          <div *ngIf="orderItemProduct.orderContainer">
+            <a [routerLink]="['/order-container', orderItemProduct.orderContainer?.id, 'view']">{{
+              orderItemProduct.orderContainer?.id
+            }}</a>
           </div>
         </dd>
       </dl>

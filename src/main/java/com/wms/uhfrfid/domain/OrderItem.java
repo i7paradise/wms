@@ -51,7 +51,7 @@ public class OrderItem implements Serializable {
     private CompanyProduct companyProduct;
 
     @OneToMany(mappedBy = "orderItem")
-    @JsonIgnoreProperties(value = { "companyContainer", "orderItem" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "companyContainer", "orderItem", "orderItemProducts" }, allowSetters = true)
     private Set<OrderContainer> orderContainers = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

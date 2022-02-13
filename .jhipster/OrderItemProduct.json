@@ -20,7 +20,7 @@
     {
       "otherEntityName": "orderContainer",
       "otherEntityRelationshipName": "orderItemProduct",
-      "relationshipName": "orderItem",
+      "relationshipName": "orderContainer",
       "relationshipType": "many-to-one"
     }
   ],

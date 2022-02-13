@@ -19,7 +19,7 @@
       },
       "id": "ID",
       "rfidTAG": "Rfid TAG",
-      "orderItem": "Order Item"
+      "orderContainer": "Order Container"
     }
   }
 }

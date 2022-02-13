@@ -3,11 +3,11 @@ import { IOrderContainer } from 'app/entities/order-container/order-container.mo
 export interface IOrderItemProduct {
   id?: number;
   rfidTAG?: string;
-  orderItem?: IOrderContainer | null;
+  orderContainer?: IOrderContainer | null;
 }
 
 export class OrderItemProduct implements IOrderItemProduct {
-  constructor(public id?: number, public rfidTAG?: string, public orderItem?: IOrderContainer | null) {}
+  constructor(public id?: number, public rfidTAG?: string, public orderContainer?: IOrderContainer | null) {}
 }
 
 export function getOrderItemProductIdentifier(orderItemProduct: IOrderItemProduct): number | undefined {

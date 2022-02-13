@@ -22,7 +22,7 @@ export class OrderItemProductUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     rfidTAG: [null, [Validators.required]],
-    orderItem: [],
+    orderContainer: [],
   });
 
   constructor(
@@ -81,12 +81,12 @@ export class OrderItemProductUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: orderItemProduct.id,
       rfidTAG: orderItemProduct.rfidTAG,
-      orderItem: orderItemProduct.orderItem,
+      orderContainer: orderItemProduct.orderContainer,
     });
 
     this.orderContainersSharedCollection = this.orderContainerService.addOrderContainerToCollectionIfMissing(
       this.orderContainersSharedCollection,
-      orderItemProduct.orderItem
+      orderItemProduct.orderContainer
     );
   }
 
@@ -96,7 +96,7 @@ export class OrderItemProductUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IOrderContainer[]>) => res.body ?? []))
       .pipe(
         map((orderContainers: IOrderContainer[]) =>
-          this.orderContainerService.addOrderContainerToCollectionIfMissing(orderContainers, this.editForm.get('orderItem')!.value)
+          this.orderContainerService.addOrderContainerToCollectionIfMissing(orderContainers, this.editForm.get('orderContainer')!.value)
         )
       )
       .subscribe((orderContainers: IOrderContainer[]) => (this.orderContainersSharedCollection = orderContainers));
@@ -107,7 +107,7 @@ export class OrderItemProductUpdateComponent implements OnInit {
       ...new OrderItemProduct(),
       id: this.editForm.get(['id'])!.value,
       rfidTAG: this.editForm.get(['rfidTAG'])!.value,
-      orderItem: this.editForm.get(['orderItem'])!.value,
+      orderContainer: this.editForm.get(['orderContainer'])!.value,
     };
   }
 }

@@ -14,7 +14,7 @@ public class OrderItemProductDTO implements Serializable {
     @NotNull
     private String rfidTAG;
 
-    private OrderContainerDTO orderItem;
+    private OrderContainerDTO orderContainer;
 
     public Long getId() {
         return id;
@@ -32,12 +32,12 @@ public class OrderItemProductDTO implements Serializable {
         this.rfidTAG = rfidTAG;
     }
 
-    public OrderContainerDTO getOrderItem() {
-        return orderItem;
+    public OrderContainerDTO getOrderContainer() {
+        return orderContainer;
     }
 
-    public void setOrderItem(OrderContainerDTO orderItem) {
-        this.orderItem = orderItem;
+    public void setOrderContainer(OrderContainerDTO orderContainer) {
+        this.orderContainer = orderContainer;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class OrderItemProductDTO implements Serializable {
         return "OrderItemProductDTO{" +
             "id=" + getId() +
             ", rfidTAG='" + getRfidTAG() + "'" +
-            ", orderItem=" + getOrderItem() +
+            ", orderContainer=" + getOrderContainer() +
             "}";
     }
 }

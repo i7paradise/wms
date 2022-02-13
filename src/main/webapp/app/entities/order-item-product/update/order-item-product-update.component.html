@@ -32,12 +32,22 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="wmsApp.orderItemProduct.orderItem" for="field_orderItem">Order Item</label>
-          <select class="form-control" id="field_orderItem" data-cy="orderItem" name="orderItem" formControlName="orderItem">
+          <label class="form-control-label" jhiTranslate="wmsApp.orderItemProduct.orderContainer" for="field_orderContainer"
+            >Order Container</label
+          >
+          <select
+            class="form-control"
+            id="field_orderContainer"
+            data-cy="orderContainer"
+            name="orderContainer"
+            formControlName="orderContainer"
+          >
             <option [ngValue]="null"></option>
             <option
               [ngValue]="
-                orderContainerOption.id === editForm.get('orderItem')!.value?.id ? editForm.get('orderItem')!.value : orderContainerOption
+                orderContainerOption.id === editForm.get('orderContainer')!.value?.id
+                  ? editForm.get('orderContainer')!.value
+                  : orderContainerOption
               "
               *ngFor="let orderContainerOption of orderContainersSharedCollection; trackBy: trackOrderContainerById"
             >

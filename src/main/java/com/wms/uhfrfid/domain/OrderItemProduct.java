@@ -25,8 +25,8 @@ public class OrderItemProduct implements Serializable {
     private String rfidTAG;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "companyContainer", "orderItem" }, allowSetters = true)
-    private OrderContainer orderItem;
+    @JsonIgnoreProperties(value = { "companyContainer", "orderItem", "orderItemProducts" }, allowSetters = true)
+    private OrderContainer orderContainer;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -56,16 +56,16 @@ public class OrderItemProduct implements Serializable {
         this.rfidTAG = rfidTAG;
     }
 
-    public OrderContainer getOrderItem() {
-        return this.orderItem;
+    public OrderContainer getOrderContainer() {
+        return this.orderContainer;
     }
 
-    public void setOrderItem(OrderContainer orderContainer) {
-        this.orderItem = orderContainer;
+    public void setOrderContainer(OrderContainer orderContainer) {
+        this.orderContainer = orderContainer;
     }
 
-    public OrderItemProduct orderItem(OrderContainer orderContainer) {
-        this.setOrderItem(orderContainer);
+    public OrderItemProduct orderContainer(OrderContainer orderContainer) {
+        this.setOrderContainer(orderContainer);
         return this;
     }
 

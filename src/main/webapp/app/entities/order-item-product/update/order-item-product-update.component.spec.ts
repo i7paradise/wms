@@ -48,12 +48,12 @@ describe('OrderItemProduct Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call OrderContainer query and add missing value', () => {
       const orderItemProduct: IOrderItemProduct = { id: 456 };
-      const orderItem: IOrderContainer = { id: 13366 };
-      orderItemProduct.orderItem = orderItem;
+      const orderContainer: IOrderContainer = { id: 13366 };
+      orderItemProduct.orderContainer = orderContainer;
 
       const orderContainerCollection: IOrderContainer[] = [{ id: 90464 }];
       jest.spyOn(orderContainerService, 'query').mockReturnValue(of(new HttpResponse({ body: orderContainerCollection })));
-      const additionalOrderContainers = [orderItem];
+      const additionalOrderContainers = [orderContainer];
       const expectedCollection: IOrderContainer[] = [...additionalOrderContainers, ...orderContainerCollection];
       jest.spyOn(orderContainerService, 'addOrderContainerToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -70,14 +70,14 @@ describe('OrderItemProduct Management Update Component', () => {
 
     it('Should update editForm', () => {
       const orderItemProduct: IOrderItemProduct = { id: 456 };
-      const orderItem: IOrderContainer = { id: 52780 };
-      orderItemProduct.orderItem = orderItem;
+      const orderContainer: IOrderContainer = { id: 52780 };
+      orderItemProduct.orderContainer = orderContainer;
 
       activatedRoute.data = of({ orderItemProduct });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(orderItemProduct));
-      expect(comp.orderContainersSharedCollection).toContain(orderItem);
+      expect(comp.orderContainersSharedCollection).toContain(orderContainer);
     });
   });
 

@@ -206,7 +206,7 @@ relationship ManyToOne {
 	OrderItem to Order
 	OrderItem{companyProduct(sku)} to CompanyProduct
 
-	OrderItemProduct{OrderItem} to OrderContainer
+	OrderItemProduct to OrderContainer
 
 	OrderContainer to OrderItem
 

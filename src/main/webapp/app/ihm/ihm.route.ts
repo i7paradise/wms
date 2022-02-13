@@ -4,7 +4,7 @@ import { ReceptionDetailComponent } from './reception/reception-detail/reception
 import { ReceptionComponent } from './reception/reception.component';
 import { ReceptionRoutingResolveService } from './reception/service/reception-routing-resolve.service';
 import { ReaderDetailComponent } from './rfid/reader/reader-detail/reader-detail.component';
-import { ReaderRoutingResolveService } from './rfid/reader/reader-routing-resolve.service';
+import { ReaderRoutingResolveService } from './rfid/reader/service/reader-routing-resolve.service';
 import { ReaderComponent } from './rfid/reader/reader.component';
 
 export const ihmRoute: Routes = [

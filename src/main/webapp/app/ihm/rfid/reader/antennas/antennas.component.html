@@ -1,1 +1,69 @@
-<p>antennas works!</p>
+<div>
+  <div class="alert alert-warning" id="no-result" *ngIf="uHFRFIDAntennas?.length === 0">
+    <span jhiTranslate="wmsApp.uHFRFIDAntenna.home.notFound">No uHFRFIDAntennas found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="uHFRFIDAntennas && uHFRFIDAntennas.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
+          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="name"><span jhiTranslate="wmsApp.uHFRFIDAntenna.name">Name</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="outputPower">
+            <span jhiTranslate="wmsApp.uHFRFIDAntenna.outputPower">Output Power</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="status">
+            <span jhiTranslate="wmsApp.uHFRFIDAntenna.status">Status</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="uhfRFIDReader.name">
+            <span jhiTranslate="wmsApp.uHFRFIDAntenna.uhfRFIDReader">Uhf RFID Reader</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+        <tr *ngFor="let uHFRFIDAntenna of uHFRFIDAntennas; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/uhfrfid-antenna', uHFRFIDAntenna.id, 'view']">{{ uHFRFIDAntenna.id }}</a>
+          </td>
+          <td>{{ uHFRFIDAntenna.name }}</td>
+          <td>{{ uHFRFIDAntenna.outputPower }}</td>
+          <td jhiTranslate="{{ 'wmsApp.UHFRFIDAntennaStatus.' + uHFRFIDAntenna.status }}">{{ uHFRFIDAntenna.status }}</td>
+          <td>
+            <div *ngIf="uHFRFIDAntenna.uhfRFIDReader">
+              <a [routerLink]="['/uhfrfid-reader', uHFRFIDAntenna.uhfRFIDReader?.id, 'view']">{{ uHFRFIDAntenna.uhfRFIDReader?.name }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/uhfrfid-antenna', uHFRFIDAntenna.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/uhfrfid-antenna', uHFRFIDAntenna.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(uHFRFIDAntenna)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

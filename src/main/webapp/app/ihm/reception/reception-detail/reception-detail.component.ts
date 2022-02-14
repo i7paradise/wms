@@ -10,6 +10,7 @@ import { IOrder, Order } from 'app/entities/order/order.model';
 import { OrderService } from 'app/entities/order/service/order.service';
 import dayjs from 'dayjs/esm';
 import { finalize } from 'rxjs';
+import { UiService } from '../service/ui.service';
 
 @Component({
   selector: 'jhi-reception-detail',
@@ -28,7 +29,8 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
 
   constructor(protected orderService: OrderService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    public uiService: UiService
     ) {
     super(activatedRoute);
   }

@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { IOrderContainer, OrderContainer } from 'app/entities/order-container/order-container.model';
+import { IOrderContainer } from 'app/entities/order-container/order-container.model';
 import { IOrderItem, OrderItem } from 'app/entities/order-item/order-item.model';
+import { ScannerService } from 'app/ihm/scanner/scanner.service';
+import { TagsList } from 'app/ihm/scanner/tags-list.model';
+import { ReceptionService } from '../service/reception.service';
 import { UiService } from '../service/ui.service';
 
 @Component({
@@ -11,7 +14,10 @@ import { UiService } from '../service/ui.service';
 export class ReceptionTagsComponent {
   orderItem!: OrderItem;
   
-  constructor(public uiService: UiService) {
+  constructor(public uiService: UiService,
+    private receptionService: ReceptionService,
+    private scannerService: ScannerService
+    ) {
     uiService.onSetOrderItem().subscribe((orderItem: IOrderItem) => this.orderItem = orderItem);
   }
   
@@ -20,31 +26,34 @@ export class ReceptionTagsComponent {
   }
 
   remainsContainerToScan(): number {
-    return (this.orderItem.containersCount ?? 0) - this.getOrderContainers().length;
+    return ((this.orderItem.containersCount ?? 0) - this.getOrderContainers().length);
   }
 
   scanContainer(): void {
     console.warn('scanning container');
-    if(!this.orderItem.orderContainers) {
-      this.orderItem.orderContainers = [];
-    }
-    // TEMP code
-    const container = {...new OrderContainer(),
-      supplierRFIDTag: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
-    };
-    this.orderItem.orderContainers.unshift(container);
+    this.scannerService.scanWithDialog((tags: TagsList) => {
+      this.receptionService.createOrderContainersWithTags(this.orderItem, tags);
+    });
   }
 
   scanPackages(container: IOrderContainer): void {
     console.warn('scanning scanPackages for', container);
-    // container.
+    this.scannerService.scanWithDialog((tags: TagsList) => {
+      this.receptionService.createOrderItemProducts(container, tags);
+    });  
   }
   
-  clearScan(container: IOrderContainer): void {
+  delete(container: IOrderContainer): void {
     console.warn('clear scan for ' , container);
     // TEMP code
-    this.orderItem.orderContainers = this.getOrderContainers().filter(e => e !== container);
-  }
 
+    this.receptionService.deleteContainer(container)
+      .subscribe((deleted) => {
+        if (deleted) {
+            this.orderItem.orderContainers = this.getOrderContainers().filter(e => e !== container);
+          }
+        }
+      );
+  }
 
 }

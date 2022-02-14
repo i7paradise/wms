@@ -1,5 +1,7 @@
 package com.wms.uhfrfid.config;
 
+import java.math.BigDecimal;
+
 import com.wms.uhfrfid.service.OrderItemService;
 import com.wms.uhfrfid.service.ReceptionService;
 import org.springframework.boot.CommandLineRunner;
@@ -25,6 +27,9 @@ public class DevDataLoader {
                         .stream()
                         .forEach(e -> {
                             e.setOrder(order);
+                            e.setQuantity(new BigDecimal("300"));
+                            e.setContainersCount(10);
+                            e.setProductsPerContainerCount(30);
                             orderItemService.save(e);
                         });
                 });

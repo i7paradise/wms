@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { IOrderItem } from 'app/entities/order-item/order-item.model';
+import { OrderItemProduct } from 'app/entities/order-item-product/order-item-product.model';
+import { TagsList } from 'app/ihm/scanner/tags-list.model';
 
 export type EntityResponseType = HttpResponse<IOrder>;
 export type EntityArrayResponseType = HttpResponse<IOrder[]>;
@@ -16,6 +18,8 @@ export type EntityArrayResponseType = HttpResponse<IOrder[]>;
   providedIn: 'root',
 })
 export class ReceptionService extends OrderService {
+  private containerIdGenerator = 10; // TEMP code
+
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {
     super(http, applicationConfigService);
     this.resourceUrl = this.applicationConfigService.getEndpointFor('api/v1/receptions');
@@ -28,15 +32,48 @@ export class ReceptionService extends OrderService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
-  prepareContainerForRFIDScan(orderItem: IOrderItem): IOrderItem {
-    orderItem.orderContainers = new Array<IOrderContainer>();
-    if (orderItem.containersCount) {
-      for (let index = 0; index < orderItem.containersCount; index++) {
-        //orderItem.orderContainers.push[new OrderContainer()];
-        
-      }
+  createOrderContainersWithTags(orderItem: IOrderItem, tagsList: TagsList): void {
+    if (!tagsList.tags || tagsList.tags.length === 0) {
+      return;
     }
-    return orderItem;
+    if (!orderItem.orderContainers) {
+      orderItem.orderContainers = [];
+    }
+    // TEMP code
+
+    const orderContainers = tagsList.tags
+      .map(e => (
+        { ...new OrderContainer(),
+          id: this.containerIdGenerator++,
+          supplierRFIDTag: e
+        })
+      );
+
+      // TODO call api with orderContainers
+
+    orderContainers.forEach(e => orderItem.orderContainers?.push(e));
   }
 
+  createOrderItemProducts(container: IOrderContainer, tagsList: TagsList): void {
+    if (!tagsList.tags || tagsList.tags.length === 0) {
+      return;
+    }
+
+    if (!container.orderItemProducts) {
+      container.orderItemProducts = [];
+    }
+
+    const orderItemProducts = tagsList.tags.map(e => ({
+      ...new OrderItemProduct(),
+      rfidTAG: e,
+      orderContainer: { id: container.id },
+    }));
+    // TODO send orderItemProducts to api/v1/
+
+    orderItemProducts.forEach(e => container.orderItemProducts?.push(e));
+  }
+
+  deleteContainer(container: IOrderContainer): Observable<boolean> {
+    return new Observable(subscriber => subscriber.next(container.id !== undefined));
+  }
 }

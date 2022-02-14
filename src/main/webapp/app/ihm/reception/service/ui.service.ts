@@ -7,7 +7,7 @@ import { Observable, Subject } from 'rxjs';
 })
 export class UiService {
   
-  private orderItem!: IOrderItem;
+  private orderItem!: IOrderItem | null;
   private subjectOrderItem = new Subject<IOrderItem>();
 
   setOrderItem(orderItem: IOrderItem): void {
@@ -18,5 +18,14 @@ export class UiService {
 
   onSetOrderItem(): Observable<IOrderItem> {
     return this.subjectOrderItem.asObservable();
+  }
+
+  equalsOrderItem(orderItem: IOrderItem): boolean {
+    return this.orderItem === orderItem;
+  }
+
+  isNoOrderItem(): boolean {
+    console.warn('bb', this.orderItem === null)
+    return this.orderItem === null;
   }
 }

@@ -1,3 +1,5 @@
+@use '/src/main/webapp/content/scss/my-global' as g;
+
 .reception-items {
   margin-top: 1.2em;
 }
@@ -8,4 +10,9 @@
 
 .order-tags {
   cursor: auto !important;
+}
+
+.selected-item {
+  background-color: g.$tr-selected !important;
+  font-weight: bold;
 }

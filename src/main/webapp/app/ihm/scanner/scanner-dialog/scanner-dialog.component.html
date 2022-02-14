@@ -1,0 +1,50 @@
+<div *ngIf="loading">
+  <div class="modal-header">
+    <h4 class="modal-title">Scanning tags...</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border m-5" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form name="deleteForm" (ngSubmit)="confirm()" *ngIf="!loading && tagsList">
+  <div class="modal-header">
+    <h4 class="modal-title">Confirm scanned tags</h4>
+
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+  </div>
+
+  <div class="modal-body">
+    <jhi-alert-error></jhi-alert-error>
+
+    <h4>{{ tagsList.tags?.length }} scanned tags</h4>
+    <p>{{ tagsList.tags }}</p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="rescan()">
+      <i class="bi bi-qr-code-scan"></i>&nbsp;<span>Rescan</span>
+    </button>
+
+    <button id="jhi-confirm-delete-company" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-success">
+      <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+    </button>
+  </div>
+</form>
+
+<div *ngIf="!loading && !tagsList">
+  <div class="modal-header">
+    <h4 class="modal-title">Error while scanning tags</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="d-flex justify-content-center">
+      <div class="alert alert-danger">Couldn't load tags</div>
+    </div>
+  </div>
+</div>

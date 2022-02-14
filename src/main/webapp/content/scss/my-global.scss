@@ -1,7 +1,9 @@
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 
+$tr-selected: rgb(55 133 231 / 33%);
+
 .table-responsive tbody tr:hover {
-    background-color: rgb(55 133 231 / 33%);
+    background-color: $tr-selected;
     cursor: pointer;
 }
   

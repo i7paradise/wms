@@ -1,0 +1,16 @@
+<div class="">
+    <label class="form-control-label" for="field_companyProduct"
+      >Door Antenna</label
+    >
+    <select
+      class="form-control"
+      data-cy="companyProduct"
+      name="companyProduct"
+      formControlName="companyProduct"
+    >
+      <option [ngValue]="null"></option>
+      <option [ngValue]="doorAntenna.id" *ngFor="let doorAntenna of listDoorAntenna">
+        {{ doorAntenna.id + ' : ' + doorAntenna.door?.name }}
+      </option>
+    </select>
+  </div>

@@ -1,4 +1,9 @@
 <div *ngIf="orderItem">
+
+  <div class="row">
+    <jhi-door-antenna-selector></jhi-door-antenna-selector>
+  </div>
+
   <div class="row" *ngIf="remainsContainerToScan() > 0">
     <div class="col">
       <button class="btn btn-primary" (click)="scanContainer()"><i class="bi bi-qr-code-scan"></i>&nbsp;Container</button>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DoorAntenna } from 'app/entities/door-antenna/door-antenna.model';
 import { IOrderContainer } from 'app/entities/order-container/order-container.model';
 import { IOrderItem, OrderItem } from 'app/entities/order-item/order-item.model';
 import { ScannerService } from 'app/ihm/scanner/scanner.service';
@@ -13,6 +14,7 @@ import { UiService } from '../service/ui.service';
 })
 export class ReceptionTagsComponent {
   orderItem!: OrderItem;
+  doorAntenna!: DoorAntenna;
   
   constructor(public uiService: UiService,
     private receptionService: ReceptionService,
@@ -31,14 +33,14 @@ export class ReceptionTagsComponent {
 
   scanContainer(): void {
     console.warn('scanning container');
-    this.scannerService.scanWithDialog((tags: TagsList) => {
+    this.scannerService.scanWithDialog(this.doorAntenna, (tags: TagsList) => {
       this.receptionService.createOrderContainersWithTags(this.orderItem, tags);
     });
   }
 
   scanPackages(container: IOrderContainer): void {
     console.warn('scanning scanPackages for', container);
-    this.scannerService.scanWithDialog((tags: TagsList) => {
+    this.scannerService.scanWithDialog(this.doorAntenna, (tags: TagsList) => {
       this.receptionService.createOrderItemProducts(container, tags);
     });  
   }

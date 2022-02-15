@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TagsList } from '../tags-list.model';
 import { ScannerService } from '../scanner.service';
+import { DoorAntenna } from 'app/entities/door-antenna/door-antenna.model';
 
 @Component({
   selector: 'jhi-scanner-dialog',
@@ -13,6 +14,7 @@ export class ScannerDialogComponent {
   public static CONFIRM = 'confirm';
 
   tagsList!: TagsList | null;
+  doorAntenna!: DoorAntenna;
   loading = false;
 
   constructor(protected scannerService: ScannerService,
@@ -29,7 +31,7 @@ export class ScannerDialogComponent {
   rescan(): void {
     this.loading = true;
     this.tagsList = null;
-    this.scannerService.scan()
+    this.scannerService.scan(this.doorAntenna)
       .subscribe((tagsList: TagsList) => {
         this.tagsList = tagsList;
         this.loading = false;

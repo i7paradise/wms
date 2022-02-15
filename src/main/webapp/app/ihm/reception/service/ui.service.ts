@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { IDoorAntenna } from 'app/entities/door-antenna/door-antenna.model';
 import { IOrderItem } from 'app/entities/order-item/order-item.model';
 import { Observable, Subject } from 'rxjs';
 
@@ -9,6 +10,9 @@ export class UiService {
   
   private orderItem!: IOrderItem | null;
   private subjectOrderItem = new Subject<IOrderItem>();
+
+  private doorAntenna!: IDoorAntenna | null;
+  private subjectDoorAntenna = new Subject<IDoorAntenna>();
 
   setOrderItem(orderItem: IOrderItem): void {
     console.warn('setOrderItem ', orderItem);
@@ -27,5 +31,14 @@ export class UiService {
   isNoOrderItem(): boolean {
     console.warn('bb', this.orderItem === null)
     return this.orderItem === null;
+  }
+
+  setDoorAntenna(doorAntenna: IDoorAntenna): void {
+    this.doorAntenna = doorAntenna;
+    this.subjectDoorAntenna.next(doorAntenna);
+  }
+
+  onSetDoorAntenna(): Observable<IDoorAntenna> {
+    return this.subjectDoorAntenna.asObservable();
   }
 }

@@ -1,6 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import { DoorAntenna } from 'app/entities/door-antenna/door-antenna.model';
+import { map, Observable } from 'rxjs';
 import { ScannerDialogComponent } from './scanner-dialog/scanner-dialog.component';
 import { TagsList } from './tags-list.model';
 
@@ -8,22 +11,28 @@ import { TagsList } from './tags-list.model';
   providedIn: 'root',
 })
 export class ScannerService {
-  constructor(protected modalService: NgbModal) {}
+  private resourceUrl = this.applicationConfigService.getEndpointFor('api/v1/tags');
 
-  scan(): Observable<TagsList> {
+  constructor(private applicationConfigService: ApplicationConfigService,
+    protected http: HttpClient,
+    protected modalService: NgbModal) {}
 
-    return new Observable(subscriber => {
-      setTimeout(() => {
-        subscriber.next(this.tempTagsList());
-      }, 1500);
-    });
+  scan(doorAntenna: DoorAntenna): Observable<TagsList> {
+    const copy = {
+      ...new DoorAntenna(),
+      id: doorAntenna.id
+    };
+    return this.http
+      .post<TagsList>(this.resourceUrl + '/scan', copy, { observe: 'response' })
+      .pipe(map((res) => res.body ?? {}));
 
   }
 
-  scanWithDialog(tagsObserver: (value: TagsList) => void): void {
+  scanWithDialog(doorAntenna: DoorAntenna, tagsObserver: (value: TagsList) => void): void {
     const modalRef = this.modalService.open(ScannerDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.loading = true;
-    this.scan().subscribe(t => {
+    modalRef.componentInstance.doorAntenna = doorAntenna;
+    this.scan(doorAntenna).subscribe(t => {
       modalRef.componentInstance.tagsList = t;
       modalRef.componentInstance.loading = false;
     });
@@ -36,18 +45,4 @@ export class ScannerService {
     });
   }
 
-  private tempTagsList(): TagsList {
-    const tags = [];
-    for (let i = 0; i < 10; i++) {
-      tags.push(this.randomString());
-    }
-    return new TagsList(tags);
-  }
-
-  private randomString(): string {
-    return Math.random()
-      .toString(36)
-      .replace(/[^a-z]+/g, '')
-      .substr(0, 5);
-  }
 }

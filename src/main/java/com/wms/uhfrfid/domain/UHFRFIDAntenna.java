@@ -3,6 +3,8 @@ package com.wms.uhfrfid.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wms.uhfrfid.domain.enumeration.UHFRFIDAntennaStatus;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -37,6 +39,10 @@ public class UHFRFIDAntenna implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
     private UHFRFIDReader uhfReader;
+
+    @OneToMany(mappedBy = "rfidAntenna")
+    @JsonIgnoreProperties(value = { "door", "rfidAntenna" }, allowSetters = true)
+    private Set<DoorAntenna> doorAntennas = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -102,6 +108,37 @@ public class UHFRFIDAntenna implements Serializable {
 
     public UHFRFIDAntenna uhfReader(UHFRFIDReader uHFRFIDReader) {
         this.setUhfReader(uHFRFIDReader);
+        return this;
+    }
+
+    public Set<DoorAntenna> getDoorAntennas() {
+        return this.doorAntennas;
+    }
+
+    public void setDoorAntennas(Set<DoorAntenna> doorAntennas) {
+        if (this.doorAntennas != null) {
+            this.doorAntennas.forEach(i -> i.setRfidAntenna(null));
+        }
+        if (doorAntennas != null) {
+            doorAntennas.forEach(i -> i.setRfidAntenna(this));
+        }
+        this.doorAntennas = doorAntennas;
+    }
+
+    public UHFRFIDAntenna doorAntennas(Set<DoorAntenna> doorAntennas) {
+        this.setDoorAntennas(doorAntennas);
+        return this;
+    }
+
+    public UHFRFIDAntenna addDoorAntenna(DoorAntenna doorAntenna) {
+        this.doorAntennas.add(doorAntenna);
+        doorAntenna.setRfidAntenna(this);
+        return this;
+    }
+
+    public UHFRFIDAntenna removeDoorAntenna(DoorAntenna doorAntenna) {
+        this.doorAntennas.remove(doorAntenna);
+        doorAntenna.setRfidAntenna(null);
         return this;
     }
 

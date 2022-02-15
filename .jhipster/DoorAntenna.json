@@ -19,17 +19,15 @@
   "readOnly": false,
   "relationships": [
     {
-      "otherEntityField": "name",
       "otherEntityName": "door",
       "otherEntityRelationshipName": "doorAntenna",
       "relationshipName": "door",
       "relationshipType": "many-to-one"
     },
     {
-      "otherEntityField": "name",
       "otherEntityName": "uHFRFIDAntenna",
       "otherEntityRelationshipName": "doorAntenna",
-      "relationshipName": "uhfAntenna",
+      "relationshipName": "rfidAntenna",
       "relationshipType": "many-to-one"
     }
   ],

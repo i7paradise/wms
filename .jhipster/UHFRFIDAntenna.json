@@ -34,6 +34,12 @@
       "otherEntityRelationshipName": "uHFRFIDAntenna",
       "relationshipName": "uhfReader",
       "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "doorAntenna",
+      "otherEntityRelationshipName": "rfidAntenna",
+      "relationshipName": "doorAntenna",
+      "relationshipType": "one-to-many"
     }
   ],
   "service": "serviceClass"

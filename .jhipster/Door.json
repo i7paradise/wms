@@ -23,6 +23,12 @@
       "otherEntityRelationshipName": "door",
       "relationshipName": "area",
       "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "doorAntenna",
+      "otherEntityRelationshipName": "door",
+      "relationshipName": "doorAntenna",
+      "relationshipType": "one-to-many"
     }
   ],
   "service": "serviceClass"

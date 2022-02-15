@@ -214,8 +214,8 @@ relationship ManyToOne {
 
 	UHFRFIDAntenna{uhfReader(name)} to UHFRFIDReader
 
-	DoorAntenna{door(name)} to Door
-	DoorAntenna{uhfAntenna(name)} to UHFRFIDAntenna
+	DoorAntenna to Door
+	DoorAntenna{rfidAntenna} to UHFRFIDAntenna{doorAntenna}
 }
 
 service * with serviceClass

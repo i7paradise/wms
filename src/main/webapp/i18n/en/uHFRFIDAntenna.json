@@ -21,7 +21,8 @@
       "name": "Name",
       "outputPower": "Output Power",
       "status": "Status",
-      "uhfReader": "Uhf Reader"
+      "uhfReader": "Uhf Reader",
+      "doorAntenna": "Door Antenna"
     }
   }
 }

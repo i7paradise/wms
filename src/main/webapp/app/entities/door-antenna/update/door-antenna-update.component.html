@@ -36,22 +36,24 @@
               [ngValue]="doorOption.id === editForm.get('door')!.value?.id ? editForm.get('door')!.value : doorOption"
               *ngFor="let doorOption of doorsSharedCollection; trackBy: trackDoorById"
             >
-              {{ doorOption.name }}
+              {{ doorOption.id }}
             </option>
           </select>
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="wmsApp.doorAntenna.uhfAntenna" for="field_uhfAntenna">Uhf Antenna</label>
-          <select class="form-control" id="field_uhfAntenna" data-cy="uhfAntenna" name="uhfAntenna" formControlName="uhfAntenna">
+          <label class="form-control-label" jhiTranslate="wmsApp.doorAntenna.rfidAntenna" for="field_rfidAntenna">Rfid Antenna</label>
+          <select class="form-control" id="field_rfidAntenna" data-cy="rfidAntenna" name="rfidAntenna" formControlName="rfidAntenna">
             <option [ngValue]="null"></option>
             <option
               [ngValue]="
-                uHFRFIDAntennaOption.id === editForm.get('uhfAntenna')!.value?.id ? editForm.get('uhfAntenna')!.value : uHFRFIDAntennaOption
+                uHFRFIDAntennaOption.id === editForm.get('rfidAntenna')!.value?.id
+                  ? editForm.get('rfidAntenna')!.value
+                  : uHFRFIDAntennaOption
               "
               *ngFor="let uHFRFIDAntennaOption of uHFRFIDAntennasSharedCollection; trackBy: trackUHFRFIDAntennaById"
             >
-              {{ uHFRFIDAntennaOption.name }}
+              {{ uHFRFIDAntennaOption.id }}
             </option>
           </select>
         </div>

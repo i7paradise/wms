@@ -1,4 +1,5 @@
 import { IUHFRFIDReader } from 'app/entities/uhfrfid-reader/uhfrfid-reader.model';
+import { IDoorAntenna } from 'app/entities/door-antenna/door-antenna.model';
 import { UHFRFIDAntennaStatus } from 'app/entities/enumerations/uhfrfid-antenna-status.model';
 
 export interface IUHFRFIDAntenna {
@@ -7,6 +8,7 @@ export interface IUHFRFIDAntenna {
   outputPower?: number;
   status?: UHFRFIDAntennaStatus;
   uhfReader?: IUHFRFIDReader | null;
+  doorAntennas?: IDoorAntenna[] | null;
 }
 
 export class UHFRFIDAntenna implements IUHFRFIDAntenna {
@@ -15,7 +17,8 @@ export class UHFRFIDAntenna implements IUHFRFIDAntenna {
     public name?: string,
     public outputPower?: number,
     public status?: UHFRFIDAntennaStatus,
-    public uhfReader?: IUHFRFIDReader | null
+    public uhfReader?: IUHFRFIDReader | null,
+    public doorAntennas?: IDoorAntenna[] | null
   ) {}
 }
 

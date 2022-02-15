@@ -14,9 +14,9 @@
                                  referencedColumnNames="id"
                                  referencedTableName="door"/>
 
-        <addForeignKeyConstraint baseColumnNames="uhf_antenna_id"
+        <addForeignKeyConstraint baseColumnNames="rfid_antenna_id"
                                  baseTableName="door_antenna"
-                                 constraintName="fk_door_antenna__uhf_antenna_id"
+                                 constraintName="fk_door_antenna__rfid_antenna_id"
                                  referencedColumnNames="id"
                                  referencedTableName="uhfrfid_antenna"/>
     </changeSet>

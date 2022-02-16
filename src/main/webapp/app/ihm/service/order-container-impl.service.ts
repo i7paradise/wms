@@ -1,0 +1,49 @@
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import { IOrderContainer } from 'app/entities/order-container/order-container.model';
+import { OrderContainerService } from 'app/entities/order-container/service/order-container.service';
+import { IOrderItem } from 'app/entities/order-item/order-item.model';
+import { map, Observable } from 'rxjs';
+import { TagsList } from 'app/ihm/model/tags-list.model';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class OrderContainerImplService extends OrderContainerService {
+  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {
+    super(http, applicationConfigService);
+    this.resourceUrl = this.applicationConfigService.getEndpointFor('api/v1/order-containers');
+  }
+
+  findOrderContainers(orderItem: IOrderItem): Observable<IOrderContainer[]> {
+    return this.http
+      .get<IOrderContainer[]>(
+        `${this.resourceUrl}/from-order-item/${orderItem.id as number}`,
+        { observe: 'response' }
+      )
+      .pipe(map(res => res.body ?? []));
+  }
+
+  createOrderContainersWithTags(orderItem: IOrderItem, tagsList: TagsList): void {
+    if (!tagsList.tags || tagsList.tags.length === 0) {
+      return;
+    }
+
+    this.http
+      .post<IOrderContainer[]>(
+        `${this.resourceUrl}/create-with-tags`,
+        {
+          orderItemId: orderItem.id,
+          tagsList,
+        },
+        { observe: 'response' }
+      )
+      .pipe(map(res => res.body ?? []))
+      .subscribe(list => (orderItem.orderContainers = list));
+  }
+
+  deleteContainer(container: IOrderContainer): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/${container.id as number}`, { observe: 'response' });
+  }
+}

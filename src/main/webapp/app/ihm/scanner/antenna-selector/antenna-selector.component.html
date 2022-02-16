@@ -1,0 +1,11 @@
+<div class="form-group row">
+  <label class="form-control-label" jhiTranslate="wmsApp.doorAntenna.rfidAntenna" for="field_rfidAntenna">Rfid
+    Antenna</label>
+  <select class="form-control" id="field_rfidAntenna" #mySelect data-cy="rfidAntenna" name="rfidAntenna"
+    (change)="onChange(mySelect.value)">
+    <option [ngValue]="null"></option>
+    <option [ngValue]="antenna.id" *ngFor="let antenna of listAntenna">
+      {{ antenna.id + ' : ' + antenna?.name }}
+    </option>
+  </select>
+</div>

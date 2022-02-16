@@ -2,10 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
-import { DoorAntenna } from 'app/entities/door-antenna/door-antenna.model';
+import { IUHFRFIDAntenna } from 'app/entities/uhfrfid-antenna/uhfrfid-antenna.model';
 import { map, Observable } from 'rxjs';
 import { ScannerDialogComponent } from './scanner-dialog/scanner-dialog.component';
-import { TagsList } from './tags-list.model';
+import { TagsList } from '../model/tags-list.model';
+import { ScanRequest } from '../model/scan-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,22 +18,22 @@ export class ScannerService {
     protected http: HttpClient,
     protected modalService: NgbModal) {}
 
-  scan(doorAntenna: DoorAntenna): Observable<TagsList> {
-    const copy = {
-      ...new DoorAntenna(),
-      id: doorAntenna.id
-    };
+  scan(rfidAntenna: IUHFRFIDAntenna): Observable<TagsList> {
+    if (!rfidAntenna.id) {
+      throw 'can not call scanner service with null IUHFRFIDAntenna.id';
+    }
+    const request = new ScanRequest(rfidAntenna.id);
     return this.http
-      .post<TagsList>(this.resourceUrl + '/scan', copy, { observe: 'response' })
+      .post<TagsList>(this.resourceUrl + '/scan', request, { observe: 'response' })
       .pipe(map((res) => res.body ?? {}));
 
   }
 
-  scanWithDialog(doorAntenna: DoorAntenna, tagsObserver: (value: TagsList) => void): void {
+  scanWithDialog(rfidAntenna: IUHFRFIDAntenna, tagsObserver: (value: TagsList) => void): void {
     const modalRef = this.modalService.open(ScannerDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.loading = true;
-    modalRef.componentInstance.doorAntenna = doorAntenna;
-    this.scan(doorAntenna).subscribe(t => {
+    modalRef.componentInstance.rfidAntenna = rfidAntenna;
+    this.scan(rfidAntenna).subscribe(t => {
       modalRef.componentInstance.tagsList = t;
       modalRef.componentInstance.loading = false;
     });

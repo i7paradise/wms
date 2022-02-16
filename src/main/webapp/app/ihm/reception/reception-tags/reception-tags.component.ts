@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { DoorAntenna } from 'app/entities/door-antenna/door-antenna.model';
 import { IOrderContainer } from 'app/entities/order-container/order-container.model';
 import { IOrderItem, OrderItem } from 'app/entities/order-item/order-item.model';
+import { IUHFRFIDAntenna } from 'app/entities/uhfrfid-antenna/uhfrfid-antenna.model';
 import { ScannerService } from 'app/ihm/scanner/scanner.service';
-import { TagsList } from 'app/ihm/scanner/tags-list.model';
+import { TagsList } from 'app/ihm/model/tags-list.model';
 import { ReceptionService } from '../service/reception.service';
 import { UiService } from '../service/ui.service';
 
@@ -14,13 +14,19 @@ import { UiService } from '../service/ui.service';
 })
 export class ReceptionTagsComponent {
   orderItem!: OrderItem;
-  doorAntenna!: DoorAntenna;
+  rfidAntenna!: IUHFRFIDAntenna;
   
   constructor(public uiService: UiService,
     private receptionService: ReceptionService,
     private scannerService: ScannerService
     ) {
-    uiService.onSetOrderItem().subscribe((orderItem: IOrderItem) => this.orderItem = orderItem);
+    uiService.onSetOrderItem()
+      .subscribe((orderItem: IOrderItem) => {
+        this.orderItem = orderItem;
+        receptionService.findOrderContainers(orderItem)
+          .subscribe((list: IOrderContainer[]) => this.orderItem.orderContainers = list);
+      });
+    uiService.onChangeRFIDAntenna().subscribe((value: IUHFRFIDAntenna) => this.rfidAntenna = value);
   }
   
   getOrderContainers(): IOrderContainer[] {
@@ -33,14 +39,14 @@ export class ReceptionTagsComponent {
 
   scanContainer(): void {
     console.warn('scanning container');
-    this.scannerService.scanWithDialog(this.doorAntenna, (tags: TagsList) => {
+    this.scannerService.scanWithDialog(this.rfidAntenna, (tags: TagsList) => {
       this.receptionService.createOrderContainersWithTags(this.orderItem, tags);
     });
   }
 
   scanPackages(container: IOrderContainer): void {
     console.warn('scanning scanPackages for', container);
-    this.scannerService.scanWithDialog(this.doorAntenna, (tags: TagsList) => {
+    this.scannerService.scanWithDialog(this.rfidAntenna, (tags: TagsList) => {
       this.receptionService.createOrderItemProducts(container, tags);
     });  
   }

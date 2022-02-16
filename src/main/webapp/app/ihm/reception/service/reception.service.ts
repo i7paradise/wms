@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IOrder } from 'app/entities/order/order.model';
-import { IOrderContainer, OrderContainer } from 'app/entities/order-container/order-container.model';
+import { IOrderContainer } from 'app/entities/order-container/order-container.model';
 import { OrderService } from 'app/entities/order/service/order.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { map } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { IOrderItem } from 'app/entities/order-item/order-item.model';
 import { OrderItemProduct } from 'app/entities/order-item-product/order-item-product.model';
-import { TagsList } from 'app/ihm/scanner/tags-list.model';
+import { TagsList } from 'app/ihm/model/tags-list.model';
 
 export type EntityResponseType = HttpResponse<IOrder>;
 export type EntityArrayResponseType = HttpResponse<IOrder[]>;
@@ -18,7 +18,6 @@ export type EntityArrayResponseType = HttpResponse<IOrder[]>;
   providedIn: 'root',
 })
 export class ReceptionService extends OrderService {
-  private containerIdGenerator = 10; // TEMP code
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {
     super(http, applicationConfigService);
@@ -30,28 +29,6 @@ export class ReceptionService extends OrderService {
     return this.http
       .get<IOrder[]>(this.resourceUrl, { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
-  }
-
-  createOrderContainersWithTags(orderItem: IOrderItem, tagsList: TagsList): void {
-    if (!tagsList.tags || tagsList.tags.length === 0) {
-      return;
-    }
-    if (!orderItem.orderContainers) {
-      orderItem.orderContainers = [];
-    }
-    // TEMP code
-
-    const orderContainers = tagsList.tags
-      .map(e => (
-        { ...new OrderContainer(),
-          id: this.containerIdGenerator++,
-          supplierRFIDTag: e
-        })
-      );
-
-      // TODO call api with orderContainers
-
-    orderContainers.forEach(e => orderItem.orderContainers?.push(e));
   }
 
   createOrderItemProducts(container: IOrderContainer, tagsList: TagsList): void {
@@ -73,7 +50,4 @@ export class ReceptionService extends OrderService {
     orderItemProducts.forEach(e => container.orderItemProducts?.push(e));
   }
 
-  deleteContainer(container: IOrderContainer): Observable<boolean> {
-    return new Observable(subscriber => subscriber.next(container.id !== undefined));
-  }
 }

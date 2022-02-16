@@ -10,11 +10,11 @@ import { ReceptionItemsComponent } from './reception/reception-items/reception-i
 import { ReceptionTagsComponent } from './reception/reception-tags/reception-tags.component';
 import { AddItemComponent } from './reception/add-item/add-item.component';
 import { ScannerDialogComponent } from './scanner/scanner-dialog/scanner-dialog.component';
-import { DoorAntennaSelectorComponent } from './scanner/door-antenna-selector/door-antenna-selector.component';
-import { DoorAntennaModule } from 'app/entities/door-antenna/door-antenna.module';
+import { AntennaSelectorComponent } from './scanner/antenna-selector/antenna-selector.component';
+import { UHFRFIDAntennaModule } from 'app/entities/uhfrfid-antenna/uhfrfid-antenna.module';
 
 @NgModule({
-  declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent, AddItemComponent, ScannerDialogComponent, DoorAntennaSelectorComponent],
-  imports: [CommonModule, SharedModule, RouterModule.forChild(ihmRoute), OrderModule, DoorAntennaModule],
+  declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent, AddItemComponent, ScannerDialogComponent, AntennaSelectorComponent],
+  imports: [CommonModule, SharedModule, RouterModule.forChild(ihmRoute), OrderModule, UHFRFIDAntennaModule],
 })
 export class IhmModule {}

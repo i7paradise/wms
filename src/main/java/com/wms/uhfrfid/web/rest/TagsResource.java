@@ -1,7 +1,7 @@
 package com.wms.uhfrfid.web.rest;
 
 import com.wms.uhfrfid.service.TagsService;
-import com.wms.uhfrfid.service.dto.DoorAntennaDTO;
+import com.wms.uhfrfid.service.dto.ScanRequest;
 import com.wms.uhfrfid.service.dto.TagsList;
 import com.wms.uhfrfid.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
@@ -31,11 +31,11 @@ public class TagsResource {
      * GET scan
      */
     @PostMapping("/scan")
-    public TagsList scan(@RequestBody DoorAntennaDTO doorAntenna) {
-        log.debug("calling /scan {}", doorAntenna);
-        if (doorAntenna.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", DoorAntennaDTO.class.getSimpleName(), "id null");
+    public TagsList scan(@RequestBody ScanRequest scanRequest) {
+        log.debug("calling /scan {}", scanRequest);
+        if (scanRequest.getAntennaId() == null) {
+            throw new BadRequestAlertException("Invalid antenna id", ScanRequest.class.getSimpleName(), "id null");
         }
-        return tagsService.scan(doorAntenna);
+        return tagsService.scan(scanRequest.getAntennaId());
     }
 }

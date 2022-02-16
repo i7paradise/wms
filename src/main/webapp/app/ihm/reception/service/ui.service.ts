@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IDoorAntenna } from 'app/entities/door-antenna/door-antenna.model';
 import { IOrderItem } from 'app/entities/order-item/order-item.model';
+import { IUHFRFIDAntenna } from 'app/entities/uhfrfid-antenna/uhfrfid-antenna.model';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -11,8 +11,8 @@ export class UiService {
   private orderItem!: IOrderItem | null;
   private subjectOrderItem = new Subject<IOrderItem>();
 
-  private doorAntenna!: IDoorAntenna | null;
-  private subjectDoorAntenna = new Subject<IDoorAntenna>();
+  private rfidAntenna!: IUHFRFIDAntenna | null;
+  private subjectRFIDAntenna = new Subject<IUHFRFIDAntenna>();
 
   setOrderItem(orderItem: IOrderItem): void {
     console.warn('setOrderItem ', orderItem);
@@ -33,12 +33,12 @@ export class UiService {
     return this.orderItem === null;
   }
 
-  setDoorAntenna(doorAntenna: IDoorAntenna): void {
-    this.doorAntenna = doorAntenna;
-    this.subjectDoorAntenna.next(doorAntenna);
+  setRFIDAntenna(rfidAntenna: IUHFRFIDAntenna): void {
+    this.rfidAntenna = rfidAntenna;
+    this.subjectRFIDAntenna.next(rfidAntenna);
   }
 
-  onSetDoorAntenna(): Observable<IDoorAntenna> {
-    return this.subjectDoorAntenna.asObservable();
+  onChangeRFIDAntenna(): Observable<IUHFRFIDAntenna> {
+    return this.subjectRFIDAntenna.asObservable();
   }
 }

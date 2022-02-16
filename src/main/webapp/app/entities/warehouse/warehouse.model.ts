@@ -1,4 +1,6 @@
 import { ICompany } from 'app/entities/company/company.model';
+import { ILocation } from 'app/entities/location/location.model';
+import { IArea } from 'app/entities/area/area.model';
 
 export interface IWarehouse {
   id?: number;
@@ -7,6 +9,8 @@ export interface IWarehouse {
   phone?: string;
   contactPerson?: string;
   company?: ICompany | null;
+  locations?: ILocation[] | null;
+  areas?: IArea[] | null;
 }
 
 export class Warehouse implements IWarehouse {
@@ -16,7 +20,9 @@ export class Warehouse implements IWarehouse {
     public note?: string | null,
     public phone?: string,
     public contactPerson?: string,
-    public company?: ICompany | null
+    public company?: ICompany | null,
+    public locations?: ILocation[] | null,
+    public areas?: IArea[] | null
   ) {}
 }
 

@@ -38,6 +38,19 @@
       "otherEntityRelationshipName": "warehouse",
       "relationshipName": "company",
       "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "location",
+      "otherEntityRelationshipName": "warehouse",
+      "relationshipName": "location",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "area",
+      "otherEntityRelationshipName": "warehouse",
+      "relationshipName": "area",
+      "relationshipType": "one-to-many"
     }
   ],
   "service": "serviceClass"

@@ -2,6 +2,8 @@ package com.wms.uhfrfid.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -38,6 +40,14 @@ public class Warehouse implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = { "companyUsers", "companyContainers", "orders", "uhfRFIDReaders" }, allowSetters = true)
     private Company company;
+
+    @OneToMany(mappedBy = "warehouse")
+    @JsonIgnoreProperties(value = { "warehouse" }, allowSetters = true)
+    private Set<Location> locations = new HashSet<>();
+
+    @OneToMany(mappedBy = "warehouse")
+    @JsonIgnoreProperties(value = { "warehouse" }, allowSetters = true)
+    private Set<Area> areas = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -116,6 +126,68 @@ public class Warehouse implements Serializable {
 
     public Warehouse company(Company company) {
         this.setCompany(company);
+        return this;
+    }
+
+    public Set<Location> getLocations() {
+        return this.locations;
+    }
+
+    public void setLocations(Set<Location> locations) {
+        if (this.locations != null) {
+            this.locations.forEach(i -> i.setWarehouse(null));
+        }
+        if (locations != null) {
+            locations.forEach(i -> i.setWarehouse(this));
+        }
+        this.locations = locations;
+    }
+
+    public Warehouse locations(Set<Location> locations) {
+        this.setLocations(locations);
+        return this;
+    }
+
+    public Warehouse addLocation(Location location) {
+        this.locations.add(location);
+        location.setWarehouse(this);
+        return this;
+    }
+
+    public Warehouse removeLocation(Location location) {
+        this.locations.remove(location);
+        location.setWarehouse(null);
+        return this;
+    }
+
+    public Set<Area> getAreas() {
+        return this.areas;
+    }
+
+    public void setAreas(Set<Area> areas) {
+        if (this.areas != null) {
+            this.areas.forEach(i -> i.setWarehouse(null));
+        }
+        if (areas != null) {
+            areas.forEach(i -> i.setWarehouse(this));
+        }
+        this.areas = areas;
+    }
+
+    public Warehouse areas(Set<Area> areas) {
+        this.setAreas(areas);
+        return this;
+    }
+
+    public Warehouse addArea(Area area) {
+        this.areas.add(area);
+        area.setWarehouse(this);
+        return this;
+    }
+
+    public Warehouse removeArea(Area area) {
+        this.areas.remove(area);
+        area.setWarehouse(null);
         return this;
     }
 

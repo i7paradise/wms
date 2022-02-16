@@ -22,7 +22,9 @@
       "note": "Note",
       "phone": "Phone",
       "contactPerson": "Contact Person",
-      "company": "Company"
+      "company": "Company",
+      "location": "Location",
+      "area": "Area"
     }
   }
 }

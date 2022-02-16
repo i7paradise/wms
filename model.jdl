@@ -194,8 +194,8 @@ relationship ManyToOne {
 	WHLevel{bay(name)} to Bay
 	Bay{whrow(name)} to WHRow
 	WHRow{location(name)} to Location
-	Location{warehouse(name)} to Warehouse
-	Area{warehouse(name)} to Warehouse
+	Location{warehouse(name)} to Warehouse{location(name)}
+	Area{warehouse(name)} to Warehouse{area}
 	Door{area(type)} to Area
 
 	Product{productCategory(name)} to ProductCategory

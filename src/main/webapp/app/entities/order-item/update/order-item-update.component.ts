@@ -43,7 +43,6 @@ export class OrderItemUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.error('calling init from entity component');
     this.activatedRoute.data.subscribe(({ orderItem }) => {
       this.updateForm(orderItem);
 

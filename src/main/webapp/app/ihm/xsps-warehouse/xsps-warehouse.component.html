@@ -46,7 +46,8 @@
         </tr>
       </thead>
       <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
-        <tr *ngFor="let warehouse of warehouses; trackBy: trackId" data-cy="entityTable">
+        <tr *ngFor="let warehouse of warehouses; trackBy: trackId" data-cy="entityTable"
+          [routerLink]="['/mgmt/warehouse', warehouse.id]">
           <td>
             <a [routerLink]="['/warehouse', warehouse.id, 'view']">{{ warehouse.id }}</a>
           </td>

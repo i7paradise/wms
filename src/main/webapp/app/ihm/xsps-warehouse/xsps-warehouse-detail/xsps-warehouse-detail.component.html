@@ -1,1 +1,50 @@
-<p>xsps-warehouse-detail works!</p>
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="warehouse">
+      <h2 data-cy="warehouseDetailsHeading"><span jhiTranslate="wmsApp.warehouse.detail.title">Warehouse</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ warehouse.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.warehouse.name">Name</span></dt>
+        <dd>
+          <span>{{ warehouse.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.warehouse.note">Note</span></dt>
+        <dd>
+          <span>{{ warehouse.note }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.warehouse.phone">Phone</span></dt>
+        <dd>
+          <span>{{ warehouse.phone }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.warehouse.contactPerson">Contact Person</span></dt>
+        <dd>
+          <span>{{ warehouse.contactPerson }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.warehouse.company">Company</span></dt>
+        <dd>
+          <div *ngIf="warehouse.company">
+            <a [routerLink]="['/company', warehouse.company?.id, 'view']">{{ warehouse.company?.name }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/warehouse', warehouse.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

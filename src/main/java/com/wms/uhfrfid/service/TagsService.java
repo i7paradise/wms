@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -36,7 +37,8 @@ public class TagsService {
 
     @NotNull
     private List<String> mockRFIDReaderCall() {
-        return IntStream.range(0, 10)
+        int packagesCount = new Random().nextInt(20 - 5 + 1) + 5;;
+        return IntStream.range(0, packagesCount)
             .mapToObj(e -> UUID.randomUUID().toString())
             .collect(Collectors.toList());
     }

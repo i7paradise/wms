@@ -1,5 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { AreaType } from 'app/entities/enumerations/area-type.model';
 import { UHFRFIDAntennaService } from 'app/entities/uhfrfid-antenna/service/uhfrfid-antenna.service';
 import { UHFRFIDAntenna } from 'app/entities/uhfrfid-antenna/uhfrfid-antenna.model';
 import { UiService } from 'app/ihm/reception/service/ui.service';
@@ -12,6 +13,7 @@ import { map } from 'rxjs';
 })
 export class AntennaSelectorComponent implements OnInit {
 
+  @Input() type!: AreaType;
   listAntenna: UHFRFIDAntenna[] = [];
 
   constructor(private rfidAntennaService: UHFRFIDAntennaService,

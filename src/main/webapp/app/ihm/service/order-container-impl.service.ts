@@ -6,6 +6,7 @@ import { OrderContainerService } from 'app/entities/order-container/service/orde
 import { IOrderItem } from 'app/entities/order-item/order-item.model';
 import { map, Observable } from 'rxjs';
 import { TagsList } from 'app/ihm/model/tags-list.model';
+import { IOrderItemProduct } from 'app/entities/order-item-product/order-item-product.model';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +33,7 @@ export class OrderContainerImplService extends OrderContainerService {
 
     this.http
       .post<IOrderContainer[]>(
-        `${this.resourceUrl}/create-with-tags`,
+        `${this.resourceUrl}/create`,
         {
           orderItemId: orderItem.id,
           tagsList,
@@ -43,7 +44,21 @@ export class OrderContainerImplService extends OrderContainerService {
       .subscribe(list => (orderItem.orderContainers = list));
   }
 
-  deleteContainer(container: IOrderContainer): Observable<HttpResponse<{}>> {
-    return this.http.delete(`${this.resourceUrl}/${container.id as number}`, { observe: 'response' });
+  createOrderItemProducts(container: IOrderContainer, tagsList: TagsList): Observable<IOrderItemProduct[]> {
+    if (!tagsList.tags || tagsList.tags.length === 0) {
+      throw '';
+    }
+
+    return this.http
+      .post<IOrderItemProduct[]>(
+        `${this.resourceUrl}/${container.id!}/create-item-products`,
+        tagsList,
+        { observe: 'response' }
+      )
+      .pipe(map(res => res.body ?? []));
+  }
+
+  deletePackages(container: IOrderContainer): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/${container.id!}/item-products`, { observe: 'response' });
   }
 }

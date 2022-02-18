@@ -15,7 +15,6 @@ export class UiService {
   private subjectRFIDAntenna = new Subject<IUHFRFIDAntenna>();
 
   setOrderItem(orderItem: IOrderItem): void {
-    console.warn('setOrderItem ', orderItem);
     this.orderItem = orderItem;
     this.subjectOrderItem.next(this.orderItem);
   }
@@ -29,7 +28,6 @@ export class UiService {
   }
 
   isNoOrderItem(): boolean {
-    console.warn('bb', this.orderItem === null)
     return this.orderItem === null;
   }
 
@@ -37,6 +35,8 @@ export class UiService {
     this.rfidAntenna = rfidAntenna;
     this.subjectRFIDAntenna.next(rfidAntenna);
   }
+  
+  getRFIDAntenna = (): IUHFRFIDAntenna => this.rfidAntenna!;
 
   onChangeRFIDAntenna(): Observable<IUHFRFIDAntenna> {
     return this.subjectRFIDAntenna.asObservable();

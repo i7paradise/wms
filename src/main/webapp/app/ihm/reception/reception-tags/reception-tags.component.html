@@ -1,12 +1,14 @@
 <div *ngIf="orderItem">
 
   <div class="row m-2">
-    <jhi-antenna-selector></jhi-antenna-selector>
+    <jhi-antenna-selector [type]="shippingAreaType"></jhi-antenna-selector>
   </div>
 
-  <div class="row" *ngIf="remainsContainerToScan() > 0">
+  <div class="row" *ngIf="remainsContainerToScan() > 0 && canEdit">
     <div class="col">
-      <button class="btn btn-primary" (click)="scanContainer()"><i class="bi bi-qr-code-scan"></i>&nbsp;Container</button>
+      <button class="btn btn-primary" (click)="scanContainer()" [disabled]="!rfidAntenna">
+        <i class="bi bi-qr-code-scan"></i>&nbsp;Container
+      </button>
     </div>
 
     <div class="col">
@@ -22,26 +24,22 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
+          <th scope="col">#</th>
           <th scope="col">container TAG</th>
           <th scope="col">packages scanned</th>
-          <th scope="col"></th>
+          <th scope="col" *ngIf="canEdit"></th>
         </tr>
       </thead>
       <tbody>
         <tr data-cy="entityTable" *ngFor="let container of getOrderContainers()">
+          <td>{{ container.id }}</td>
           <td>{{ container.supplierRFIDTag }}</td>
           <td class="text-center">
-            <span *ngIf="container.orderItemProducts && container.orderItemProducts.length > 0">
-              {{ container.orderItemProducts?.length }}
-            </span>
-            <div class="button-group" *ngIf="!container.orderItemProducts || container.orderItemProducts.length == 0">
-              <button class="btn btn-sm btn-primary" (click)="scanPackages(container)">
-                <i class="bi bi-qr-code-scan"></i>
-              </button>
-            </div>
+            <jhi-scan-packages [container]="container"></jhi-scan-packages>
           </td>
-          <td class="text-right">
-            <button type="submit" (click)="delete(container)" class="btn btn-danger btn-sm">
+          <td class="text-right" *ngIf="canEdit">
+            <button type="submit" (click)="openEditDialog(container)" class="btn btn-danger btn-sm"
+              data-toggle="tooltip" data-placement="top" title="Delete container {{ container.id }}">
               <fa-icon icon="times"></fa-icon>
               <span class="d-none d-md-inline"></span>
             </button>

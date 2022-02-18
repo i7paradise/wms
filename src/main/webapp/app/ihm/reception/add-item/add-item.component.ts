@@ -65,10 +65,8 @@ export class AddItemComponent extends OrderItemUpdateComponent implements OnInit
   }
 
   private onCreateSuccess(orderItem: IOrderItem | null): void {
-    console.warn('calling onCreateSuccess' , orderItem);
     this.addMode = false;
     if (orderItem) {
-      console.warn('event out' , orderItem);
       this.createdOrderItemEvt.emit(orderItem);
     }
   }

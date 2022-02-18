@@ -4,8 +4,13 @@ import { IOrderItem, OrderItem } from 'app/entities/order-item/order-item.model'
 import { IUHFRFIDAntenna } from 'app/entities/uhfrfid-antenna/uhfrfid-antenna.model';
 import { ScannerService } from 'app/ihm/scanner/scanner.service';
 import { TagsList } from 'app/ihm/model/tags-list.model';
-import { ReceptionService } from '../service/reception.service';
 import { UiService } from '../service/ui.service';
+import { OrderContainerImplService } from 'app/ihm/service/order-container-impl.service';
+import { OrderItemStatus } from 'app/entities/enumerations/order-item-status.model';
+import { AreaType } from 'app/entities/enumerations/area-type.model';
+import { IOrderContainerImpl } from 'app/ihm/model/order-container.impl.model';
+import { OrderContainerEditDialogComponent } from '../order-container-edit-dialog/order-container-edit-dialog.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'jhi-reception-tags',
@@ -15,20 +20,24 @@ import { UiService } from '../service/ui.service';
 export class ReceptionTagsComponent {
   orderItem!: OrderItem;
   rfidAntenna!: IUHFRFIDAntenna;
-  
+  canEdit = true;
+  shippingAreaType = AreaType.SHIPPING;
+
   constructor(public uiService: UiService,
-    private receptionService: ReceptionService,
-    private scannerService: ScannerService
-    ) {
+    private scannerService: ScannerService,
+    private orderContainerService: OrderContainerImplService,
+    private modalService: NgbModal,
+  ) {
     uiService.onSetOrderItem()
       .subscribe((orderItem: IOrderItem) => {
         this.orderItem = orderItem;
-        receptionService.findOrderContainers(orderItem)
+        this.canEdit = this.evaluateCanEdit();
+        orderContainerService.findOrderContainers(orderItem)
           .subscribe((list: IOrderContainer[]) => this.orderItem.orderContainers = list);
       });
     uiService.onChangeRFIDAntenna().subscribe((value: IUHFRFIDAntenna) => this.rfidAntenna = value);
   }
-  
+
   getOrderContainers(): IOrderContainer[] {
     return this.orderItem.orderContainers ?? [];
   }
@@ -38,30 +47,28 @@ export class ReceptionTagsComponent {
   }
 
   scanContainer(): void {
-    console.warn('scanning container');
     this.scannerService.scanWithDialog(this.rfidAntenna, (tags: TagsList) => {
-      this.receptionService.createOrderContainersWithTags(this.orderItem, tags);
+      this.orderContainerService.createOrderContainersWithTags(this.orderItem, tags);
     });
   }
 
-  scanPackages(container: IOrderContainer): void {
-    console.warn('scanning scanPackages for', container);
-    this.scannerService.scanWithDialog(this.rfidAntenna, (tags: TagsList) => {
-      this.receptionService.createOrderItemProducts(container, tags);
-    });  
+  openEditDialog(container: IOrderContainerImpl): void {
+    const modalRef = this.modalService.open(OrderContainerEditDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.orderContainer = container;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === OrderContainerEditDialogComponent.DELETED_CONTAINER) {
+        this.orderItem.orderContainers = this.getOrderContainers().filter(e => e !== container);
+      }
+      if (reason === OrderContainerEditDialogComponent.DELETED_PACKAGES) {
+        container.countProducts = undefined;
+        container.orderItemProducts = undefined;
+      }
+    });
   }
-  
-  delete(container: IOrderContainer): void {
-    console.warn('clear scan for ' , container);
-    // TEMP code
 
-    this.receptionService.deleteContainer(container)
-      .subscribe((deleted) => {
-        if (deleted) {
-            this.orderItem.orderContainers = this.getOrderContainers().filter(e => e !== container);
-          }
-        }
-      );
+  private evaluateCanEdit(): boolean {
+    return this.orderItem.status === OrderItemStatus.IN_PROGRESS;
   }
 
 }

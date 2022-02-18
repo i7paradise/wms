@@ -18,21 +18,4 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @IntegrationTest
 class XSPSWarehouseResourceIT {
 
-    private MockMvc restMockMvc;
-
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-
-        XSPSWarehouseResource xSPSWarehouseResource = new XSPSWarehouseResource();
-        restMockMvc = MockMvcBuilders.standaloneSetup(xSPSWarehouseResource).build();
-    }
-
-    /**
-     * Test getWarehouse
-     */
-    @Test
-    void testGetWarehouse() throws Exception {
-        restMockMvc.perform(get("/api/xsps-warehouse/get-warehouse")).andExpect(status().isOk());
-    }
 }

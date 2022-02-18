@@ -13,13 +13,15 @@ import { ReaderComponent } from './rfid/reader/reader.component';
 import { ReaderDetailComponent } from './rfid/reader/reader-detail/reader-detail.component';
 import { AntennasComponent } from './rfid/reader/antennas/antennas.component';
 import { XspsWarehouseComponent } from './xsps-warehouse/xsps-warehouse.component';
+import { XspsWarehouseDetailComponent } from './xsps-warehouse/xsps-warehouse-detail/xsps-warehouse-detail.component';
 
 @NgModule({
   declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent, AddItemComponent,
     ReaderComponent,
     ReaderDetailComponent,
     AntennasComponent,
-    XspsWarehouseComponent],
+    XspsWarehouseComponent,
+    XspsWarehouseDetailComponent],
 
   imports: [CommonModule, SharedModule, RouterModule.forChild(ihmRoute), OrderModule],
 })

@@ -21,7 +21,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * XSPSWarehouseResource controller
  */
 @RestController
-@RequestMapping(ReaderResource.PATH)
+@RequestMapping(XSPSWarehouseResource.PATH)
 public class XSPSWarehouseResource {
 
 	public static final String PATH = "/api/v1/warehouse";
@@ -35,10 +35,10 @@ public class XSPSWarehouseResource {
 	}
 
     @GetMapping("/{id}")
-    public ResponseEntity<WarehouseDTOV2> getReader(@PathVariable Long id) {
-        log.debug("REST request to get Order : {}", id);
-        Optional<WarehouseDTOV2> readerDTO = xspsWarehouseService.findOneDetailed(id);
-        return ResponseUtil.wrapOrNotFound(readerDTO);
+    public ResponseEntity<WarehouseDTOV2> getXSPSWarehouse(@PathVariable Long id) {
+        log.debug("REST request to get Warehouse : {}", id);
+        Optional<WarehouseDTOV2> xspsWarehouseDTO = xspsWarehouseService.findOneDetailed(id);
+        return ResponseUtil.wrapOrNotFound(xspsWarehouseDTO);
 
     }
 

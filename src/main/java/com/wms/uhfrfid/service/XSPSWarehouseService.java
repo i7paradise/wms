@@ -29,7 +29,7 @@ public class XSPSWarehouseService extends WarehouseService {
 
     @Transactional(readOnly = true)
     public Optional<WarehouseDTOV2> findOneDetailed(Long id) {
-        log.debug("Request to get Locationsr : {}", id);
+        log.debug("Request to get Locations : {}", id);
         return warehouseRepository.findById(id)
             .map(e -> {
                 e.getLocations();

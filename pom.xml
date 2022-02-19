@@ -105,6 +105,13 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.rfidread</groupId>
+            <artifactId>rfidread</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/RFIDReaderAPI.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>tech.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>
         </dependency>

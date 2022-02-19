@@ -1,29 +1,4 @@
 <div>
-  <h2 id="page-heading" data-cy="LocationHeading">
-    <span jhiTranslate="wmsApp.location.home.title">Locations</span>
-
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="wmsApp.location.home.refreshListLabel">Refresh List</span>
-      </button>
-
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-location"
-        [routerLink]="['/location/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="wmsApp.location.home.createLabel"> Create a new Location </span>
-      </button>
-    </div>
-  </h2>
-
-  <jhi-alert-error></jhi-alert-error>
-
-  <jhi-alert></jhi-alert>
-
   <div class="alert alert-warning" id="no-result" *ngIf="locations?.length === 0">
     <span jhiTranslate="wmsApp.location.home.notFound">No locations found</span>
   </div>

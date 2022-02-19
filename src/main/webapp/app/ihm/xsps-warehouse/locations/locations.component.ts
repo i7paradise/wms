@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { LocationComponent } from 'app/entities/location/list/location.component';
-import { ILocation } from 'app/entities/location/location.model';
+import { IWarehouse } from 'app/entities/warehouse/warehouse.model';
 
 @Component({
   selector: 'jhi-locations',
@@ -8,10 +8,11 @@ import { ILocation } from 'app/entities/location/location.model';
   styleUrls: ['./locations.component.scss']
 })
 export class LocationsComponent extends LocationComponent implements OnInit {
-  @Input() location!: ILocation | null;
+  @Input() warehouse: IWarehouse | null = null;
+
   
   ngOnInit(): void {
-    this.locations = this.location?.locations ?? [];
+    this.locations = this.warehouse?.locations ?? [];
   }
 
   reset(): void {

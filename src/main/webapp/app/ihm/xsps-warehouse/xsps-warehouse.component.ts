@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { WarehouseComponent } from 'app/entities/warehouse/list/warehouse.component';
 
 @Component({

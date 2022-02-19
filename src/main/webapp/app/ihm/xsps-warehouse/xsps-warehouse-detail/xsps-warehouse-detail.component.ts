@@ -7,7 +7,7 @@ import { WarehouseDetailComponent } from 'app/entities/warehouse/detail/warehous
   templateUrl: './xsps-warehouse-detail.component.html',
   styleUrls: ['./xsps-warehouse-detail.component.scss']
 })
-export class XspsWarehouseDetailComponent extends WarehouseDetailComponent {
+export class XspsWarehouseDetailComponent extends WarehouseDetailComponent implements OnInit {
 
   constructor(  protected activatedRoute: ActivatedRoute) {
       super(activatedRoute);

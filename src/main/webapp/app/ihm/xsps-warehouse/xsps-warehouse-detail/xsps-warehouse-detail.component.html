@@ -1,6 +1,6 @@
-<div class="row justify-content-center">
-  <div class="col-8">
-    <div *ngIf="warehouse">
+<div class="row justify-content-center" *ngIf="warehouse">
+  <div class="col-6">
+    <div>
       <h2 data-cy="warehouseDetailsHeading"><span jhiTranslate="wmsApp.warehouse.detail.title">Warehouse</span></h2>
 
       <hr />
@@ -46,5 +46,10 @@
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
     </div>
+
+    <jhi-locations [warehouse]="warehouse"></jhi-locations>
+
   </div>
+
+
 </div>

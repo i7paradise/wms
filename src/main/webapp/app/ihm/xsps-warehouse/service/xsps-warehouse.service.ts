@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class XspsWarehouseService {
 
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/v1/reader');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/v1/warehouse');
 
   constructor(protected http: HttpClient, 
     protected applicationConfigService: ApplicationConfigService) { }

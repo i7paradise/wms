@@ -25,9 +25,12 @@ export class AntennaSelectorComponent implements OnInit {
     this.rfidAntennaService
       .query()
       .pipe(map((res: HttpResponse<UHFRFIDAntenna[]>) => res.body ?? []))
-      .subscribe((list: UHFRFIDAntenna[]) =>
-        this.listAntenna = list.sort((a, b) => a.id ?? 0 - (b.id ?? 0))
-      );
+      .subscribe((list: UHFRFIDAntenna[]) => {
+        this.listAntenna = list.sort((a, b) => a.id ?? 0 - (b.id ?? 0));
+        if (this.listAntenna.length === 1) {
+          this.uiService.setRFIDAntenna(this.listAntenna[0]);
+        }
+      });
   }
 
   onChange(id: string): void {

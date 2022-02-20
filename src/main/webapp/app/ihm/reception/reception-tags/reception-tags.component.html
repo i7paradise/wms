@@ -6,17 +6,23 @@
 
   <div class="row" *ngIf="remainsContainerToScan() > 0 && canEdit">
     <div class="col">
-      <button class="btn btn-primary" (click)="scanContainer()" [disabled]="!rfidAntenna">
+      <button class="btn btn-primary" (click)="scanContainer()"
+        [disabled]="!rfidAntenna">
         <i class="bi bi-qr-code-scan"></i>&nbsp;Container
       </button>
     </div>
-
-    <div class="col">
+    
+    <div class="col alert alert-warning">
       <span>{{ remainsContainerToScan() }} containers remaining</span>
     </div>
   </div>
 
-  <div class="text-center" *ngIf="remainsContainerToScan() == 0">
+  <div class="col alert alert-warning" *ngIf="remainsContainerToScan() < 0 && canEdit">
+    <p>Careful!! You've exceeded scanning..</p> 
+    <p><b>{{ -remainsContainerToScan() }} unexpected </b> containers scanned</p>
+  </div>
+
+  <div class="col alert alert-success" *ngIf="remainsContainerToScan() == 0">
     <h4>You've scanned all containers</h4>
   </div>
 

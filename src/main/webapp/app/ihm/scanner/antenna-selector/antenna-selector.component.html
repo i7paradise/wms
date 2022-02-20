@@ -1,4 +1,4 @@
-<div class="form-group row">
+<div class="form-group row" *ngIf="listAntenna.length > 1">
   <label class="form-control-label" jhiTranslate="wmsApp.doorAntenna.rfidAntenna" for="field_rfidAntenna">Rfid
     Antenna</label>
   <select class="form-control" id="field_rfidAntenna" #mySelect data-cy="rfidAntenna" name="rfidAntenna"

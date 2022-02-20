@@ -4,7 +4,7 @@ import dayjs from 'dayjs/esm';
 
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { OrderStatus } from 'app/entities/enumerations/order-status.model';
-import { IOrder, Order } from 'app/entities/order/order.model';
+import { IOrder } from 'app/entities/order/order.model';
 
 import { ReceptionService } from './reception.service';
 

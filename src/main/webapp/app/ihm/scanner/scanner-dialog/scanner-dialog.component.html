@@ -23,7 +23,11 @@
     <jhi-alert-error></jhi-alert-error>
 
     <h4>{{ tagsList.tags?.length }} scanned tags</h4>
-    <p>{{ tagsList.tags }}</p>
+    <div class="row">
+      <div class="col-5" *ngFor="let tag of tagsList.tags">
+        # {{ tag }}
+      </div>
+    </div>
   </div>
 
   <div class="modal-footer">

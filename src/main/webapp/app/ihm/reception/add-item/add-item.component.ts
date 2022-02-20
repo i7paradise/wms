@@ -2,6 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { ICompanyProduct } from 'app/entities/company-product/company-product.model';
+import { OrderItemStatus } from 'app/entities/enumerations/order-item-status.model';
 import { IOrderItem, OrderItem } from 'app/entities/order-item/order-item.model';
 import { OrderItemUpdateComponent } from 'app/entities/order-item/update/order-item-update.component';
 import { Order } from 'app/entities/order/order.model';
@@ -31,7 +32,6 @@ export class AddItemComponent extends OrderItemUpdateComponent implements OnInit
     this.loadAddOrderElementOptions();
     this.editForm = this.fb.group({
       quantity: [null, [Validators.required, Validators.min(0)]],
-      status: [null, [Validators.required]],
       containersCount: [null, [Validators.min(0)]],
       productsPerContainerCount: [null, [Validators.min(0)]],
       companyProduct: [],
@@ -46,7 +46,7 @@ export class AddItemComponent extends OrderItemUpdateComponent implements OnInit
     return {
       ...new OrderItem(),
       quantity: this.editForm.get(['quantity'])!.value,
-      status: this.editForm.get(['status'])!.value,
+      status: OrderItemStatus.IN_PROGRESS,
       containersCount: this.editForm.get(['containersCount'])!.value,
       productsPerContainerCount: this.editForm.get(['productsPerContainerCount'])!.value,
       companyProduct: this.editForm.get(['companyProduct'])!.value,

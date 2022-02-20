@@ -14,7 +14,7 @@
 
         <div class="row">
 
-          <div class="form-group col-4">
+          <div class="form-group col">
             <label class="form-control-label" jhiTranslate="wmsApp.orderItem.quantity" for="field_quantity">Quantity</label>
             <input type="number" class="form-control" name="quantity" id="field_quantity" data-cy="quantity" formControlName="quantity" />
             <div *ngIf="editForm.get('quantity')!.invalid && (editForm.get('quantity')!.dirty || editForm.get('quantity')!.touched)">
@@ -43,26 +43,7 @@
             </div>
           </div>
 
-          <div class="form-group col-4">
-            <label class="form-control-label" jhiTranslate="wmsApp.orderItem.status" for="field_status">Status</label>
-            <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
-              <option [ngValue]="null">{{ 'wmsApp.OrderItemStatus.null' | translate }}</option>
-              <option *ngFor="let orderItemStatus of orderItemStatusValues" [value]="orderItemStatus">
-                {{ 'wmsApp.OrderItemStatus.' + orderItemStatus | translate }}
-              </option>
-            </select>
-            <div *ngIf="editForm.get('status')!.invalid && (editForm.get('status')!.dirty || editForm.get('status')!.touched)">
-              <small
-                class="form-text text-danger"
-                *ngIf="editForm.get('status')?.errors?.required"
-                jhiTranslate="entity.validation.required"
-              >
-                This field is required.
-              </small>
-            </div>
-          </div>
-
-          <div class="form-group col-4">
+          <div class="form-group col">
             <label class="form-control-label" jhiTranslate="wmsApp.orderItem.companyProduct" for="field_companyProduct"
               >Company Product</label
             >
@@ -87,7 +68,7 @@
             </select>
           </div>
         
-          <div class="form-group col-4">
+          <div class="form-group col">
             <span class="input-group-text"><fa-icon icon="truck-loading"></fa-icon>&nbsp;containers</span>
 
             <input
@@ -122,7 +103,7 @@
             </div>
           </div>
 
-          <div class="form-group col-6">
+          <div class="form-group col">
             <span class="input-group-text"><fa-icon icon="boxes"></fa-icon>&nbsp;boxes/container</span>
 
             <input

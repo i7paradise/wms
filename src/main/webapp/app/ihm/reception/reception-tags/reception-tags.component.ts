@@ -11,6 +11,7 @@ import { AreaType } from 'app/entities/enumerations/area-type.model';
 import { IOrderContainerImpl } from 'app/ihm/model/order-container.impl.model';
 import { OrderContainerEditDialogComponent } from '../order-container-edit-dialog/order-container-edit-dialog.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
 
 @Component({
   selector: 'jhi-reception-tags',
@@ -21,21 +22,23 @@ export class ReceptionTagsComponent {
   orderItem!: OrderItem;
   rfidAntenna!: IUHFRFIDAntenna;
   canEdit = true;
-  shippingAreaType = AreaType.SHIPPING;
+  readonly shippingAreaType = AreaType.SHIPPING;
 
-  constructor(public uiService: UiService,
+  multiselect = false;
+  readonly selectedIds = new Set<number>();
+
+  constructor(
+    public uiService: UiService,
     private scannerService: ScannerService,
     private orderContainerService: OrderContainerImplService,
-    private modalService: NgbModal,
+    private modalService: NgbModal
   ) {
-    uiService.onSetOrderItem()
-      .subscribe((orderItem: IOrderItem) => {
-        this.orderItem = orderItem;
-        this.canEdit = this.evaluateCanEdit();
-        orderContainerService.findOrderContainers(orderItem)
-          .subscribe((list: IOrderContainer[]) => this.orderItem.orderContainers = list);
-      });
-    uiService.onChangeRFIDAntenna().subscribe((value: IUHFRFIDAntenna) => this.rfidAntenna = value);
+    uiService.onSetOrderItem().subscribe((orderItem: IOrderItem) => {
+      this.orderItem = orderItem;
+      this.canEdit = this.evaluateCanEdit();
+      orderContainerService.findOrderContainers(orderItem).subscribe((list: IOrderContainer[]) => (this.orderItem.orderContainers = list));
+    });
+    uiService.onChangeRFIDAntenna().subscribe((value: IUHFRFIDAntenna) => (this.rfidAntenna = value));
   }
 
   getOrderContainers(): IOrderContainer[] {
@@ -43,7 +46,7 @@ export class ReceptionTagsComponent {
   }
 
   remainsContainerToScan(): number {
-    return ((this.orderItem.containersCount ?? 0) - this.getOrderContainers().length);
+    return (this.orderItem.containersCount ?? 0) - this.getOrderContainers().length;
   }
 
   scanContainer(): void {
@@ -67,8 +70,32 @@ export class ReceptionTagsComponent {
     });
   }
 
+  onChangeMultiselect(): void {
+    this.multiselect = !this.multiselect;
+    if (!this.multiselect) {
+      this.selectedIds.clear();
+    }
+    console.warn('ssssssssssssssssssssss', this.multiselect);
+  }
+
+  select(container: IOrderContainer): void {
+    const id = container.id!;
+    if (this.selectedIds.has(id)) {
+      this.selectedIds.delete(id);
+    } else {
+      this.selectedIds.add(id);
+    }
+  }
+
+  isSelected(container: IOrderContainer): boolean {
+    return this.selectedIds.has(container.id!);
+  }
+
+  deleteSelected(): void {
+    console.warn('ssssssssssssssssssssss', this.selectedIds);
+  }
+
   private evaluateCanEdit(): boolean {
     return this.orderItem.status === OrderItemStatus.IN_PROGRESS;
   }
-
 }

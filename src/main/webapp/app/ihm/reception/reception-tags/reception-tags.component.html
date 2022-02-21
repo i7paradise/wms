@@ -26,8 +26,29 @@
     <h4>You've scanned all containers</h4>
   </div>
 
-  <div class="table-responsive" *ngIf="getOrderContainers().length > 0">
+  <div class="table-responsive" *ngIf="getOrderContainers().length > 0"
+      [class.table-multiselect] = "multiselect">
     <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr *ngIf="canEdit">
+          <th scope="col">Select multiple</th>
+          <th scope="col">
+            <input
+              type="checkbox"
+              [checked]="multiselect"
+              (change)="onChangeMultiselect()"/>
+          </th>
+          <th scope="col"></th>
+          <th scope="col">
+            <button type="submit" (click)="deleteSelected()" class="btn btn-danger btn-sm"
+              [disabled]="selectedIds.size == 0"
+              data-toggle="tooltip" data-placement="top" title="Delete selected containers">
+              <fa-icon icon="times"></fa-icon>&nbsp;Deleted selected
+              <span class="d-none d-md-inline"></span>
+            </button>
+          </th>
+        </tr>
+      </thead>
       <thead>
         <tr>
           <th scope="col">#</th>
@@ -37,7 +58,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr data-cy="entityTable" *ngFor="let container of getOrderContainers()">
+        <tr data-cy="entityTable" *ngFor="let container of getOrderContainers()"
+          (click) = "multiselect && select(container)"
+          [class.tr-selected] = 'isSelected(container)'>
           <td>{{ container.id }}</td>
           <td>{{ container.supplierRFIDTag }}</td>
           <td class="text-center">

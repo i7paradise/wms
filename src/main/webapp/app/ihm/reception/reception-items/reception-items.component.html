@@ -27,7 +27,7 @@
       <tbody>
         <ng-container *ngFor="let orderItem of orderItems">
           <tr data-cy="entityTable"
-            [class.selected-item] = 'uiService.equalsOrderItem(orderItem)'>
+            [class.tr-selected] = 'uiService.equalsOrderItem(orderItem)'>
             <td>{{ orderItem.quantity }}</td>
             <td jhiTranslate="{{ 'wmsApp.OrderItemStatus.' + orderItem.status }}">{{ orderItem.status }}</td>
             <td>

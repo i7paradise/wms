@@ -26,7 +26,7 @@
       </thead>
       <tbody>
         <ng-container *ngFor="let orderItem of orderItems">
-          <tr data-cy="entityTable" (click)="uiService.setOrderItem(orderItem)"
+          <tr data-cy="entityTable"
             [class.selected-item] = 'uiService.equalsOrderItem(orderItem)'>
             <td>{{ orderItem.quantity }}</td>
             <td jhiTranslate="{{ 'wmsApp.OrderItemStatus.' + orderItem.status }}">{{ orderItem.status }}</td>
@@ -43,7 +43,7 @@
               <div class="btn-group">
                 <button
                   type="submit"
-                  [routerLink]="['/order-item', orderItem.id, 'view']"
+                  (click)="uiService.setOrderItem(orderItem)"
                   class="btn btn-info btn-sm"
                   data-cy="entityDetailsButton"
                 >

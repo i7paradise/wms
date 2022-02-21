@@ -1,24 +1,27 @@
 package com.wms.uhfrfid.web.rest;
 
 import com.wms.uhfrfid.security.SecurityUtils;
+import com.wms.uhfrfid.service.ReceptionItemService;
 import com.wms.uhfrfid.service.ReceptionService;
 import com.wms.uhfrfid.service.dto.OrderDTO;
 import com.wms.uhfrfid.service.dto.OrderDTOV2;
+import com.wms.uhfrfid.service.dto.OrderItemDTO;
+import com.wms.uhfrfid.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import javax.validation.Valid;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -32,9 +35,11 @@ public class ReceptionResource {
 
     private final Logger log = LoggerFactory.getLogger(ReceptionResource.class);
     private final ReceptionService receptionService;
+    private final ReceptionItemService receptionItemService;
 
-    public ReceptionResource(ReceptionService receptionService) {
+    public ReceptionResource(ReceptionService receptionService, ReceptionItemService receptionItemService) {
         this.receptionService = receptionService;
+        this.receptionItemService = receptionItemService;
     }
 
     /**
@@ -55,5 +60,30 @@ public class ReceptionResource {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new IllegalArgumentException("TODO 401"));
         Optional<OrderDTOV2> orderDTO = receptionService.findOne(id, userLogin);
         return ResponseUtil.wrapOrNotFound(orderDTO);
+    }
+
+    @GetMapping("/order-item/{id}")
+    public ResponseEntity<OrderItemDTO> getOrderItem(@PathVariable Long id) {
+        log.debug("REST request to get OrderItem : {}", id);
+        Optional<OrderItemDTO> orderItemDTO = receptionItemService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(orderItemDTO);
+    }
+
+    @PutMapping("/order-item/{id}")
+    public ResponseEntity<OrderItemDTO> updateOrderItem(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody OrderItemDTO orderItemDTO
+    ) throws URISyntaxException {
+        final String ENTITY_NAME = "order-item";
+        log.debug("REST request to update OrderItem : {}, {}", id, orderItemDTO);
+        if (orderItemDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, orderItemDTO.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        OrderItemDTO result = receptionItemService.save(orderItemDTO);
+        return ResponseEntity.ok().body(result);
     }
 }

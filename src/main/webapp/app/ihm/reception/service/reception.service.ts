@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import { getOrderItemIdentifier, IOrderItem } from 'app/entities/order-item/order-item.model';
 
 export type EntityResponseType = HttpResponse<IOrder>;
 export type EntityArrayResponseType = HttpResponse<IOrder[]>;
@@ -24,6 +25,18 @@ export class ReceptionService extends OrderService {
     return this.http
       .get<IOrder[]>(this.resourceUrl, { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
+
+  findOrderItem(id: number): Observable<HttpResponse<IOrderItem>> {
+    return this.http.get<IOrderItem>(`${this.resourceUrl}/order-item/${id}`, { observe: 'response' });
+  }
+
+
+  updateOrderItem(orderItem: IOrderItem): Observable<HttpResponse<IOrderItem>> {
+    return this.http.put<IOrderItem>(`${this.resourceUrl}/order-item/${getOrderItemIdentifier(orderItem) as number}`, orderItem, {
+      observe: 'response',
+    });
   }
 
 }

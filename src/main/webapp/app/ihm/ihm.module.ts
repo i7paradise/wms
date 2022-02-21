@@ -14,9 +14,10 @@ import { AntennaSelectorComponent } from './scanner/antenna-selector/antenna-sel
 import { UHFRFIDAntennaModule } from 'app/entities/uhfrfid-antenna/uhfrfid-antenna.module';
 import { ScanPackagesComponent } from './reception/scan-packages/scan-packages.component';
 import { OrderContainerEditDialogComponent } from './reception/order-container-edit-dialog/order-container-edit-dialog.component';
+import { ReceptionItemUpdateComponent } from './reception/reception-item-update/reception-item-update.component';
 
 @NgModule({
-  declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent, AddItemComponent, ScannerDialogComponent, AntennaSelectorComponent, ScanPackagesComponent, OrderContainerEditDialogComponent],
+  declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent, AddItemComponent, ScannerDialogComponent, AntennaSelectorComponent, ScanPackagesComponent, OrderContainerEditDialogComponent, ReceptionItemUpdateComponent],
   imports: [CommonModule, SharedModule, RouterModule.forChild(ihmRoute), OrderModule, UHFRFIDAntennaModule],
 })
 export class IhmModule {}

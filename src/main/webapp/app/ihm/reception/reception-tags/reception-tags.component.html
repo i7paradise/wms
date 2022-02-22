@@ -27,7 +27,7 @@
   </div>
 
   <div class="table-responsive" *ngIf="getOrderContainers().length > 0"
-      [class.table-multiselect] = "multiselect">
+      [class.table-multiselect] = "multiSelect.isActive()">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr *ngIf="canEdit">
@@ -35,13 +35,13 @@
           <th scope="col">
             <input
               type="checkbox"
-              [checked]="multiselect"
-              (change)="onChangeMultiselect()"/>
+              [checked]="multiSelect.isActive()"
+              (change)="multiSelect.onChangeActive()"/>
           </th>
           <th scope="col"></th>
           <th scope="col">
             <button type="submit" (click)="deleteSelected()" class="btn btn-danger btn-sm"
-              [disabled]="selectedIds.size == 0"
+              [disabled]="multiSelect.isEmpty()"
               data-toggle="tooltip" data-placement="top" title="Delete selected containers">
               <fa-icon icon="times"></fa-icon>&nbsp;Deleted selected
               <span class="d-none d-md-inline"></span>
@@ -59,8 +59,8 @@
       </thead>
       <tbody>
         <tr data-cy="entityTable" *ngFor="let container of getOrderContainers()"
-          (click) = "multiselect && select(container)"
-          [class.tr-selected] = 'isSelected(container)'>
+          (click) = "multiSelect.select(container)"
+          [class.tr-selected] = 'multiSelect.isSelected(container)'>
           <td>{{ container.id }}</td>
           <td>{{ container.supplierRFIDTag }}</td>
           <td class="text-center">

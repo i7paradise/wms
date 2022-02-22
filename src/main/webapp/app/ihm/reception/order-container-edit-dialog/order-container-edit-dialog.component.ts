@@ -13,23 +13,25 @@ export class OrderContainerEditDialogComponent {
   public static readonly DELETED_CONTAINER = 'DELETED_CONTAINER';
   public static readonly DELETED_PACKAGES = 'DELETED_PACKAGES';
 
-  orderContainer!: IOrderContainerImpl;
+  listOrderContainer!: IOrderContainerImpl[];
 
   constructor(private orderContainerService: OrderContainerImplService, private activeModal: NgbActiveModal) {}
+
+  ids = (): string => this.listOrderContainer.map(e => e.id!.toString()).reduce((a,b) => a + " , " + b);
 
   cancel(): void {
     this.activeModal.dismiss();
   }
 
   deletePackages(): void {
-    this.orderContainerService.deletePackages(this.orderContainer)
+    this.orderContainerService.deletePackages(this.listOrderContainer)
       .subscribe(() => {
         this.activeModal.close(OrderContainerEditDialogComponent.DELETED_PACKAGES);
       });
   }
 
   confirmDelete(): void {
-    this.orderContainerService.delete(this.orderContainer.id!)
+    this.orderContainerService.deleteList(this.listOrderContainer)
       .subscribe(() => this.activeModal.close(OrderContainerEditDialogComponent.DELETED_CONTAINER));
   }
 }

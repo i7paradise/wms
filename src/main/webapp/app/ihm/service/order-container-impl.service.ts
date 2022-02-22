@@ -58,7 +58,17 @@ export class OrderContainerImplService extends OrderContainerService {
       .pipe(map(res => res.body ?? []));
   }
 
-  deletePackages(container: IOrderContainer): Observable<HttpResponse<{}>> {
-    return this.http.delete(`${this.resourceUrl}/${container.id!}/item-products`, { observe: 'response' });
+  deletePackages(containers: IOrderContainer[]): Observable<HttpResponse<{}>> {
+    const request = {
+      ids : containers.map(e => e.id!)
+    };
+    return this.http.post(`${this.resourceUrl}/delete-item-products`, request, { observe: 'response' });
+  }
+
+  deleteList(containers: IOrderContainer[]): Observable<HttpResponse<{}>> {
+    const request = {
+      ids : containers.map(e => e.id!)
+    };
+    return this.http.post(`${this.resourceUrl}/delete`, request, { observe: 'response' });
   }
 }

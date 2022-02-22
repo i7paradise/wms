@@ -11,7 +11,7 @@ import { AreaType } from 'app/entities/enumerations/area-type.model';
 import { IOrderContainerImpl } from 'app/ihm/model/order-container.impl.model';
 import { OrderContainerEditDialogComponent } from '../order-container-edit-dialog/order-container-edit-dialog.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
+import MultiSelectTable from 'app/ihm/tools/multi-select-table';
 
 @Component({
   selector: 'jhi-reception-tags',
@@ -23,9 +23,7 @@ export class ReceptionTagsComponent {
   rfidAntenna!: IUHFRFIDAntenna;
   canEdit = true;
   readonly shippingAreaType = AreaType.SHIPPING;
-
-  multiselect = false;
-  readonly selectedIds = new Set<number>();
+  readonly multiSelect = new MultiSelectTable<IOrderContainer>(e => e.id!, false);
 
   constructor(
     public uiService: UiService,
@@ -57,44 +55,37 @@ export class ReceptionTagsComponent {
 
   openEditDialog(container: IOrderContainerImpl): void {
     const modalRef = this.modalService.open(OrderContainerEditDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.orderContainer = container;
+    modalRef.componentInstance.listOrderContainer = [container];
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
-      if (reason === OrderContainerEditDialogComponent.DELETED_CONTAINER) {
-        this.orderItem.orderContainers = this.getOrderContainers().filter(e => e !== container);
-      }
-      if (reason === OrderContainerEditDialogComponent.DELETED_PACKAGES) {
-        container.countProducts = undefined;
-        container.orderItemProducts = undefined;
-      }
+      this.onDeleteDialog(reason, [container]);
     });
   }
 
-  onChangeMultiselect(): void {
-    this.multiselect = !this.multiselect;
-    if (!this.multiselect) {
-      this.selectedIds.clear();
-    }
-    console.warn('ssssssssssssssssssssss', this.multiselect);
-  }
-
-  select(container: IOrderContainer): void {
-    const id = container.id!;
-    if (this.selectedIds.has(id)) {
-      this.selectedIds.delete(id);
-    } else {
-      this.selectedIds.add(id);
-    }
-  }
-
-  isSelected(container: IOrderContainer): boolean {
-    return this.selectedIds.has(container.id!);
-  }
-
+  
   deleteSelected(): void {
-    console.warn('ssssssssssssssssssssss', this.selectedIds);
+    const selectedContainers = this.getOrderContainers().filter(e => this.multiSelect.isSelected(e));
+    console.warn('selectedContainers', selectedContainers);
+    const modalRef = this.modalService.open(OrderContainerEditDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.listOrderContainer = selectedContainers;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      this.onDeleteDialog(reason, selectedContainers);
+    });
   }
-
+  
+  private onDeleteDialog(reason: string, listContainers: IOrderContainerImpl[]): void {
+    if (reason === OrderContainerEditDialogComponent.DELETED_CONTAINER) {
+      this.orderItem.orderContainers = this.getOrderContainers().filter(e => !listContainers.includes(e));
+    }
+    if (reason === OrderContainerEditDialogComponent.DELETED_PACKAGES) {
+      listContainers.forEach(container => {
+        container.countProducts = undefined;
+        container.orderItemProducts = undefined;
+      });
+    }
+  }
+  
   private evaluateCanEdit(): boolean {
     return this.orderItem.status === OrderItemStatus.IN_PROGRESS;
   }

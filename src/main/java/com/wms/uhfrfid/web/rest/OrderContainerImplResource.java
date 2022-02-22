@@ -2,10 +2,7 @@ package com.wms.uhfrfid.web.rest;
 
 import com.wms.uhfrfid.security.SecurityUtils;
 import com.wms.uhfrfid.service.OrderContainerImplService;
-import com.wms.uhfrfid.service.dto.CreateWithTagsDTO;
-import com.wms.uhfrfid.service.dto.OrderContainerImplDTO;
-import com.wms.uhfrfid.service.dto.OrderItemProductDTO;
-import com.wms.uhfrfid.service.dto.TagsList;
+import com.wms.uhfrfid.service.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -53,11 +50,11 @@ public class OrderContainerImplResource {
     /**
      * DELETE deleteContainer
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrderContainer(@PathVariable Long id) {
-        log.debug("REST request to delete OrderContainer : {}", id);
+    @PostMapping("/delete")
+    public ResponseEntity<Void> deleteOrderContainer(@RequestBody IdsDTO ids) {
+        log.debug("REST request to delete OrderContainer : {}", ids);
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new IllegalArgumentException("TODO 401"));
-        orderContainerService.delete(id, userLogin);
+        orderContainerService.delete(ids, userLogin);
         return ResponseEntity.noContent().build();
     }
 
@@ -69,11 +66,11 @@ public class OrderContainerImplResource {
         return ResponseEntity.ok(list);
     }
 
-    @DeleteMapping("/{id}/item-products")
-    public ResponseEntity<Void> deleteItemProducts(@PathVariable Long id) {
-        log.debug("REST request to delete OrderContainer : {}", id);
+    @PostMapping("/delete-item-products")
+    public ResponseEntity<Void> deleteItemProducts(@RequestBody IdsDTO ids) {
+        log.debug("REST request to delete OrderContainer : {}", ids);
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new IllegalArgumentException("TODO 401"));
-        orderContainerService.deleteItemProducts(id, userLogin);
+        orderContainerService.deleteItemProducts(ids, userLogin);
         return ResponseEntity.noContent().build();
     }
 }

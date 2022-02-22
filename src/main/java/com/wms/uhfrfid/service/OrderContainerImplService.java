@@ -7,13 +7,9 @@ import com.wms.uhfrfid.domain.ProductsByContainer;
 import com.wms.uhfrfid.repository.OrderContainerRepositoryImpl;
 import com.wms.uhfrfid.repository.OrderItemProductRepositoryImpl;
 import com.wms.uhfrfid.repository.OrderItemRepository;
-import com.wms.uhfrfid.service.dto.CreateWithTagsDTO;
-import com.wms.uhfrfid.service.dto.OrderContainerImplDTO;
-import com.wms.uhfrfid.service.dto.OrderItemProductDTO;
-import com.wms.uhfrfid.service.dto.TagsList;
+import com.wms.uhfrfid.service.dto.*;
 import com.wms.uhfrfid.service.mapper.OrderContainerImplMapper;
 import com.wms.uhfrfid.service.mapper.OrderItemProductMapper;
-import com.wms.uhfrfid.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -79,10 +75,10 @@ public class OrderContainerImplService {
         return findOrderContainers(orderItem.getId());
     }
 
-    public void delete(Long id, String userLogin) {
-        deleteItemProducts(id, userLogin);
-        log.debug("delete order-container(id={}) by user {}", id, userLogin);
-        orderContainerRepository.deleteById(id);
+    public void delete(IdsDTO ids, String userLogin) {
+        deleteItemProducts(ids, userLogin);
+        log.debug("delete order-container(id={}) by user {}", ids, userLogin);
+        orderContainerRepository.deleteByIdIn(ids.getIds());
     }
 
     public List<OrderItemProductDTO> createOrderItemProducts(Long id, TagsList tagsList, String userLogin) {
@@ -99,12 +95,12 @@ public class OrderContainerImplService {
             .collect(Collectors.toList());
     }
 
-    public void deleteItemProducts(Long orderContainerId, String userLogin) {
-        checkUpdateRights(orderContainerId, userLogin);
-        orderItemProductRepository.deleteByOrderContainerId(orderContainerId);
+    public void deleteItemProducts(IdsDTO ids, String userLogin) {
+        checkUpdateRights(ids, userLogin);
+        orderItemProductRepository.deleteByOrderContainerIdIn(ids.getIds());
     }
 
-    private void checkUpdateRights(Long orderContainerId, String userLogin) {
+    private void checkUpdateRights(IdsDTO ids, String userLogin) {
         //TODO TEMP code
         /*
         if (!"admin".equals(userLogin)) {

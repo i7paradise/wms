@@ -4,6 +4,7 @@ import com.wms.uhfrfid.domain.ProductsByContainer;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Set;
 
 public interface OrderItemProductRepositoryImpl extends OrderItemProductRepository {
 
@@ -13,5 +14,5 @@ public interface OrderItemProductRepositoryImpl extends OrderItemProductReposito
         " GROUP BY orderContainer.id ")
     List<ProductsByContainer> countIdByOrderContainer();
 
-    void deleteByOrderContainerId(Long orderContainerId);
+    void deleteByOrderContainerIdIn(Set<Long> ids);
 }

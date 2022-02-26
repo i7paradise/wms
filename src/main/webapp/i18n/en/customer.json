@@ -20,7 +20,6 @@
       "id": "ID",
       "firstName": "First Name",
       "lastName": "Last Name",
-      "gender": "Gender",
       "email": "Email",
       "phone": "Phone",
       "addressLine1": "Address Line 1",

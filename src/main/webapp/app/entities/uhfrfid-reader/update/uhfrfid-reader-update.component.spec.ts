@@ -8,6 +8,8 @@ import { of, Subject, from } from 'rxjs';
 
 import { UHFRFIDReaderService } from '../service/uhfrfid-reader.service';
 import { IUHFRFIDReader, UHFRFIDReader } from '../uhfrfid-reader.model';
+import { ICompany } from 'app/entities/company/company.model';
+import { CompanyService } from 'app/entities/company/service/company.service';
 
 import { UHFRFIDReaderUpdateComponent } from './uhfrfid-reader-update.component';
 
@@ -16,6 +18,7 @@ describe('UHFRFIDReader Management Update Component', () => {
   let fixture: ComponentFixture<UHFRFIDReaderUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let uHFRFIDReaderService: UHFRFIDReaderService;
+  let companyService: CompanyService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -37,18 +40,41 @@ describe('UHFRFIDReader Management Update Component', () => {
     fixture = TestBed.createComponent(UHFRFIDReaderUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     uHFRFIDReaderService = TestBed.inject(UHFRFIDReaderService);
+    companyService = TestBed.inject(CompanyService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
+    it('Should call Company query and add missing value', () => {
+      const uHFRFIDReader: IUHFRFIDReader = { id: 456 };
+      const company: ICompany = { id: 88636 };
+      uHFRFIDReader.company = company;
+
+      const companyCollection: ICompany[] = [{ id: 84047 }];
+      jest.spyOn(companyService, 'query').mockReturnValue(of(new HttpResponse({ body: companyCollection })));
+      const additionalCompanies = [company];
+      const expectedCollection: ICompany[] = [...additionalCompanies, ...companyCollection];
+      jest.spyOn(companyService, 'addCompanyToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ uHFRFIDReader });
+      comp.ngOnInit();
+
+      expect(companyService.query).toHaveBeenCalled();
+      expect(companyService.addCompanyToCollectionIfMissing).toHaveBeenCalledWith(companyCollection, ...additionalCompanies);
+      expect(comp.companiesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const uHFRFIDReader: IUHFRFIDReader = { id: 456 };
+      const company: ICompany = { id: 22144 };
+      uHFRFIDReader.company = company;
 
       activatedRoute.data = of({ uHFRFIDReader });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(uHFRFIDReader));
+      expect(comp.companiesSharedCollection).toContain(company);
     });
   });
 
@@ -113,6 +139,16 @@ describe('UHFRFIDReader Management Update Component', () => {
       expect(uHFRFIDReaderService.update).toHaveBeenCalledWith(uHFRFIDReader);
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Tracking relationships identifiers', () => {
+    describe('trackCompanyById', () => {
+      it('Should return tracked Company primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackCompanyById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
     });
   });
 });

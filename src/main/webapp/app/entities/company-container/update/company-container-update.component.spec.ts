@@ -8,10 +8,10 @@ import { of, Subject, from } from 'rxjs';
 
 import { CompanyContainerService } from '../service/company-container.service';
 import { ICompanyContainer, CompanyContainer } from '../company-container.model';
+import { IContainerCategory } from 'app/entities/container-category/container-category.model';
+import { ContainerCategoryService } from 'app/entities/container-category/service/container-category.service';
 import { ICompany } from 'app/entities/company/company.model';
 import { CompanyService } from 'app/entities/company/service/company.service';
-import { IContainer } from 'app/entities/container/container.model';
-import { ContainerService } from 'app/entities/container/service/container.service';
 
 import { CompanyContainerUpdateComponent } from './company-container-update.component';
 
@@ -20,8 +20,8 @@ describe('CompanyContainer Management Update Component', () => {
   let fixture: ComponentFixture<CompanyContainerUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let companyContainerService: CompanyContainerService;
+  let containerCategoryService: ContainerCategoryService;
   let companyService: CompanyService;
-  let containerService: ContainerService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,13 +43,34 @@ describe('CompanyContainer Management Update Component', () => {
     fixture = TestBed.createComponent(CompanyContainerUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     companyContainerService = TestBed.inject(CompanyContainerService);
+    containerCategoryService = TestBed.inject(ContainerCategoryService);
     companyService = TestBed.inject(CompanyService);
-    containerService = TestBed.inject(ContainerService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
+    it('Should call containerCategory query and add missing value', () => {
+      const companyContainer: ICompanyContainer = { id: 456 };
+      const containerCategory: IContainerCategory = { id: 17424 };
+      companyContainer.containerCategory = containerCategory;
+
+      const containerCategoryCollection: IContainerCategory[] = [{ id: 30762 }];
+      jest.spyOn(containerCategoryService, 'query').mockReturnValue(of(new HttpResponse({ body: containerCategoryCollection })));
+      const expectedCollection: IContainerCategory[] = [containerCategory, ...containerCategoryCollection];
+      jest.spyOn(containerCategoryService, 'addContainerCategoryToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ companyContainer });
+      comp.ngOnInit();
+
+      expect(containerCategoryService.query).toHaveBeenCalled();
+      expect(containerCategoryService.addContainerCategoryToCollectionIfMissing).toHaveBeenCalledWith(
+        containerCategoryCollection,
+        containerCategory
+      );
+      expect(comp.containerCategoriesCollection).toEqual(expectedCollection);
+    });
+
     it('Should call Company query and add missing value', () => {
       const companyContainer: ICompanyContainer = { id: 456 };
       const company: ICompany = { id: 55896 };
@@ -69,38 +90,19 @@ describe('CompanyContainer Management Update Component', () => {
       expect(comp.companiesSharedCollection).toEqual(expectedCollection);
     });
 
-    it('Should call Container query and add missing value', () => {
-      const companyContainer: ICompanyContainer = { id: 456 };
-      const container: IContainer = { id: 50821 };
-      companyContainer.container = container;
-
-      const containerCollection: IContainer[] = [{ id: 78964 }];
-      jest.spyOn(containerService, 'query').mockReturnValue(of(new HttpResponse({ body: containerCollection })));
-      const additionalContainers = [container];
-      const expectedCollection: IContainer[] = [...additionalContainers, ...containerCollection];
-      jest.spyOn(containerService, 'addContainerToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ companyContainer });
-      comp.ngOnInit();
-
-      expect(containerService.query).toHaveBeenCalled();
-      expect(containerService.addContainerToCollectionIfMissing).toHaveBeenCalledWith(containerCollection, ...additionalContainers);
-      expect(comp.containersSharedCollection).toEqual(expectedCollection);
-    });
-
     it('Should update editForm', () => {
       const companyContainer: ICompanyContainer = { id: 456 };
+      const containerCategory: IContainerCategory = { id: 5565 };
+      companyContainer.containerCategory = containerCategory;
       const company: ICompany = { id: 60865 };
       companyContainer.company = company;
-      const container: IContainer = { id: 23107 };
-      companyContainer.container = container;
 
       activatedRoute.data = of({ companyContainer });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(companyContainer));
+      expect(comp.containerCategoriesCollection).toContain(containerCategory);
       expect(comp.companiesSharedCollection).toContain(company);
-      expect(comp.containersSharedCollection).toContain(container);
     });
   });
 
@@ -169,18 +171,18 @@ describe('CompanyContainer Management Update Component', () => {
   });
 
   describe('Tracking relationships identifiers', () => {
-    describe('trackCompanyById', () => {
-      it('Should return tracked Company primary key', () => {
+    describe('trackContainerCategoryById', () => {
+      it('Should return tracked ContainerCategory primary key', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackCompanyById(0, entity);
+        const trackResult = comp.trackContainerCategoryById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });
 
-    describe('trackContainerById', () => {
-      it('Should return tracked Container primary key', () => {
+    describe('trackCompanyById', () => {
+      it('Should return tracked Company primary key', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackContainerById(0, entity);
+        const trackResult = comp.trackCompanyById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

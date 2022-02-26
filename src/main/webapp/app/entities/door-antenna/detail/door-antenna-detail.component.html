@@ -21,13 +21,13 @@
         <dt><span jhiTranslate="wmsApp.doorAntenna.door">Door</span></dt>
         <dd>
           <div *ngIf="doorAntenna.door">
-            <a [routerLink]="['/door', doorAntenna.door?.id, 'view']">{{ doorAntenna.door?.name }}</a>
+            <a [routerLink]="['/door', doorAntenna.door?.id, 'view']">{{ doorAntenna.door?.id }}</a>
           </div>
         </dd>
-        <dt><span jhiTranslate="wmsApp.doorAntenna.uhfAntenna">Uhf Antenna</span></dt>
+        <dt><span jhiTranslate="wmsApp.doorAntenna.rfidAntenna">Rfid Antenna</span></dt>
         <dd>
-          <div *ngIf="doorAntenna.uhfAntenna">
-            <a [routerLink]="['/uhfrfid-antenna', doorAntenna.uhfAntenna?.id, 'view']">{{ doorAntenna.uhfAntenna?.name }}</a>
+          <div *ngIf="doorAntenna.rfidAntenna">
+            <a [routerLink]="['/uhfrfid-antenna', doorAntenna.rfidAntenna?.id, 'view']">{{ doorAntenna.rfidAntenna?.id }}</a>
           </div>
         </dd>
       </dl>

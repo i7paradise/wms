@@ -7,8 +7,11 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link UHFRFIDReader} and its DTO {@link UHFRFIDReaderDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = { CompanyMapper.class })
 public interface UHFRFIDReaderMapper extends EntityMapper<UHFRFIDReaderDTO, UHFRFIDReader> {
+    @Mapping(target = "company", source = "company", qualifiedByName = "name")
+    UHFRFIDReaderDTO toDto(UHFRFIDReader s);
+
     @Named("name")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

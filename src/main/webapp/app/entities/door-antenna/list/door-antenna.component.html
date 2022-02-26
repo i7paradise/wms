@@ -34,11 +34,9 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="type"><span jhiTranslate="wmsApp.doorAntenna.type">Type</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="door.name">
-            <span jhiTranslate="wmsApp.doorAntenna.door">Door</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="uhfAntenna.name">
-            <span jhiTranslate="wmsApp.doorAntenna.uhfAntenna">Uhf Antenna</span> <fa-icon icon="sort"></fa-icon>
+          <th scope="col" jhiSortBy="door.id"><span jhiTranslate="wmsApp.doorAntenna.door">Door</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="rfidAntenna.id">
+            <span jhiTranslate="wmsApp.doorAntenna.rfidAntenna">Rfid Antenna</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
         </tr>
@@ -51,12 +49,12 @@
           <td jhiTranslate="{{ 'wmsApp.DoorAntennaType.' + doorAntenna.type }}">{{ doorAntenna.type }}</td>
           <td>
             <div *ngIf="doorAntenna.door">
-              <a [routerLink]="['/door', doorAntenna.door?.id, 'view']">{{ doorAntenna.door?.name }}</a>
+              <a [routerLink]="['/door', doorAntenna.door?.id, 'view']">{{ doorAntenna.door?.id }}</a>
             </div>
           </td>
           <td>
-            <div *ngIf="doorAntenna.uhfAntenna">
-              <a [routerLink]="['/uhfrfid-antenna', doorAntenna.uhfAntenna?.id, 'view']">{{ doorAntenna.uhfAntenna?.name }}</a>
+            <div *ngIf="doorAntenna.rfidAntenna">
+              <a [routerLink]="['/uhfrfid-antenna', doorAntenna.rfidAntenna?.id, 'view']">{{ doorAntenna.rfidAntenna?.id }}</a>
             </div>
           </td>
           <td class="text-right">

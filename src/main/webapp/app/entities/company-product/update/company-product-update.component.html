@@ -52,32 +52,33 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="wmsApp.companyProduct.stockingRatio" for="field_stockingRatio"
-            >Stocking Ratio</label
+          <label class="form-control-label" jhiTranslate="wmsApp.companyProduct.containerStockingRatio" for="field_containerStockingRatio"
+            >Container Stocking Ratio</label
           >
           <input
             type="number"
             class="form-control"
-            name="stockingRatio"
-            id="field_stockingRatio"
-            data-cy="stockingRatio"
-            formControlName="stockingRatio"
+            name="containerStockingRatio"
+            id="field_containerStockingRatio"
+            data-cy="containerStockingRatio"
+            formControlName="containerStockingRatio"
           />
           <div
             *ngIf="
-              editForm.get('stockingRatio')!.invalid && (editForm.get('stockingRatio')!.dirty || editForm.get('stockingRatio')!.touched)
+              editForm.get('containerStockingRatio')!.invalid &&
+              (editForm.get('containerStockingRatio')!.dirty || editForm.get('containerStockingRatio')!.touched)
             "
           >
             <small
               class="form-text text-danger"
-              *ngIf="editForm.get('stockingRatio')?.errors?.required"
+              *ngIf="editForm.get('containerStockingRatio')?.errors?.required"
               jhiTranslate="entity.validation.required"
             >
               This field is required.
             </small>
             <small
               class="form-text text-danger"
-              *ngIf="editForm.get('stockingRatio')?.errors?.min"
+              *ngIf="editForm.get('containerStockingRatio')?.errors?.min"
               jhiTranslate="entity.validation.min"
               [translateValues]="{ min: 0 }"
             >
@@ -85,7 +86,7 @@
             </small>
             <small
               class="form-text text-danger"
-              [hidden]="!editForm.get('stockingRatio')?.errors?.number"
+              [hidden]="!editForm.get('containerStockingRatio')?.errors?.number"
               jhiTranslate="entity.validation.number"
             >
               This field should be a number.
@@ -94,14 +95,26 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="wmsApp.companyProduct.container" for="field_container">Container</label>
-          <select class="form-control" id="field_container" data-cy="container" name="container" formControlName="container">
+          <label class="form-control-label" jhiTranslate="wmsApp.companyProduct.containerCategory" for="field_containerCategory"
+            >Container Category</label
+          >
+          <select
+            class="form-control"
+            id="field_containerCategory"
+            data-cy="containerCategory"
+            name="containerCategory"
+            formControlName="containerCategory"
+          >
             <option [ngValue]="null"></option>
             <option
-              [ngValue]="containerOption.id === editForm.get('container')!.value?.id ? editForm.get('container')!.value : containerOption"
-              *ngFor="let containerOption of containersCollection; trackBy: trackContainerById"
+              [ngValue]="
+                containerCategoryOption.id === editForm.get('containerCategory')!.value?.id
+                  ? editForm.get('containerCategory')!.value
+                  : containerCategoryOption
+              "
+              *ngFor="let containerCategoryOption of containerCategoriesCollection; trackBy: trackContainerCategoryById"
             >
-              {{ containerOption.name }}
+              {{ containerCategoryOption.name }}
             </option>
           </select>
         </div>

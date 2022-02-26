@@ -15,9 +15,9 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./company-user/company-user.module').then(m => m.CompanyUserModule),
       },
       {
-        path: 'container',
-        data: { pageTitle: 'wmsApp.container.home.title' },
-        loadChildren: () => import('./container/container.module').then(m => m.ContainerModule),
+        path: 'container-category',
+        data: { pageTitle: 'wmsApp.containerCategory.home.title' },
+        loadChildren: () => import('./container-category/container-category.module').then(m => m.ContainerCategoryModule),
       },
       {
         path: 'company-container',
@@ -48,6 +48,11 @@ import { RouterModule } from '@angular/router';
         path: 'door',
         data: { pageTitle: 'wmsApp.door.home.title' },
         loadChildren: () => import('./door/door.module').then(m => m.DoorModule),
+      },
+      {
+        path: 'door-antenna',
+        data: { pageTitle: 'wmsApp.doorAntenna.home.title' },
+        loadChildren: () => import('./door-antenna/door-antenna.module').then(m => m.DoorAntennaModule),
       },
       {
         path: 'location',
@@ -95,29 +100,24 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./customer/customer.module').then(m => m.CustomerModule),
       },
       {
-        path: 'delivery-order',
-        data: { pageTitle: 'wmsApp.deliveryOrder.home.title' },
-        loadChildren: () => import('./delivery-order/delivery-order.module').then(m => m.DeliveryOrderModule),
+        path: 'order',
+        data: { pageTitle: 'wmsApp.order.home.title' },
+        loadChildren: () => import('./order/order.module').then(m => m.OrderModule),
       },
       {
-        path: 'delivery-order-item',
-        data: { pageTitle: 'wmsApp.deliveryOrderItem.home.title' },
-        loadChildren: () => import('./delivery-order-item/delivery-order-item.module').then(m => m.DeliveryOrderItemModule),
+        path: 'order-item',
+        data: { pageTitle: 'wmsApp.orderItem.home.title' },
+        loadChildren: () => import('./order-item/order-item.module').then(m => m.OrderItemModule),
       },
       {
-        path: 'delivery-container',
-        data: { pageTitle: 'wmsApp.deliveryContainer.home.title' },
-        loadChildren: () => import('./delivery-container/delivery-container.module').then(m => m.DeliveryContainerModule),
+        path: 'order-container',
+        data: { pageTitle: 'wmsApp.orderContainer.home.title' },
+        loadChildren: () => import('./order-container/order-container.module').then(m => m.OrderContainerModule),
       },
       {
-        path: 'delivery-item-product',
-        data: { pageTitle: 'wmsApp.deliveryItemProduct.home.title' },
-        loadChildren: () => import('./delivery-item-product/delivery-item-product.module').then(m => m.DeliveryItemProductModule),
-      },
-      {
-        path: 'door-antenna',
-        data: { pageTitle: 'wmsApp.doorAntenna.home.title' },
-        loadChildren: () => import('./door-antenna/door-antenna.module').then(m => m.DoorAntennaModule),
+        path: 'order-item-product',
+        data: { pageTitle: 'wmsApp.orderItemProduct.home.title' },
+        loadChildren: () => import('./order-item-product/order-item-product.module').then(m => m.OrderItemProductModule),
       },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),

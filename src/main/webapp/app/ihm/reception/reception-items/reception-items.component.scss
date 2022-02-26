@@ -1,0 +1,13 @@
+@use '/src/main/webapp/content/scss/my-global' as g;
+
+.reception-items {
+  margin-top: 1.2em;
+}
+
+.btn-group button {
+  margin-right: 0.2em;
+}
+
+.order-tags {
+  cursor: auto !important;
+}

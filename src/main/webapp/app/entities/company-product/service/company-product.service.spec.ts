@@ -23,7 +23,7 @@ describe('CompanyProduct Service', () => {
       id: 0,
       quantity: 0,
       sku: 'AAAAAAA',
-      stockingRatio: 0,
+      containerStockingRatio: 0,
     };
   });
 
@@ -61,7 +61,7 @@ describe('CompanyProduct Service', () => {
           id: 1,
           quantity: 1,
           sku: 'BBBBBB',
-          stockingRatio: 1,
+          containerStockingRatio: 1,
         },
         elemDefault
       );
@@ -101,7 +101,7 @@ describe('CompanyProduct Service', () => {
           id: 1,
           quantity: 1,
           sku: 'BBBBBB',
-          stockingRatio: 1,
+          containerStockingRatio: 1,
         },
         elemDefault
       );

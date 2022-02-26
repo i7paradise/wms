@@ -30,6 +30,12 @@
         <dd>
           <span jhiTranslate="{{ 'wmsApp.UHFRFIDReaderStatus.' + uHFRFIDReader.status }}">{{ uHFRFIDReader.status }}</span>
         </dd>
+        <dt><span jhiTranslate="wmsApp.uHFRFIDReader.company">Company</span></dt>
+        <dd>
+          <div *ngIf="uHFRFIDReader.company">
+            <a [routerLink]="['/company', uHFRFIDReader.company?.id, 'view']">{{ uHFRFIDReader.company?.name }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

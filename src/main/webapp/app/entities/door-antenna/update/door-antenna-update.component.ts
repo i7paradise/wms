@@ -28,7 +28,7 @@ export class DoorAntennaUpdateComponent implements OnInit {
     id: [],
     type: [null, [Validators.required]],
     door: [],
-    uhfAntenna: [],
+    rfidAntenna: [],
   });
 
   constructor(
@@ -93,13 +93,13 @@ export class DoorAntennaUpdateComponent implements OnInit {
       id: doorAntenna.id,
       type: doorAntenna.type,
       door: doorAntenna.door,
-      uhfAntenna: doorAntenna.uhfAntenna,
+      rfidAntenna: doorAntenna.rfidAntenna,
     });
 
     this.doorsSharedCollection = this.doorService.addDoorToCollectionIfMissing(this.doorsSharedCollection, doorAntenna.door);
     this.uHFRFIDAntennasSharedCollection = this.uHFRFIDAntennaService.addUHFRFIDAntennaToCollectionIfMissing(
       this.uHFRFIDAntennasSharedCollection,
-      doorAntenna.uhfAntenna
+      doorAntenna.rfidAntenna
     );
   }
 
@@ -115,7 +115,7 @@ export class DoorAntennaUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUHFRFIDAntenna[]>) => res.body ?? []))
       .pipe(
         map((uHFRFIDAntennas: IUHFRFIDAntenna[]) =>
-          this.uHFRFIDAntennaService.addUHFRFIDAntennaToCollectionIfMissing(uHFRFIDAntennas, this.editForm.get('uhfAntenna')!.value)
+          this.uHFRFIDAntennaService.addUHFRFIDAntennaToCollectionIfMissing(uHFRFIDAntennas, this.editForm.get('rfidAntenna')!.value)
         )
       )
       .subscribe((uHFRFIDAntennas: IUHFRFIDAntenna[]) => (this.uHFRFIDAntennasSharedCollection = uHFRFIDAntennas));
@@ -127,7 +127,7 @@ export class DoorAntennaUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       type: this.editForm.get(['type'])!.value,
       door: this.editForm.get(['door'])!.value,
-      uhfAntenna: this.editForm.get(['uhfAntenna'])!.value,
+      rfidAntenna: this.editForm.get(['rfidAntenna'])!.value,
     };
   }
 }

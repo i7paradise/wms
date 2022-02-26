@@ -1,16 +1,14 @@
 package com.wms.uhfrfid.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A CompanyContainer.
  */
 @Entity
 @Table(name = "company_container")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class CompanyContainer implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,11 +25,13 @@ public class CompanyContainer implements Serializable {
     @Column(name = "color")
     private String color;
 
-    @ManyToOne
-    private Company company;
+    @OneToOne
+    @JoinColumn(unique = true)
+    private ContainerCategory containerCategory;
 
     @ManyToOne
-    private Container container;
+    @JsonIgnoreProperties(value = { "companyUsers", "companyContainers", "orders", "uhfRFIDReaders" }, allowSetters = true)
+    private Company company;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -74,6 +74,19 @@ public class CompanyContainer implements Serializable {
         this.color = color;
     }
 
+    public ContainerCategory getContainerCategory() {
+        return this.containerCategory;
+    }
+
+    public void setContainerCategory(ContainerCategory containerCategory) {
+        this.containerCategory = containerCategory;
+    }
+
+    public CompanyContainer containerCategory(ContainerCategory containerCategory) {
+        this.setContainerCategory(containerCategory);
+        return this;
+    }
+
     public Company getCompany() {
         return this.company;
     }
@@ -84,19 +97,6 @@ public class CompanyContainer implements Serializable {
 
     public CompanyContainer company(Company company) {
         this.setCompany(company);
-        return this;
-    }
-
-    public Container getContainer() {
-        return this.container;
-    }
-
-    public void setContainer(Container container) {
-        this.container = container;
-    }
-
-    public CompanyContainer container(Container container) {
-        this.setContainer(container);
         return this;
     }
 

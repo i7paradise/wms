@@ -20,7 +20,7 @@
       "id": "ID",
       "type": "Type",
       "door": "Door",
-      "uhfAntenna": "Uhf Antenna"
+      "rfidAntenna": "Rfid Antenna"
     }
   }
 }

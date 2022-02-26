@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { Gender } from 'app/entities/enumerations/gender.model';
 import { ICustomer, Customer } from '../customer.model';
 
 import { CustomerService } from './customer.service';
@@ -24,7 +23,6 @@ describe('Customer Service', () => {
       id: 0,
       firstName: 'AAAAAAA',
       lastName: 'AAAAAAA',
-      gender: Gender.MALE,
       email: 'AAAAAAA',
       phone: 'AAAAAAA',
       addressLine1: 'AAAAAAA',
@@ -68,7 +66,6 @@ describe('Customer Service', () => {
           id: 1,
           firstName: 'BBBBBB',
           lastName: 'BBBBBB',
-          gender: 'BBBBBB',
           email: 'BBBBBB',
           phone: 'BBBBBB',
           addressLine1: 'BBBBBB',
@@ -92,10 +89,9 @@ describe('Customer Service', () => {
       const patchObject = Object.assign(
         {
           firstName: 'BBBBBB',
-          gender: 'BBBBBB',
-          phone: 'BBBBBB',
+          email: 'BBBBBB',
           addressLine1: 'BBBBBB',
-          country: 'BBBBBB',
+          addressLine2: 'BBBBBB',
         },
         new Customer()
       );
@@ -117,7 +113,6 @@ describe('Customer Service', () => {
           id: 1,
           firstName: 'BBBBBB',
           lastName: 'BBBBBB',
-          gender: 'BBBBBB',
           email: 'BBBBBB',
           phone: 'BBBBBB',
           addressLine1: 'BBBBBB',
@@ -175,7 +170,7 @@ describe('Customer Service', () => {
       });
 
       it('should add only unique Customer to an array', () => {
-        const customerArray: ICustomer[] = [{ id: 123 }, { id: 456 }, { id: 20419 }];
+        const customerArray: ICustomer[] = [{ id: 123 }, { id: 456 }, { id: 58082 }];
         const customerCollection: ICustomer[] = [{ id: 123 }];
         expectedResult = service.addCustomerToCollectionIfMissing(customerCollection, ...customerArray);
         expect(expectedResult).toHaveLength(3);

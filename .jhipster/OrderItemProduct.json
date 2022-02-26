@@ -1,0 +1,28 @@
+{
+  "applications": ["wms"],
+  "changelogDate": "20220204221708",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "order_item_product",
+  "fields": [
+    {
+      "fieldName": "rfidTAG",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "OrderItemProduct",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "orderContainer",
+      "otherEntityRelationshipName": "orderItemProduct",
+      "relationshipName": "orderContainer",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

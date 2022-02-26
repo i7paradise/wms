@@ -21,7 +21,8 @@
       "name": "Name",
       "ip": "Ip",
       "port": "Port",
-      "status": "Status"
+      "status": "Status",
+      "company": "Company"
     }
   }
 }

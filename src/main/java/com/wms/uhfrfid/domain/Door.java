@@ -2,17 +2,16 @@ package com.wms.uhfrfid.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Door.
  */
 @Entity
 @Table(name = "door")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Door implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,6 +29,10 @@ public class Door implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = { "warehouse" }, allowSetters = true)
     private Area area;
+
+    @OneToMany(mappedBy = "door")
+    @JsonIgnoreProperties(value = { "door", "rfidAntenna" }, allowSetters = true)
+    private Set<DoorAntenna> doorAntennas = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -69,6 +72,37 @@ public class Door implements Serializable {
 
     public Door area(Area area) {
         this.setArea(area);
+        return this;
+    }
+
+    public Set<DoorAntenna> getDoorAntennas() {
+        return this.doorAntennas;
+    }
+
+    public void setDoorAntennas(Set<DoorAntenna> doorAntennas) {
+        if (this.doorAntennas != null) {
+            this.doorAntennas.forEach(i -> i.setDoor(null));
+        }
+        if (doorAntennas != null) {
+            doorAntennas.forEach(i -> i.setDoor(this));
+        }
+        this.doorAntennas = doorAntennas;
+    }
+
+    public Door doorAntennas(Set<DoorAntenna> doorAntennas) {
+        this.setDoorAntennas(doorAntennas);
+        return this;
+    }
+
+    public Door addDoorAntenna(DoorAntenna doorAntenna) {
+        this.doorAntennas.add(doorAntenna);
+        doorAntenna.setDoor(this);
+        return this;
+    }
+
+    public Door removeDoorAntenna(DoorAntenna doorAntenna) {
+        this.doorAntennas.remove(doorAntenna);
+        doorAntenna.setDoor(null);
         return this;
     }
 

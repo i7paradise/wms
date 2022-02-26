@@ -20,8 +20,8 @@
       "id": "ID",
       "rfidTag": "Rfid Tag",
       "color": "Color",
-      "company": "Company",
-      "container": "Container"
+      "containerCategory": "Container Category",
+      "company": "Company"
     }
   }
 }

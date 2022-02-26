@@ -3,15 +3,12 @@ package com.wms.uhfrfid.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Product sold by the Online store
  */
 @Entity
 @Table(name = "product")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;

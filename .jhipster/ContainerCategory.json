@@ -1,0 +1,25 @@
+{
+  "applications": ["wms"],
+  "changelogDate": "20220204215708",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "container_category",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "ContainerCategory",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}

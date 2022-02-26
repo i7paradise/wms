@@ -33,6 +33,10 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="user.id"><span jhiTranslate="wmsApp.companyUser.user">User</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="company.id">
+            <span jhiTranslate="wmsApp.companyUser.company">Company</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -40,6 +44,14 @@
         <tr *ngFor="let companyUser of companyUsers; trackBy: trackId" data-cy="entityTable">
           <td>
             <a [routerLink]="['/company-user', companyUser.id, 'view']">{{ companyUser.id }}</a>
+          </td>
+          <td>
+            {{ companyUser.user?.id }}
+          </td>
+          <td>
+            <div *ngIf="companyUser.company">
+              <a [routerLink]="['/company', companyUser.company?.id, 'view']">{{ companyUser.company?.id }}</a>
+            </div>
           </td>
           <td class="text-right">
             <div class="btn-group">

@@ -1,0 +1,60 @@
+{
+  "applications": ["wms"],
+  "changelogDate": "20220204221508",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "order_item",
+  "fields": [
+    {
+      "fieldName": "quantity",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "OrderItemStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "IN_PROGRESS,VERIFIED,LABELED,PARTIALLY_PLACED,FULLY_PLACED"
+    },
+    {
+      "fieldName": "containersCount",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "productsPerContainerCount",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "OrderItem",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "order",
+      "otherEntityRelationshipName": "orderItem",
+      "relationshipName": "order",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "sku",
+      "otherEntityName": "companyProduct",
+      "otherEntityRelationshipName": "orderItem",
+      "relationshipName": "companyProduct",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "orderContainer",
+      "otherEntityRelationshipName": "orderItem",
+      "relationshipName": "orderContainer",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

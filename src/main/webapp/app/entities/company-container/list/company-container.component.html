@@ -39,11 +39,11 @@
           <th scope="col" jhiSortBy="color">
             <span jhiTranslate="wmsApp.companyContainer.color">Color</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="containerCategory.name">
+            <span jhiTranslate="wmsApp.companyContainer.containerCategory">Container Category</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="company.name">
             <span jhiTranslate="wmsApp.companyContainer.company">Company</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="container.name">
-            <span jhiTranslate="wmsApp.companyContainer.container">Container</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
         </tr>
@@ -56,13 +56,15 @@
           <td>{{ companyContainer.rfidTag }}</td>
           <td>{{ companyContainer.color }}</td>
           <td>
-            <div *ngIf="companyContainer.company">
-              <a [routerLink]="['/company', companyContainer.company?.id, 'view']">{{ companyContainer.company?.name }}</a>
+            <div *ngIf="companyContainer.containerCategory">
+              <a [routerLink]="['/container-category', companyContainer.containerCategory?.id, 'view']">{{
+                companyContainer.containerCategory?.name
+              }}</a>
             </div>
           </td>
           <td>
-            <div *ngIf="companyContainer.container">
-              <a [routerLink]="['/container', companyContainer.container?.id, 'view']">{{ companyContainer.container?.name }}</a>
+            <div *ngIf="companyContainer.company">
+              <a [routerLink]="['/company', companyContainer.company?.id, 'view']">{{ companyContainer.company?.name }}</a>
             </div>
           </td>
           <td class="text-right">

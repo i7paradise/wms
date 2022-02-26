@@ -1,0 +1,35 @@
+<div *ngIf="listOrderContainer && listOrderContainer.length > 0" name="deleteForm" >
+  <div class="modal-header">
+    <h4 class="modal-title" data-cy="orderContainerDeleteDialogHeading">Edit order container</h4>
+
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+  </div>
+
+  <div class="modal-body">
+    <jhi-alert-error></jhi-alert-error>
+
+    <div class="alert alert-default">
+      <p> <fa-icon icon="boxes"></fa-icon> Delete scanned packages ?</p>
+      <button id="jhi-confirm-delete-orderContainer" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger"
+        (click)="deletePackages()">
+        <fa-icon icon="times"></fa-icon>&nbsp;<span>Delete packages</span>
+      </button>
+    </div>
+
+    <div class="alert alert-danger">
+      <p
+        id="jhi-delete-orderContainer-heading"
+        jhiTranslate="wmsApp.orderContainer.delete.question"
+        [translateValues]="{ id: ids() }"
+      >
+        Are you sure you want to delete this Order Container?
+      </p>
+      <button id="jhi-confirm-delete-orderContainer" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger"
+        (click)="confirmDelete()">
+        <fa-icon icon="times"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Delete</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="modal-footer"></div>
+</div>

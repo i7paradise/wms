@@ -19,7 +19,8 @@
       },
       "id": "ID",
       "name": "Name",
-      "area": "Area"
+      "area": "Area",
+      "doorAntenna": "Door Antenna"
     }
   }
 }

@@ -26,6 +26,18 @@
           </span>
         </a>
       </li>
+      <li
+        *ngSwitchCase="true"
+        ngbDropdown
+        class="nav-item dropdown pointer"
+        display="dynamic"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link" routerLink="mgmt/reception" (click)="collapseNavbar()">
+          <span>Reception</span>
+        </a>
+      </li>
       <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
       <li
         *ngSwitchCase="true"
@@ -64,18 +76,6 @@
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
               <span jhiTranslate="global.menu.entities.companyUser">Company User</span>
-            </a>
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              routerLink="container"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="collapseNavbar()"
-            >
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.container">Container</span>
             </a>
           </li>
           <li>
@@ -261,49 +261,49 @@
           <li>
             <a
               class="dropdown-item"
-              routerLink="delivery-order"
+              routerLink="order"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
               (click)="collapseNavbar()"
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.deliveryOrder">Delivery Order</span>
+              <span jhiTranslate="global.menu.entities.order">Order</span>
             </a>
           </li>
           <li>
             <a
               class="dropdown-item"
-              routerLink="delivery-order-item"
+              routerLink="order-item"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
               (click)="collapseNavbar()"
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.deliveryOrderItem">Delivery Order Item</span>
+              <span jhiTranslate="global.menu.entities.orderItem">Order Item</span>
             </a>
           </li>
           <li>
             <a
               class="dropdown-item"
-              routerLink="delivery-container"
+              routerLink="order-container"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
               (click)="collapseNavbar()"
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.deliveryContainer">Delivery Container</span>
+              <span jhiTranslate="global.menu.entities.orderContainer">Order Container</span>
             </a>
           </li>
           <li>
             <a
               class="dropdown-item"
-              routerLink="delivery-item-product"
+              routerLink="order-item-product"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
               (click)="collapseNavbar()"
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.deliveryItemProduct">Delivery Item Product</span>
+              <span jhiTranslate="global.menu.entities.orderItemProduct">Order Item Product</span>
             </a>
           </li>
           <li>
@@ -316,6 +316,18 @@
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
               <span jhiTranslate="global.menu.entities.doorAntenna">Door Antenna</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="container-category"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.containerCategory">Container Category</span>
             </a>
           </li>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->

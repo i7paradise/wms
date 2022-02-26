@@ -5,15 +5,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A CompanyProduct.
  */
 @Entity
 @Table(name = "company_product")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class CompanyProduct implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,14 +31,15 @@ public class CompanyProduct implements Serializable {
 
     @NotNull
     @DecimalMin(value = "0")
-    @Column(name = "stocking_ratio", precision = 21, scale = 2, nullable = false)
-    private BigDecimal stockingRatio;
+    @Column(name = "container_stocking_ratio", precision = 21, scale = 2, nullable = false)
+    private BigDecimal containerStockingRatio;
 
     @OneToOne
     @JoinColumn(unique = true)
-    private Container container;
+    private ContainerCategory containerCategory;
 
     @ManyToOne
+    @JsonIgnoreProperties(value = { "companyUsers", "companyContainers", "orders", "uhfRFIDReaders" }, allowSetters = true)
     private Company company;
 
     @ManyToOne
@@ -89,29 +87,29 @@ public class CompanyProduct implements Serializable {
         this.sku = sku;
     }
 
-    public BigDecimal getStockingRatio() {
-        return this.stockingRatio;
+    public BigDecimal getContainerStockingRatio() {
+        return this.containerStockingRatio;
     }
 
-    public CompanyProduct stockingRatio(BigDecimal stockingRatio) {
-        this.setStockingRatio(stockingRatio);
+    public CompanyProduct containerStockingRatio(BigDecimal containerStockingRatio) {
+        this.setContainerStockingRatio(containerStockingRatio);
         return this;
     }
 
-    public void setStockingRatio(BigDecimal stockingRatio) {
-        this.stockingRatio = stockingRatio;
+    public void setContainerStockingRatio(BigDecimal containerStockingRatio) {
+        this.containerStockingRatio = containerStockingRatio;
     }
 
-    public Container getContainer() {
-        return this.container;
+    public ContainerCategory getContainerCategory() {
+        return this.containerCategory;
     }
 
-    public void setContainer(Container container) {
-        this.container = container;
+    public void setContainerCategory(ContainerCategory containerCategory) {
+        this.containerCategory = containerCategory;
     }
 
-    public CompanyProduct container(Container container) {
-        this.setContainer(container);
+    public CompanyProduct containerCategory(ContainerCategory containerCategory) {
+        this.setContainerCategory(containerCategory);
         return this;
     }
 
@@ -167,7 +165,7 @@ public class CompanyProduct implements Serializable {
             "id=" + getId() +
             ", quantity=" + getQuantity() +
             ", sku='" + getSku() + "'" +
-            ", stockingRatio=" + getStockingRatio() +
+            ", containerStockingRatio=" + getContainerStockingRatio() +
             "}";
     }
 }

@@ -1,0 +1,10 @@
+{
+  "wmsApp": {
+    "OrderType": {
+      "null": "",
+      "SHIPPING": "SHIPPING",
+      "RECEPTION": "RECEPTION",
+      "INTERNAL": "INTERNAL"
+    }
+  }
+}

@@ -20,9 +20,9 @@ public class CompanyProductDTO implements Serializable {
 
     @NotNull
     @DecimalMin(value = "0")
-    private BigDecimal stockingRatio;
+    private BigDecimal containerStockingRatio;
 
-    private ContainerDTO container;
+    private ContainerCategoryDTO containerCategory;
 
     private CompanyDTO company;
 
@@ -52,20 +52,20 @@ public class CompanyProductDTO implements Serializable {
         this.sku = sku;
     }
 
-    public BigDecimal getStockingRatio() {
-        return stockingRatio;
+    public BigDecimal getContainerStockingRatio() {
+        return containerStockingRatio;
     }
 
-    public void setStockingRatio(BigDecimal stockingRatio) {
-        this.stockingRatio = stockingRatio;
+    public void setContainerStockingRatio(BigDecimal containerStockingRatio) {
+        this.containerStockingRatio = containerStockingRatio;
     }
 
-    public ContainerDTO getContainer() {
-        return container;
+    public ContainerCategoryDTO getContainerCategory() {
+        return containerCategory;
     }
 
-    public void setContainer(ContainerDTO container) {
-        this.container = container;
+    public void setContainerCategory(ContainerCategoryDTO containerCategory) {
+        this.containerCategory = containerCategory;
     }
 
     public CompanyDTO getCompany() {
@@ -112,8 +112,8 @@ public class CompanyProductDTO implements Serializable {
             "id=" + getId() +
             ", quantity=" + getQuantity() +
             ", sku='" + getSku() + "'" +
-            ", stockingRatio=" + getStockingRatio() +
-            ", container=" + getContainer() +
+            ", containerStockingRatio=" + getContainerStockingRatio() +
+            ", containerCategory=" + getContainerCategory() +
             ", company=" + getCompany() +
             ", product=" + getProduct() +
             "}";

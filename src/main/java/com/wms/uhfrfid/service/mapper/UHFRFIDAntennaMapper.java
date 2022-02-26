@@ -12,9 +12,8 @@ public interface UHFRFIDAntennaMapper extends EntityMapper<UHFRFIDAntennaDTO, UH
     @Mapping(target = "uhfReader", source = "uhfReader", qualifiedByName = "name")
     UHFRFIDAntennaDTO toDto(UHFRFIDAntenna s);
 
-    @Named("name")
+    @Named("id")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "name", source = "name")
-    UHFRFIDAntennaDTO toDtoName(UHFRFIDAntenna uHFRFIDAntenna);
+    UHFRFIDAntennaDTO toDtoId(UHFRFIDAntenna uHFRFIDAntenna);
 }

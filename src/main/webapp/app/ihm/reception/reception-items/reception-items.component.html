@@ -1,0 +1,75 @@
+<div class="reception-items">
+
+  <jhi-add-item [order]="order" (createdOrderItemEvt)="onAddOrderItem($event)"></jhi-add-item>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="orderItems?.length === 0">
+    <span jhiTranslate="wmsApp.orderItem.home.notFound">No orderItems found</span>
+  </div>
+
+  <div class="table-responsive" *ngIf="orderItems && orderItems.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col">
+            <span jhiTranslate="wmsApp.orderItem.quantity">Unit Quantity</span>
+          </th>
+          <th scope="col">
+            <span jhiTranslate="wmsApp.orderItem.status">Status</span>
+          </th>
+          <th scope="col">
+            <span >Product</span>
+          </th>
+          <th scope="col">Containers</th>
+          <th scope="col">boxes</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let orderItem of orderItems">
+          <tr data-cy="entityTable"
+            [class.tr-selected] = 'uiService.equalsOrderItem(orderItem)'>
+            <td>{{ orderItem.quantity }}</td>
+            <td jhiTranslate="{{ 'wmsApp.OrderItemStatus.' + orderItem.status }}">{{ orderItem.status }}</td>
+            <td>
+              <div *ngIf="orderItem.companyProduct">
+                <a [routerLink]="['/company-product', orderItem.companyProduct?.id, 'view']">{{
+                  orderItem.companyProduct?.sku
+                }}</a>
+              </div>
+            </td>
+            <td>{{ orderItem.containersCount }} </td>
+            <td>{{ orderItem.productsPerContainerCount }} </td>
+            <td class="text-right">
+              <div class="btn-group">
+                <button
+                  type="submit"
+                  (click)="uiService.setOrderItem(orderItem)"
+                  class="btn btn-info btn-sm"
+                  data-cy="entityDetailsButton"
+                >
+                  <fa-icon icon="eye"></fa-icon>
+                  <span class="d-none d-md-inline"></span>
+                </button>
+  
+                <button
+                  type="submit"
+                  [routerLink]="['/mgmt/reception-item', orderItem.id, 'edit']"
+                  class="btn btn-primary btn-sm"
+                  data-cy="entityEditButton"
+                >
+                  <fa-icon icon="pencil-alt"></fa-icon>
+                  <span class="d-none d-md-inline"></span>
+                </button>
+  
+                <button type="submit" (click)="delete(orderItem)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                  <fa-icon icon="times"></fa-icon>
+                  <span class="d-none d-md-inline"></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

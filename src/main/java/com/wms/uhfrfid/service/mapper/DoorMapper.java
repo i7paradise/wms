@@ -12,9 +12,8 @@ public interface DoorMapper extends EntityMapper<DoorDTO, Door> {
     @Mapping(target = "area", source = "area", qualifiedByName = "type")
     DoorDTO toDto(Door s);
 
-    @Named("name")
+    @Named("id")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "name", source = "name")
-    DoorDTO toDtoName(Door door);
+    DoorDTO toDtoId(Door door);
 }

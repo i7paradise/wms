@@ -1,16 +1,14 @@
 package com.wms.uhfrfid.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A CompanyUser.
  */
 @Entity
 @Table(name = "company_user")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class CompanyUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -20,6 +18,14 @@ public class CompanyUser implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
     private Long id;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private User user;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "companyUsers", "companyContainers", "orders", "uhfRFIDReaders" }, allowSetters = true)
+    private Company company;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -34,6 +40,32 @@ public class CompanyUser implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public CompanyUser user(User user) {
+        this.setUser(user);
+        return this;
+    }
+
+    public Company getCompany() {
+        return this.company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public CompanyUser company(Company company) {
+        this.setCompany(company);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

@@ -21,7 +21,11 @@
       "name": "Name",
       "address": "Address",
       "phone": "Phone",
-      "description": "Description"
+      "description": "Description",
+      "companyUser": "Company User",
+      "companyContainer": "Company Container",
+      "order": "Order",
+      "uhfRFIDReader": "Uhf RFID Reader"
     }
   }
 }

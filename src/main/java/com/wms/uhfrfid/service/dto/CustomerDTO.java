@@ -1,6 +1,5 @@
 package com.wms.uhfrfid.service.dto;
 
-import com.wms.uhfrfid.domain.enumeration.Gender;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.validation.constraints.*;
@@ -17,9 +16,6 @@ public class CustomerDTO implements Serializable {
 
     @NotNull
     private String lastName;
-
-    @NotNull
-    private Gender gender;
 
     @NotNull
     @Pattern(regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
@@ -61,14 +57,6 @@ public class CustomerDTO implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
     }
 
     public String getEmail() {
@@ -147,7 +135,6 @@ public class CustomerDTO implements Serializable {
             "id=" + getId() +
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
-            ", gender='" + getGender() + "'" +
             ", email='" + getEmail() + "'" +
             ", phone='" + getPhone() + "'" +
             ", addressLine1='" + getAddressLine1() + "'" +

@@ -39,8 +39,8 @@ class CompanyProductResourceIT {
     private static final String DEFAULT_SKU = "AAAAAAAAAA";
     private static final String UPDATED_SKU = "BBBBBBBBBB";
 
-    private static final BigDecimal DEFAULT_STOCKING_RATIO = new BigDecimal(0);
-    private static final BigDecimal UPDATED_STOCKING_RATIO = new BigDecimal(1);
+    private static final BigDecimal DEFAULT_CONTAINER_STOCKING_RATIO = new BigDecimal(0);
+    private static final BigDecimal UPDATED_CONTAINER_STOCKING_RATIO = new BigDecimal(1);
 
     private static final String ENTITY_API_URL = "/api/company-products";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -72,7 +72,7 @@ class CompanyProductResourceIT {
         CompanyProduct companyProduct = new CompanyProduct()
             .quantity(DEFAULT_QUANTITY)
             .sku(DEFAULT_SKU)
-            .stockingRatio(DEFAULT_STOCKING_RATIO);
+            .containerStockingRatio(DEFAULT_CONTAINER_STOCKING_RATIO);
         return companyProduct;
     }
 
@@ -86,7 +86,7 @@ class CompanyProductResourceIT {
         CompanyProduct companyProduct = new CompanyProduct()
             .quantity(UPDATED_QUANTITY)
             .sku(UPDATED_SKU)
-            .stockingRatio(UPDATED_STOCKING_RATIO);
+            .containerStockingRatio(UPDATED_CONTAINER_STOCKING_RATIO);
         return companyProduct;
     }
 
@@ -113,7 +113,7 @@ class CompanyProductResourceIT {
         CompanyProduct testCompanyProduct = companyProductList.get(companyProductList.size() - 1);
         assertThat(testCompanyProduct.getQuantity()).isEqualByComparingTo(DEFAULT_QUANTITY);
         assertThat(testCompanyProduct.getSku()).isEqualTo(DEFAULT_SKU);
-        assertThat(testCompanyProduct.getStockingRatio()).isEqualByComparingTo(DEFAULT_STOCKING_RATIO);
+        assertThat(testCompanyProduct.getContainerStockingRatio()).isEqualByComparingTo(DEFAULT_CONTAINER_STOCKING_RATIO);
     }
 
     @Test
@@ -159,10 +159,10 @@ class CompanyProductResourceIT {
 
     @Test
     @Transactional
-    void checkStockingRatioIsRequired() throws Exception {
+    void checkContainerStockingRatioIsRequired() throws Exception {
         int databaseSizeBeforeTest = companyProductRepository.findAll().size();
         // set the field null
-        companyProduct.setStockingRatio(null);
+        companyProduct.setContainerStockingRatio(null);
 
         // Create the CompanyProduct, which fails.
         CompanyProductDTO companyProductDTO = companyProductMapper.toDto(companyProduct);
@@ -191,7 +191,7 @@ class CompanyProductResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(companyProduct.getId().intValue())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(sameNumber(DEFAULT_QUANTITY))))
             .andExpect(jsonPath("$.[*].sku").value(hasItem(DEFAULT_SKU)))
-            .andExpect(jsonPath("$.[*].stockingRatio").value(hasItem(sameNumber(DEFAULT_STOCKING_RATIO))));
+            .andExpect(jsonPath("$.[*].containerStockingRatio").value(hasItem(sameNumber(DEFAULT_CONTAINER_STOCKING_RATIO))));
     }
 
     @Test
@@ -208,7 +208,7 @@ class CompanyProductResourceIT {
             .andExpect(jsonPath("$.id").value(companyProduct.getId().intValue()))
             .andExpect(jsonPath("$.quantity").value(sameNumber(DEFAULT_QUANTITY)))
             .andExpect(jsonPath("$.sku").value(DEFAULT_SKU))
-            .andExpect(jsonPath("$.stockingRatio").value(sameNumber(DEFAULT_STOCKING_RATIO)));
+            .andExpect(jsonPath("$.containerStockingRatio").value(sameNumber(DEFAULT_CONTAINER_STOCKING_RATIO)));
     }
 
     @Test
@@ -230,7 +230,7 @@ class CompanyProductResourceIT {
         CompanyProduct updatedCompanyProduct = companyProductRepository.findById(companyProduct.getId()).get();
         // Disconnect from session so that the updates on updatedCompanyProduct are not directly saved in db
         em.detach(updatedCompanyProduct);
-        updatedCompanyProduct.quantity(UPDATED_QUANTITY).sku(UPDATED_SKU).stockingRatio(UPDATED_STOCKING_RATIO);
+        updatedCompanyProduct.quantity(UPDATED_QUANTITY).sku(UPDATED_SKU).containerStockingRatio(UPDATED_CONTAINER_STOCKING_RATIO);
         CompanyProductDTO companyProductDTO = companyProductMapper.toDto(updatedCompanyProduct);
 
         restCompanyProductMockMvc
@@ -247,7 +247,7 @@ class CompanyProductResourceIT {
         CompanyProduct testCompanyProduct = companyProductList.get(companyProductList.size() - 1);
         assertThat(testCompanyProduct.getQuantity()).isEqualByComparingTo(UPDATED_QUANTITY);
         assertThat(testCompanyProduct.getSku()).isEqualTo(UPDATED_SKU);
-        assertThat(testCompanyProduct.getStockingRatio()).isEqualByComparingTo(UPDATED_STOCKING_RATIO);
+        assertThat(testCompanyProduct.getContainerStockingRatio()).isEqualByComparingTo(UPDATED_CONTAINER_STOCKING_RATIO);
     }
 
     @Test
@@ -345,7 +345,7 @@ class CompanyProductResourceIT {
         CompanyProduct testCompanyProduct = companyProductList.get(companyProductList.size() - 1);
         assertThat(testCompanyProduct.getQuantity()).isEqualByComparingTo(UPDATED_QUANTITY);
         assertThat(testCompanyProduct.getSku()).isEqualTo(DEFAULT_SKU);
-        assertThat(testCompanyProduct.getStockingRatio()).isEqualByComparingTo(DEFAULT_STOCKING_RATIO);
+        assertThat(testCompanyProduct.getContainerStockingRatio()).isEqualByComparingTo(DEFAULT_CONTAINER_STOCKING_RATIO);
     }
 
     @Test
@@ -360,7 +360,7 @@ class CompanyProductResourceIT {
         CompanyProduct partialUpdatedCompanyProduct = new CompanyProduct();
         partialUpdatedCompanyProduct.setId(companyProduct.getId());
 
-        partialUpdatedCompanyProduct.quantity(UPDATED_QUANTITY).sku(UPDATED_SKU).stockingRatio(UPDATED_STOCKING_RATIO);
+        partialUpdatedCompanyProduct.quantity(UPDATED_QUANTITY).sku(UPDATED_SKU).containerStockingRatio(UPDATED_CONTAINER_STOCKING_RATIO);
 
         restCompanyProductMockMvc
             .perform(
@@ -376,7 +376,7 @@ class CompanyProductResourceIT {
         CompanyProduct testCompanyProduct = companyProductList.get(companyProductList.size() - 1);
         assertThat(testCompanyProduct.getQuantity()).isEqualByComparingTo(UPDATED_QUANTITY);
         assertThat(testCompanyProduct.getSku()).isEqualTo(UPDATED_SKU);
-        assertThat(testCompanyProduct.getStockingRatio()).isEqualByComparingTo(UPDATED_STOCKING_RATIO);
+        assertThat(testCompanyProduct.getContainerStockingRatio()).isEqualByComparingTo(UPDATED_CONTAINER_STOCKING_RATIO);
     }
 
     @Test

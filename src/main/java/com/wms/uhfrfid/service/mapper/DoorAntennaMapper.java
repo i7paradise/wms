@@ -9,7 +9,7 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = { DoorMapper.class, UHFRFIDAntennaMapper.class })
 public interface DoorAntennaMapper extends EntityMapper<DoorAntennaDTO, DoorAntenna> {
-    @Mapping(target = "door", source = "door", qualifiedByName = "name")
-    @Mapping(target = "uhfAntenna", source = "uhfAntenna", qualifiedByName = "name")
+    @Mapping(target = "door", source = "door", qualifiedByName = "id")
+    @Mapping(target = "rfidAntenna", source = "rfidAntenna", qualifiedByName = "id")
     DoorAntennaDTO toDto(DoorAntenna s);
 }

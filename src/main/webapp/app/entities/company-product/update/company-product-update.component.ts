@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ICompanyProduct, CompanyProduct } from '../company-product.model';
 import { CompanyProductService } from '../service/company-product.service';
-import { IContainer } from 'app/entities/container/container.model';
-import { ContainerService } from 'app/entities/container/service/container.service';
+import { IContainerCategory } from 'app/entities/container-category/container-category.model';
+import { ContainerCategoryService } from 'app/entities/container-category/service/container-category.service';
 import { ICompany } from 'app/entities/company/company.model';
 import { CompanyService } from 'app/entities/company/service/company.service';
 import { IProduct } from 'app/entities/product/product.model';
@@ -21,7 +21,7 @@ import { ProductService } from 'app/entities/product/service/product.service';
 export class CompanyProductUpdateComponent implements OnInit {
   isSaving = false;
 
-  containersCollection: IContainer[] = [];
+  containerCategoriesCollection: IContainerCategory[] = [];
   companiesSharedCollection: ICompany[] = [];
   productsSharedCollection: IProduct[] = [];
 
@@ -29,15 +29,15 @@ export class CompanyProductUpdateComponent implements OnInit {
     id: [],
     quantity: [null, [Validators.required, Validators.min(0)]],
     sku: [],
-    stockingRatio: [null, [Validators.required, Validators.min(0)]],
-    container: [],
+    containerStockingRatio: [null, [Validators.required, Validators.min(0)]],
+    containerCategory: [],
     company: [],
     product: [],
   });
 
   constructor(
     protected companyProductService: CompanyProductService,
-    protected containerService: ContainerService,
+    protected containerCategoryService: ContainerCategoryService,
     protected companyService: CompanyService,
     protected productService: ProductService,
     protected activatedRoute: ActivatedRoute,
@@ -66,7 +66,7 @@ export class CompanyProductUpdateComponent implements OnInit {
     }
   }
 
-  trackContainerById(index: number, item: IContainer): number {
+  trackContainerCategoryById(index: number, item: IContainerCategory): number {
     return item.id!;
   }
 
@@ -102,15 +102,15 @@ export class CompanyProductUpdateComponent implements OnInit {
       id: companyProduct.id,
       quantity: companyProduct.quantity,
       sku: companyProduct.sku,
-      stockingRatio: companyProduct.stockingRatio,
-      container: companyProduct.container,
+      containerStockingRatio: companyProduct.containerStockingRatio,
+      containerCategory: companyProduct.containerCategory,
       company: companyProduct.company,
       product: companyProduct.product,
     });
 
-    this.containersCollection = this.containerService.addContainerToCollectionIfMissing(
-      this.containersCollection,
-      companyProduct.container
+    this.containerCategoriesCollection = this.containerCategoryService.addContainerCategoryToCollectionIfMissing(
+      this.containerCategoriesCollection,
+      companyProduct.containerCategory
     );
     this.companiesSharedCollection = this.companyService.addCompanyToCollectionIfMissing(
       this.companiesSharedCollection,
@@ -123,15 +123,18 @@ export class CompanyProductUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
-    this.containerService
+    this.containerCategoryService
       .query({ filter: 'companyproduct-is-null' })
-      .pipe(map((res: HttpResponse<IContainer[]>) => res.body ?? []))
+      .pipe(map((res: HttpResponse<IContainerCategory[]>) => res.body ?? []))
       .pipe(
-        map((containers: IContainer[]) =>
-          this.containerService.addContainerToCollectionIfMissing(containers, this.editForm.get('container')!.value)
+        map((containerCategories: IContainerCategory[]) =>
+          this.containerCategoryService.addContainerCategoryToCollectionIfMissing(
+            containerCategories,
+            this.editForm.get('containerCategory')!.value
+          )
         )
       )
-      .subscribe((containers: IContainer[]) => (this.containersCollection = containers));
+      .subscribe((containerCategories: IContainerCategory[]) => (this.containerCategoriesCollection = containerCategories));
 
     this.companyService
       .query()
@@ -156,8 +159,8 @@ export class CompanyProductUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       quantity: this.editForm.get(['quantity'])!.value,
       sku: this.editForm.get(['sku'])!.value,
-      stockingRatio: this.editForm.get(['stockingRatio'])!.value,
-      container: this.editForm.get(['container'])!.value,
+      containerStockingRatio: this.editForm.get(['containerStockingRatio'])!.value,
+      containerCategory: this.editForm.get(['containerCategory'])!.value,
       company: this.editForm.get(['company'])!.value,
       product: this.editForm.get(['product'])!.value,
     };

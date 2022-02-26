@@ -1,0 +1,56 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="orderItem">
+      <h2 data-cy="orderItemDetailsHeading"><span jhiTranslate="wmsApp.orderItem.detail.title">Order Item</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ orderItem.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.orderItem.quantity">Quantity</span></dt>
+        <dd>
+          <span>{{ orderItem.quantity }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.orderItem.status">Status</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'wmsApp.OrderItemStatus.' + orderItem.status }}">{{ orderItem.status }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.orderItem.containersCount">Containers Count</span></dt>
+        <dd>
+          <span>{{ orderItem.containersCount }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.orderItem.productsPerContainerCount">Products Per Container Count</span></dt>
+        <dd>
+          <span>{{ orderItem.productsPerContainerCount }}</span>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.orderItem.order">Order</span></dt>
+        <dd>
+          <div *ngIf="orderItem.order">
+            <a [routerLink]="['/order', orderItem.order?.id, 'view']">{{ orderItem.order?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="wmsApp.orderItem.companyProduct">Company Product</span></dt>
+        <dd>
+          <div *ngIf="orderItem.companyProduct">
+            <a [routerLink]="['/company-product', orderItem.companyProduct?.id, 'view']">{{ orderItem.companyProduct?.sku }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/order-item', orderItem.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

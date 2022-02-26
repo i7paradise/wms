@@ -7,9 +7,9 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link CompanyProduct} and its DTO {@link CompanyProductDTO}.
  */
-@Mapper(componentModel = "spring", uses = { ContainerMapper.class, CompanyMapper.class, ProductMapper.class })
+@Mapper(componentModel = "spring", uses = { ContainerCategoryMapper.class, CompanyMapper.class, ProductMapper.class })
 public interface CompanyProductMapper extends EntityMapper<CompanyProductDTO, CompanyProduct> {
-    @Mapping(target = "container", source = "container", qualifiedByName = "name")
+    @Mapping(target = "containerCategory", source = "containerCategory", qualifiedByName = "name")
     @Mapping(target = "company", source = "company", qualifiedByName = "name")
     @Mapping(target = "product", source = "product", qualifiedByName = "name")
     CompanyProductDTO toDto(CompanyProduct s);

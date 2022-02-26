@@ -1,0 +1,25 @@
+{
+  "wmsApp": {
+    "containerCategory": {
+      "home": {
+        "title": "Container Categories",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Container Category",
+        "createOrEditLabel": "Create or edit a Container Category",
+        "notFound": "No Container Categories found"
+      },
+      "created": "A new Container Category is created with identifier {{ param }}",
+      "updated": "A Container Category is updated with identifier {{ param }}",
+      "deleted": "A Container Category is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Container Category {{ id }}?"
+      },
+      "detail": {
+        "title": "Container Category"
+      },
+      "id": "ID",
+      "name": "Name",
+      "description": "Description"
+    }
+  }
+}

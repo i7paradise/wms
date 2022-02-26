@@ -5,15 +5,12 @@ import com.wms.uhfrfid.domain.enumeration.DoorAntennaType;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A DoorAntenna.
  */
 @Entity
 @Table(name = "door_antenna")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class DoorAntenna implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,12 +27,12 @@ public class DoorAntenna implements Serializable {
     private DoorAntennaType type;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "area" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "area", "doorAntennas" }, allowSetters = true)
     private Door door;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "uhfReader" }, allowSetters = true)
-    private UHFRFIDAntenna uhfAntenna;
+    @JsonIgnoreProperties(value = { "uhfReader", "doorAntennas" }, allowSetters = true)
+    private UHFRFIDAntenna rfidAntenna;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -78,16 +75,16 @@ public class DoorAntenna implements Serializable {
         return this;
     }
 
-    public UHFRFIDAntenna getUhfAntenna() {
-        return this.uhfAntenna;
+    public UHFRFIDAntenna getRfidAntenna() {
+        return this.rfidAntenna;
     }
 
-    public void setUhfAntenna(UHFRFIDAntenna uHFRFIDAntenna) {
-        this.uhfAntenna = uHFRFIDAntenna;
+    public void setRfidAntenna(UHFRFIDAntenna uHFRFIDAntenna) {
+        this.rfidAntenna = uHFRFIDAntenna;
     }
 
-    public DoorAntenna uhfAntenna(UHFRFIDAntenna uHFRFIDAntenna) {
-        this.setUhfAntenna(uHFRFIDAntenna);
+    public DoorAntenna rfidAntenna(UHFRFIDAntenna uHFRFIDAntenna) {
+        this.setRfidAntenna(uHFRFIDAntenna);
         return this;
     }
 

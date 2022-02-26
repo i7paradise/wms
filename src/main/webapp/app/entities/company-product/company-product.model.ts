@@ -1,4 +1,4 @@
-import { IContainer } from 'app/entities/container/container.model';
+import { IContainerCategory } from 'app/entities/container-category/container-category.model';
 import { ICompany } from 'app/entities/company/company.model';
 import { IProduct } from 'app/entities/product/product.model';
 
@@ -6,8 +6,8 @@ export interface ICompanyProduct {
   id?: number;
   quantity?: number;
   sku?: string | null;
-  stockingRatio?: number;
-  container?: IContainer | null;
+  containerStockingRatio?: number;
+  containerCategory?: IContainerCategory | null;
   company?: ICompany | null;
   product?: IProduct | null;
 }
@@ -17,8 +17,8 @@ export class CompanyProduct implements ICompanyProduct {
     public id?: number,
     public quantity?: number,
     public sku?: string | null,
-    public stockingRatio?: number,
-    public container?: IContainer | null,
+    public containerStockingRatio?: number,
+    public containerCategory?: IContainerCategory | null,
     public company?: ICompany | null,
     public product?: IProduct | null
   ) {}

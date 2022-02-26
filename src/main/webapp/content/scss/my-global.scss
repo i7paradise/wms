@@ -1,0 +1,23 @@
+@import '~bootstrap-icons/font/bootstrap-icons.css';
+
+$tr-selected-color: rgb(55 133 231 / 33%);
+
+.table-multiselect tbody tr:hover {
+  background-color: $tr-selected-color;
+  cursor: pointer;
+}
+
+.tr-selected {
+  background-color: $tr-selected-color !important;
+  font-weight: bold;
+}
+
+.btn-group .btn {
+  margin-right: 0.2em;
+  height: 2em;
+  width: 2.4em;
+}
+
+.btn-group .btn span {
+  font-size: 0;
+}

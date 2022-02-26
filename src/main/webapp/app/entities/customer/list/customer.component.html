@@ -39,7 +39,6 @@
           <th scope="col" jhiSortBy="lastName">
             <span jhiTranslate="wmsApp.customer.lastName">Last Name</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="gender"><span jhiTranslate="wmsApp.customer.gender">Gender</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="email"><span jhiTranslate="wmsApp.customer.email">Email</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="phone"><span jhiTranslate="wmsApp.customer.phone">Phone</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="addressLine1">
@@ -62,7 +61,6 @@
           </td>
           <td>{{ customer.firstName }}</td>
           <td>{{ customer.lastName }}</td>
-          <td jhiTranslate="{{ 'wmsApp.Gender.' + customer.gender }}">{{ customer.gender }}</td>
           <td>{{ customer.email }}</td>
           <td>{{ customer.phone }}</td>
           <td>{{ customer.addressLine1 }}</td>

@@ -102,8 +102,19 @@
             <!-- jhipster-needle-maven-add-dependency-management -->
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
+        <dependency>
+            <groupId>com.rfidread</groupId>
+            <artifactId>rfidread</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/RFIDReaderAPI.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-core</artifactId>
+            <version>5.7.0</version>
+        </dependency>
         <dependency>
             <groupId>tech.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>

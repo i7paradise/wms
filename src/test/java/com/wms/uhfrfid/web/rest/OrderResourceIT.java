@@ -41,8 +41,8 @@ class OrderResourceIT {
     private static final Instant DEFAULT_PLACED_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_PLACED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final OrderStatus DEFAULT_STATUS = OrderStatus.COMPLETED;
-    private static final OrderStatus UPDATED_STATUS = OrderStatus.PENDING;
+    private static final OrderStatus DEFAULT_STATUS = OrderStatus.DRAFT;
+    private static final OrderStatus UPDATED_STATUS = OrderStatus.IN_PROGRESS;
 
     private static final String DEFAULT_CODE = "AAAAAAAAAA";
     private static final String UPDATED_CODE = "BBBBBBBBBB";

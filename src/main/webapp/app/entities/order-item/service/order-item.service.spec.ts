@@ -23,7 +23,7 @@ describe('OrderItem Service', () => {
     elemDefault = {
       id: 0,
       quantity: 0,
-      status: OrderItemStatus.IN_PROGRESS,
+      status: OrderItemStatus.DRAFT,
       containersCount: 0,
       productsPerContainerCount: 0,
     };

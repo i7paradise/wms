@@ -2,8 +2,9 @@
   "wmsApp": {
     "OrderStatus": {
       "null": "",
+      "DRAFT": "DRAFT",
+      "IN_PROGRESS": "IN_PROGRESS",
       "COMPLETED": "COMPLETED",
-      "PENDING": "PENDING",
       "CANCELLED": "CANCELLED"
     }
   }

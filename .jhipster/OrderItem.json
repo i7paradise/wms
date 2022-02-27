@@ -15,7 +15,7 @@
       "fieldName": "status",
       "fieldType": "OrderItemStatus",
       "fieldValidateRules": ["required"],
-      "fieldValues": "IN_PROGRESS,VERIFIED,LABELED,PARTIALLY_PLACED,FULLY_PLACED"
+      "fieldValues": "DRAFT,IN_PROGRESS,COMPLETED,CANCELLED"
     },
     {
       "fieldName": "containersCount",

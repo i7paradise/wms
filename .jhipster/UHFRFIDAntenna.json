@@ -31,8 +31,8 @@
     {
       "otherEntityField": "name",
       "otherEntityName": "uHFRFIDReader",
-      "otherEntityRelationshipName": "uHFRFIDAntenna",
-      "relationshipName": "uhfReader",
+      "otherEntityRelationshipName": "uhfRFIDAntennas",
+      "relationshipName": "uhfRFIDReader",
       "relationshipType": "many-to-one"
     },
     {

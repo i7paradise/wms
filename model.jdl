@@ -212,7 +212,7 @@ relationship ManyToOne {
 
 	UHFRFIDReader{company(name)} to Company{uhfRFIDReader(name)}
 
-	UHFRFIDAntenna{uhfReader(name)} to UHFRFIDReader
+	UHFRFIDAntenna{uhfRFIDReader(name)} to UHFRFIDReader{uhfRFIDAntennas(name)}
 
 	DoorAntenna to Door
 	DoorAntenna{rfidAntenna} to UHFRFIDAntenna{doorAntenna}

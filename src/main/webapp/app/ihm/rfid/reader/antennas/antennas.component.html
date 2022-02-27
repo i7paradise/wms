@@ -1,29 +1,4 @@
 <div>
-  <h2 id="page-heading" data-cy="UHFRFIDAntennaHeading">
-    <span jhiTranslate="wmsApp.uHFRFIDAntenna.home.title">UHFRFID Antennas</span>
-
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="wmsApp.uHFRFIDAntenna.home.refreshListLabel">Refresh List</span>
-      </button>
-
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-uhfrfid-antenna"
-        [routerLink]="['/uhfrfid-antenna/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="wmsApp.uHFRFIDAntenna.home.createLabel"> Create a new UHFRFID Antenna </span>
-      </button>
-    </div>
-  </h2>
-
-  <jhi-alert-error></jhi-alert-error>
-
-  <jhi-alert></jhi-alert>
-
   <div class="alert alert-warning" id="no-result" *ngIf="uHFRFIDAntennas?.length === 0">
     <span jhiTranslate="wmsApp.uHFRFIDAntenna.home.notFound">No uHFRFIDAntennas found</span>
   </div>

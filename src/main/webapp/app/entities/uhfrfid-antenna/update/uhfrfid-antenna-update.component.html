@@ -71,12 +71,22 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="wmsApp.uHFRFIDAntenna.uhfReader" for="field_uhfReader">Uhf Reader</label>
-          <select class="form-control" id="field_uhfReader" data-cy="uhfReader" name="uhfReader" formControlName="uhfReader">
+          <label class="form-control-label" jhiTranslate="wmsApp.uHFRFIDAntenna.uhfRFIDReader" for="field_uhfRFIDReader"
+            >Uhf RFID Reader</label
+          >
+          <select
+            class="form-control"
+            id="field_uhfRFIDReader"
+            data-cy="uhfRFIDReader"
+            name="uhfRFIDReader"
+            formControlName="uhfRFIDReader"
+          >
             <option [ngValue]="null"></option>
             <option
               [ngValue]="
-                uHFRFIDReaderOption.id === editForm.get('uhfReader')!.value?.id ? editForm.get('uhfReader')!.value : uHFRFIDReaderOption
+                uHFRFIDReaderOption.id === editForm.get('uhfRFIDReader')!.value?.id
+                  ? editForm.get('uhfRFIDReader')!.value
+                  : uHFRFIDReaderOption
               "
               *ngFor="let uHFRFIDReaderOption of uHFRFIDReadersSharedCollection; trackBy: trackUHFRFIDReaderById"
             >

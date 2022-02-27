@@ -21,7 +21,7 @@ public class UHFRFIDAntennaDTO implements Serializable {
     @NotNull
     private UHFRFIDAntennaStatus status;
 
-    private UHFRFIDReaderDTO uhfReader;
+    private UHFRFIDReaderDTO uhfRFIDReader;
 
     public Long getId() {
         return id;
@@ -55,12 +55,12 @@ public class UHFRFIDAntennaDTO implements Serializable {
         this.status = status;
     }
 
-    public UHFRFIDReaderDTO getUhfReader() {
-        return uhfReader;
+    public UHFRFIDReaderDTO getUhfRFIDReader() {
+        return uhfRFIDReader;
     }
 
-    public void setUhfReader(UHFRFIDReaderDTO uhfReader) {
-        this.uhfReader = uhfReader;
+    public void setUhfRFIDReader(UHFRFIDReaderDTO uhfRFIDReader) {
+        this.uhfRFIDReader = uhfRFIDReader;
     }
 
     @Override
@@ -92,7 +92,7 @@ public class UHFRFIDAntennaDTO implements Serializable {
             ", name='" + getName() + "'" +
             ", outputPower=" + getOutputPower() +
             ", status='" + getStatus() + "'" +
-            ", uhfReader=" + getUhfReader() +
+            ", uhfRFIDReader=" + getUhfRFIDReader() +
             "}";
     }
 }

@@ -26,10 +26,10 @@
         <dd>
           <span jhiTranslate="{{ 'wmsApp.UHFRFIDAntennaStatus.' + uHFRFIDAntenna.status }}">{{ uHFRFIDAntenna.status }}</span>
         </dd>
-        <dt><span jhiTranslate="wmsApp.uHFRFIDAntenna.uhfReader">Uhf Reader</span></dt>
+        <dt><span jhiTranslate="wmsApp.uHFRFIDAntenna.uhfRFIDReader">Uhf RFID Reader</span></dt>
         <dd>
-          <div *ngIf="uHFRFIDAntenna.uhfReader">
-            <a [routerLink]="['/uhfrfid-reader', uHFRFIDAntenna.uhfReader?.id, 'view']">{{ uHFRFIDAntenna.uhfReader?.name }}</a>
+          <div *ngIf="uHFRFIDAntenna.uhfRFIDReader">
+            <a [routerLink]="['/uhfrfid-reader', uHFRFIDAntenna.uhfRFIDReader?.id, 'view']">{{ uHFRFIDAntenna.uhfRFIDReader?.name }}</a>
           </div>
         </dd>
       </dl>

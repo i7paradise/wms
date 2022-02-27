@@ -3,20 +3,17 @@ package com.wms.uhfrfid.service.rfid.reader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class RFIDReaderStartup {
-
     private static RFIDReaderStartup INSTANCE;
 	private HashMap<Integer, Integer> antennaSetConsumers = new HashMap<Integer, Integer>(4);
 	private Vector<Integer> antennaSet = null;
 	private XSPSRFIDReader producer;
 	private PoolRFIDConsumer consumers;
 	private Thread producerThread;
+    private final Logger log = LoggerFactory.getLogger(RFIDReaderStartup.class);
 
     public synchronized static RFIDReaderStartup getInstance() {
         if(INSTANCE == null) {
@@ -27,14 +24,11 @@ public final class RFIDReaderStartup {
     }
 
 	public void startRFIDReader() {
-		System.out.println("Aloha");
+		log.debug(this.toString() + " started");
 
-//		antennaSetConsumers.put(1, 1);
-//		antennaSetConsumers.put(2, 1);
 		antennaSetConsumers.put(3, 1);
-//		antennaSetConsumers.put(4, 1);
 
-		antennaSet = new Vector(antennaSetConsumers.size());
+		antennaSet = new Vector<Integer>(antennaSetConsumers.size());
 		for (Map.Entry<Integer, Integer> set : antennaSetConsumers.entrySet())
 			antennaSet.add(set.getKey());		
 
@@ -78,6 +72,4 @@ public final class RFIDReaderStartup {
 	public void setConsumers(PoolRFIDConsumer consumers) {
 		this.consumers = consumers;
 	}
-
-
 }

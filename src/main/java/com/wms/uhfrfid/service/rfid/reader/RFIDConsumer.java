@@ -1,24 +1,19 @@
 package com.wms.uhfrfid.service.rfid.reader;
 
-import java.util.Map;
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
-import javax.jms.TextMessage;
-
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RFIDConsumer implements Runnable {
-
     private static transient ConnectionFactory factory = null;
     private transient Connection connection = null;
     private transient Session session = null;
@@ -29,7 +24,7 @@ public class RFIDConsumer implements Runnable {
     private String brokerUrl = null;
     private String brokerStore = null;
     private int tag_cnt = 0;
-
+    private final Logger log = LoggerFactory.getLogger(RFIDConsumer.class);
     
     public RFIDConsumer(String brokerStorePrefix, String brokerURL, int rfidAntenna) throws JMSException {
     	this.brokerUrl = new String(brokerURL);
@@ -63,18 +58,17 @@ public class RFIDConsumer implements Runnable {
             		RFIDTag wmsTag = (RFIDTag) objMessage.getObject();
                     
             		for (RFIDTagListener rfidListener : rfidListeners) {
-//            			wmsTag.set_EPC(this.toString());
                        if (rfidAntenna == wmsTag.get_ANT_NUM())
                     	   rfidListener.onMessage(wmsTag);
                        else
-                    	   System.out.println("RFID Consumer: wrong antenna: " + rfidAntenna + " ### " + wmsTag.get_ANT_NUM());
+                    	   log.error("RFID Consumer: wrong antenna: " + rfidAntenna + " ### " + wmsTag.get_ANT_NUM());
                    }
             	} else {
-            		System.out.println("RFID Consumer: received message is broken");            		
+            		log.error("RFID Consumer: received a broken message");            		
             	}
             }
     	} catch(Exception e) {
-    		System.out.println("Consumer @ exeception: " + e.getMessage());
+    		e.printStackTrace();
     	}
     }
 
@@ -122,7 +116,5 @@ public class RFIDConsumer implements Runnable {
 
 	public void setBrokerStore(String brokerStore) {
 		this.brokerStore = brokerStore;
-	}
-
-	
+	}	
 }

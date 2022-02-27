@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  */
 public class RFIDTag implements Serializable {
-
+	private static final long serialVersionUID = 8526412295622776555L; 
 	private String _ReaderName = "";
 	private String _PC = null;
 	private String _EPC = null;

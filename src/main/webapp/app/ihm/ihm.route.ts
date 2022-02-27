@@ -8,6 +8,9 @@ import { ReceptionRoutingResolveService } from './reception/service/reception-ro
 import { ReaderDetailComponent } from './rfid/reader/reader-detail/reader-detail.component';
 import { ReaderRoutingResolveService } from './rfid/reader/service/reader-routing-resolve.service';
 import { ReaderComponent } from './rfid/reader/reader.component';
+import { XspsWarehouseComponent} from './xsps-warehouse/xsps-warehouse.component';
+import { XspsWarehouseRoutingResolveService } from './xsps-warehouse/service/xsps-warehouse-routing-resolve.service';
+import { XspsWarehouseDetailComponent } from './xsps-warehouse/xsps-warehouse-detail/xsps-warehouse-detail.component';
 
 export const ihmRoute: Routes = [
   {
@@ -41,6 +44,19 @@ export const ihmRoute: Routes = [
       uHFRFIDReader: ReaderRoutingResolveService,
     },
     component: ReaderDetailComponent,
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'warehouse',
+    component: XspsWarehouseComponent,
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'warehouse/:id',
+    resolve: {
+      warehouse: XspsWarehouseRoutingResolveService,
+    },
+    component: XspsWarehouseDetailComponent,
     canActivate: [UserRouteAccessService],
   },
 ];

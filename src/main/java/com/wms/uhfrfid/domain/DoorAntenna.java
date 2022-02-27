@@ -31,7 +31,7 @@ public class DoorAntenna implements Serializable {
     private Door door;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "uhfReader", "doorAntennas" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "uhfRFIDReader", "doorAntennas" }, allowSetters = true)
     private UHFRFIDAntenna rfidAntenna;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

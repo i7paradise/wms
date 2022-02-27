@@ -22,7 +22,8 @@
       "ip": "Ip",
       "port": "Port",
       "status": "Status",
-      "company": "Company"
+      "company": "Company",
+      "uhfRFIDAntennas": "Uhf RFID Antennas"
     }
   }
 }

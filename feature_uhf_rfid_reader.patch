@@ -1,0 +1,247 @@
+diff --git a/src/main/java/com/wms/uhfrfid/repository/XSPSUHFRFIDReaderRepository.java b/src/main/java/com/wms/uhfrfid/repository/XSPSUHFRFIDReaderRepository.java
+new file mode 100644
+index 0000000..27f7564
+--- /dev/null
++++ b/src/main/java/com/wms/uhfrfid/repository/XSPSUHFRFIDReaderRepository.java
+@@ -0,0 +1,15 @@
++package com.wms.uhfrfid.repository;
++
++import com.wms.uhfrfid.domain.UHFRFIDReader;
++import org.springframework.data.domain.Page;
++import org.springframework.data.domain.Pageable;
++import org.springframework.stereotype.Repository;
++
++/**
++ * Spring Data SQL repository for the DeliveryOrder entity.
++ */
++@Repository
++public interface XSPSUHFRFIDReaderRepository extends UHFRFIDReaderRepository {
++    //TODO define Query
++    Page<UHFRFIDReader> findUHFReaderByName(String name, Pageable pageable);
++}
+\ No newline at end of file
+diff --git a/src/main/java/com/wms/uhfrfid/service/XSPSUHFRFIDReaderService.java b/src/main/java/com/wms/uhfrfid/service/XSPSUHFRFIDReaderService.java
+new file mode 100644
+index 0000000..d65e34a
+--- /dev/null
++++ b/src/main/java/com/wms/uhfrfid/service/XSPSUHFRFIDReaderService.java
+@@ -0,0 +1,67 @@
++package com.wms.uhfrfid.service;
++
++import com.wms.uhfrfid.domain.User;
++import com.wms.uhfrfid.repository.UHFRFIDReaderRepository;
++import com.wms.uhfrfid.repository.XSPSUHFRFIDReaderRepository;
++import com.wms.uhfrfid.repository.UserRepository;
++import com.wms.uhfrfid.service.dto.UHFRFIDReaderDTO;
++import com.wms.uhfrfid.service.dto.UHFRFIDReaderDTOV2;
++import com.wms.uhfrfid.service.mapper.UHFRFIDReaderMapper;
++import com.wms.uhfrfid.service.mapper.v2.UHFRFIDReaderV2Mapper;
++import java.util.Optional;
++import org.slf4j.Logger;
++import org.slf4j.LoggerFactory;
++import org.springframework.data.domain.Page;
++import org.springframework.data.domain.Pageable;
++import org.springframework.stereotype.Service;
++import org.springframework.transaction.annotation.Transactional;
++
++@Service
++@Transactional
++public class XSPSUHFRFIDReaderService extends UHFRFIDReaderService {
++
++	private final Logger log = LoggerFactory.getLogger(XSPSUHFRFIDReaderService.class);
++
++	private final UHFRFIDReaderRepository uhfRFIDReaderRepository;
++	private final XSPSUHFRFIDReaderRepository xspsUHFRFIDReaderRepository;
++	private final UserRepository userRepository;
++	private final UHFRFIDReaderMapper uhfRFIDReaderMapper;
++	private final UHFRFIDReaderV2Mapper uhfRFIDReaderV2Mapper;
++
++	public XSPSUHFRFIDReaderService(
++			UHFRFIDReaderRepository uhfRFIDReaderRepository,
++			UHFRFIDReaderMapper uhfRFIDReaderMapper,
++			XSPSUHFRFIDReaderRepository xspsUHFRFIDReaderRepository,
++			UserRepository userRepository,
++			UHFRFIDReaderV2Mapper uhfRFIDReaderV2Mapper
++			) {
++		super(uhfRFIDReaderRepository, uhfRFIDReaderMapper);
++		this.uhfRFIDReaderRepository = uhfRFIDReaderRepository;
++		this.uhfRFIDReaderMapper = uhfRFIDReaderMapper;
++		this.xspsUHFRFIDReaderRepository = xspsUHFRFIDReaderRepository;
++		this.userRepository = userRepository;
++		this.uhfRFIDReaderV2Mapper = uhfRFIDReaderV2Mapper;
++	}
++
++	@Transactional(readOnly = true)
++	public Page<UHFRFIDReaderDTO> findAll(String userLogin, Pageable pageable) {
++		User user = userRepository
++				.findOneByLogin(userLogin)
++				.orElseThrow(() -> new IllegalArgumentException("TODO UHFRFIDReaderService user not found"));
++		//TODO add user to the query
++		return xspsUHFRFIDReaderRepository.findAll(pageable).map(uhfRFIDReaderMapper::toDto);
++	}
++
++	@Transactional(readOnly = true)
++	public Optional<UHFRFIDReaderDTOV2> findOne(Long id, String userLogin) {
++		log.debug("Request to get UHFRFIDReader : {}", id);
++		//TODO implement find by user
++		return uhfRFIDReaderRepository
++				.findById(id)
++				.map(e -> {
++					e.getUhfRFIDAntennas();
++					return e;
++				})
++				.map(uhfRFIDReaderV2Mapper::toDto);
++	}
++}
+diff --git a/src/main/java/com/wms/uhfrfid/service/dto/UHFRFIDReaderDTOV2.java b/src/main/java/com/wms/uhfrfid/service/dto/UHFRFIDReaderDTOV2.java
+new file mode 100644
+index 0000000..8e3768e
+--- /dev/null
++++ b/src/main/java/com/wms/uhfrfid/service/dto/UHFRFIDReaderDTOV2.java
+@@ -0,0 +1,18 @@
++package com.wms.uhfrfid.service.dto;
++
++import com.fasterxml.jackson.annotation.JsonInclude;
++import java.util.List;
++
++@JsonInclude(JsonInclude.Include.NON_EMPTY)
++public class UHFRFIDReaderDTOV2 extends UHFRFIDReaderDTO {
++
++    private List<UHFRFIDAntennaDTO> uhfRFIDAntennas;
++
++    public void setUHFRFIDAntennas(List<UHFRFIDAntennaDTO> uhfRFIDAntennas) {
++        this.uhfRFIDAntennas = uhfRFIDAntennas;
++    }
++
++    public List<UHFRFIDAntennaDTO> getDeliveryOrderItems() {
++        return uhfRFIDAntennas;
++    }
++}
+\ No newline at end of file
+diff --git a/src/main/java/com/wms/uhfrfid/service/mapper/v2/UHFRFIDReaderV2Mapper.java b/src/main/java/com/wms/uhfrfid/service/mapper/v2/UHFRFIDReaderV2Mapper.java
+new file mode 100644
+index 0000000..5be65ba
+--- /dev/null
++++ b/src/main/java/com/wms/uhfrfid/service/mapper/v2/UHFRFIDReaderV2Mapper.java
+@@ -0,0 +1,29 @@
++package com.wms.uhfrfid.service.mapper.v2;
++
++import com.wms.uhfrfid.domain.UHFRFIDReader;
++import com.wms.uhfrfid.domain.DeliveryOrderItem;
++import com.wms.uhfrfid.domain.UHFRFIDAntenna;
++import com.wms.uhfrfid.service.dto.UHFRFIDReaderDTO;
++import com.wms.uhfrfid.service.dto.UHFRFIDReaderDTOV2;
++import com.wms.uhfrfid.service.dto.DeliveryOrderItemDTO;
++import com.wms.uhfrfid.service.dto.UHFRFIDAntennaDTO;
++import com.wms.uhfrfid.service.mapper.CompanyProductMapper;
++import com.wms.uhfrfid.service.mapper.DeliveryOrderMapper;
++import com.wms.uhfrfid.service.mapper.EntityMapper;
++
++import org.mapstruct.BeanMapping;
++import org.mapstruct.Mapper;
++import org.mapstruct.Mapping;
++import org.mapstruct.Named;
++
++/**
++ * Mapper for the entity {@link UHFRFIDReader} and its DTO {@link UHFRFIDReaderDTO}.
++ */
++@Mapper(componentModel = "spring", uses = {})
++public interface UHFRFIDReaderV2Mapper extends EntityMapper<UHFRFIDReaderDTOV2, UHFRFIDReader> {
++    @Mapping(target = "uhfRFIDReader", ignore = true)
++    UHFRFIDAntenna toEntity(UHFRFIDAntennaDTO s);
++
++    @Mapping(target = "uhfRFIDReader", ignore = true)
++    UHFRFIDAntennaDTO toEntity(UHFRFIDAntenna s);
++}
+\ No newline at end of file
+diff --git a/src/main/java/com/wms/uhfrfid/web/rest/XSPSUHFRFIDReaderResource.java b/src/main/java/com/wms/uhfrfid/web/rest/XSPSUHFRFIDReaderResource.java
+new file mode 100644
+index 0000000..46cde23
+--- /dev/null
++++ b/src/main/java/com/wms/uhfrfid/web/rest/XSPSUHFRFIDReaderResource.java
+@@ -0,0 +1,62 @@
++package com.wms.uhfrfid.web.rest;
++
++import com.wms.uhfrfid.security.SecurityUtils;
++import com.wms.uhfrfid.service.ReceptionService;
++import com.wms.uhfrfid.service.XSPSUHFRFIDReaderService;
++import com.wms.uhfrfid.service.dto.DeliveryOrderDTO;
++import com.wms.uhfrfid.service.dto.DeliveryOrderDTOV2;
++import com.wms.uhfrfid.service.dto.UHFRFIDReaderDTO;
++import com.wms.uhfrfid.service.dto.UHFRFIDReaderDTOV2;
++
++import java.util.List;
++import java.util.Optional;
++import org.slf4j.Logger;
++import org.slf4j.LoggerFactory;
++import org.springframework.data.domain.Page;
++import org.springframework.data.domain.Pageable;
++import org.springframework.http.HttpHeaders;
++import org.springframework.http.ResponseEntity;
++import org.springframework.web.bind.annotation.GetMapping;
++import org.springframework.web.bind.annotation.PathVariable;
++import org.springframework.web.bind.annotation.RequestMapping;
++import org.springframework.web.bind.annotation.RestController;
++import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
++import tech.jhipster.web.util.PaginationUtil;
++import tech.jhipster.web.util.ResponseUtil;
++
++/**
++ * ReceptionResource controller
++ */
++@RestController
++@RequestMapping(XSPSUHFRFIDReaderResource.PATH)
++public class XSPSUHFRFIDReaderResource {
++
++    public static final String PATH = "/api/v1/receptions";
++
++    private final Logger log = LoggerFactory.getLogger(XSPSUHFRFIDReaderResource.class);
++    private final XSPSUHFRFIDReaderService xspsUHFRFIDReaderService;
++
++    public XSPSUHFRFIDReaderResource(XSPSUHFRFIDReaderService xspsUHFRFIDReaderService) {
++        this.xspsUHFRFIDReaderService = xspsUHFRFIDReaderService;
++    }
++
++    /**
++     * GET fetchOpenReceptions
++     */
++    @GetMapping
++    public ResponseEntity<List<UHFRFIDReaderDTO>> fetchReceptions(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
++        log.debug("REST request to get a page of DeliveryOrders");
++        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new IllegalArgumentException("TODO 401"));
++        Page<UHFRFIDReaderDTO> page = xspsUHFRFIDReaderService.findAll(userLogin, pageable);
++        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
++        return ResponseEntity.ok().headers(headers).body(page.getContent());
++    }
++
++    @GetMapping("/{id}")
++    public ResponseEntity<UHFRFIDReaderDTOV2> fetchReception(@PathVariable Long id) {
++        log.debug("REST request to get DeliveryOrder : {}", id);
++        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new IllegalArgumentException("TODO 401"));
++        Optional<UHFRFIDReaderDTOV2> UHFRFIDReaderDTO = xspsUHFRFIDReaderService.findOne(id, userLogin);
++        return ResponseUtil.wrapOrNotFound(UHFRFIDReaderDTO);
++    }
++}
+diff --git a/src/main/resources/config/liquibase/changelog/20220129215439_added_entity_constraints_UHFRFIDReader.xml b/src/main/resources/config/liquibase/changelog/20220129215439_added_entity_constraints_UHFRFIDReader.xml
+new file mode 100644
+index 0000000..234b785
+--- /dev/null
++++ b/src/main/resources/config/liquibase/changelog/20220129215439_added_entity_constraints_UHFRFIDReader.xml
+@@ -0,0 +1,17 @@
++<?xml version="1.0" encoding="utf-8"?>
++<databaseChangeLog
++    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
++    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
++    <!--
++        Added the constraints for entity UHFRFIDReader.
++    -->
++    <changeSet id="20220129215439-2" author="jhipster">
++
++        <addForeignKeyConstraint baseColumnNames="company_id"
++                                 baseTableName="uhfrfid_reader"
++                                 constraintName="fk_uhfrfid_reader__company_id"
++                                 referencedColumnNames="id"
++                                 referencedTableName="company"/>
++    </changeSet>
++</databaseChangeLog>

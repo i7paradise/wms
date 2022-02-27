@@ -1,4 +1,5 @@
 import { ICompany } from 'app/entities/company/company.model';
+import { IUHFRFIDAntenna } from 'app/entities/uhfrfid-antenna/uhfrfid-antenna.model';
 import { UHFRFIDReaderStatus } from 'app/entities/enumerations/uhfrfid-reader-status.model';
 
 export interface IUHFRFIDReader {
@@ -8,6 +9,7 @@ export interface IUHFRFIDReader {
   port?: number;
   status?: UHFRFIDReaderStatus;
   company?: ICompany | null;
+  uhfRFIDAntennas?: IUHFRFIDAntenna[] | null;
 }
 
 export class UHFRFIDReader implements IUHFRFIDReader {
@@ -17,7 +19,8 @@ export class UHFRFIDReader implements IUHFRFIDReader {
     public ip?: string,
     public port?: number,
     public status?: UHFRFIDReaderStatus,
-    public company?: ICompany | null
+    public company?: ICompany | null,
+    public uhfRFIDAntennas?: IUHFRFIDAntenna[] | null
   ) {}
 }
 

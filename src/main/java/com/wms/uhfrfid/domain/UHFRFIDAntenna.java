@@ -44,6 +44,10 @@ public class UHFRFIDAntenna implements Serializable {
     @JsonIgnoreProperties(value = { "door", "rfidAntenna" }, allowSetters = true)
     private Set<DoorAntenna> doorAntennas = new HashSet<>();
 
+    @OneToMany(mappedBy = "rfidAntenna")
+    @JsonIgnoreProperties(value = { "door", "rfidAntenna" }, allowSetters = true)
+    private Set<DoorAntenna> doorAntennas = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -108,6 +112,37 @@ public class UHFRFIDAntenna implements Serializable {
 
     public UHFRFIDAntenna uhfRFIDReader(UHFRFIDReader uHFRFIDReader) {
         this.setUhfRFIDReader(uHFRFIDReader);
+        return this;
+    }
+
+    public Set<DoorAntenna> getDoorAntennas() {
+        return this.doorAntennas;
+    }
+
+    public void setDoorAntennas(Set<DoorAntenna> doorAntennas) {
+        if (this.doorAntennas != null) {
+            this.doorAntennas.forEach(i -> i.setRfidAntenna(null));
+        }
+        if (doorAntennas != null) {
+            doorAntennas.forEach(i -> i.setRfidAntenna(this));
+        }
+        this.doorAntennas = doorAntennas;
+    }
+
+    public UHFRFIDAntenna doorAntennas(Set<DoorAntenna> doorAntennas) {
+        this.setDoorAntennas(doorAntennas);
+        return this;
+    }
+
+    public UHFRFIDAntenna addDoorAntenna(DoorAntenna doorAntenna) {
+        this.doorAntennas.add(doorAntenna);
+        doorAntenna.setRfidAntenna(this);
+        return this;
+    }
+
+    public UHFRFIDAntenna removeDoorAntenna(DoorAntenna doorAntenna) {
+        this.doorAntennas.remove(doorAntenna);
+        doorAntenna.setRfidAntenna(null);
         return this;
     }
 

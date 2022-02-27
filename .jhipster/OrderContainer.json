@@ -28,12 +28,6 @@
       "otherEntityRelationshipName": "orderContainer",
       "relationshipName": "orderItem",
       "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityName": "orderItemProduct",
-      "otherEntityRelationshipName": "orderContainer",
-      "relationshipName": "orderItemProduct",
-      "relationshipType": "one-to-many"
     }
   ],
   "service": "serviceClass"

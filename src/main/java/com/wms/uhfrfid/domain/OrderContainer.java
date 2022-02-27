@@ -2,8 +2,6 @@ package com.wms.uhfrfid.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.*;
 
 /**
@@ -32,10 +30,6 @@ public class OrderContainer implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = { "order", "companyProduct", "orderContainers" }, allowSetters = true)
     private OrderItem orderItem;
-
-    @OneToMany(mappedBy = "orderContainer")
-    @JsonIgnoreProperties(value = { "orderContainer" }, allowSetters = true)
-    private Set<OrderItemProduct> orderItemProducts = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -88,37 +82,6 @@ public class OrderContainer implements Serializable {
 
     public OrderContainer orderItem(OrderItem orderItem) {
         this.setOrderItem(orderItem);
-        return this;
-    }
-
-    public Set<OrderItemProduct> getOrderItemProducts() {
-        return this.orderItemProducts;
-    }
-
-    public void setOrderItemProducts(Set<OrderItemProduct> orderItemProducts) {
-        if (this.orderItemProducts != null) {
-            this.orderItemProducts.forEach(i -> i.setOrderContainer(null));
-        }
-        if (orderItemProducts != null) {
-            orderItemProducts.forEach(i -> i.setOrderContainer(this));
-        }
-        this.orderItemProducts = orderItemProducts;
-    }
-
-    public OrderContainer orderItemProducts(Set<OrderItemProduct> orderItemProducts) {
-        this.setOrderItemProducts(orderItemProducts);
-        return this;
-    }
-
-    public OrderContainer addOrderItemProduct(OrderItemProduct orderItemProduct) {
-        this.orderItemProducts.add(orderItemProduct);
-        orderItemProduct.setOrderContainer(this);
-        return this;
-    }
-
-    public OrderContainer removeOrderItemProduct(OrderItemProduct orderItemProduct) {
-        this.orderItemProducts.remove(orderItemProduct);
-        orderItemProduct.setOrderContainer(null);
         return this;
     }
 

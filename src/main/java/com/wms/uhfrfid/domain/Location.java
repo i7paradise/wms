@@ -28,7 +28,7 @@ public class Location implements Serializable {
     private String note;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "company" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "company", "locations", "areas" }, allowSetters = true)
     private Warehouse warehouse;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

@@ -5,24 +5,23 @@ package com.wms.uhfrfid.service.rfid.reader;
 
 import java.util.HashMap;
 import java.util.Vector;
-import java.util.concurrent.Callable;
-
-import javax.jms.Message;
-import javax.jms.MessageListener;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author hmr
  *
  */
-public class RFIDTagListener { //implements Callable<Integer> {
-
+public class RFIDTagListener implements AutoCloseable {
 	protected PoolRFIDConsumer consumers = null;
 	protected String job = null;
 	protected Vector<Integer> antennaSet = null;
 	protected HashMap<String, RFIDTag> rfidTagSet = null;
-	protected int rfidTagCount = 0;
+	protected AtomicInteger rfidTagCount = new AtomicInteger();
 	protected int rfidTagToRead = 0;
 	protected int timeout = 0;
+    private final Logger log = LoggerFactory.getLogger(RFIDTagListener.class);
 	
 	/**
 	 * @param consumers
@@ -36,45 +35,23 @@ public class RFIDTagListener { //implements Callable<Integer> {
 		this.rfidTagToRead = rfidTagToRead;
 		this.timeout = timeout;
 
+		log.debug(this.toString() + " registring listenners linked to those antenna: " + this.antennaSet.toString());
 		for (Integer antenna : this.antennaSet)
 			this.consumers.registerListener(antenna, this);
 	}
 
 	public synchronized void onMessage(RFIDTag rfidTag) {
 		try {
-			//do something here
-			System.out.println("RFIDTagListener : " + job + " Antenna: " + rfidTag.get_ANT_NUM() + " # " + rfidTag.get_EPC());
+			log.debug("RFIDTagListener : " + job + " Antenna: " + rfidTag.get_ANT_NUM() + " # " + rfidTag.get_EPC());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public Vector<RFIDTag> call(int timeout) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-/*
 	@Override
-	public Integer call() throws Exception {
-		// TODO Auto-generated method stub
-		return 555;
+	public void close() throws Exception {
+		log.debug(this.toString() + " unregistring listenners linked to those antenna: " + this.antennaSet.toString());
+		for (Integer antenna : this.antennaSet)
+			this.consumers.unregisterListener(antenna, this);
 	}
-*/
-
-/*
-	@Override
-	public synchronized void run() {
-		while (true) {
-			try {
-				wait();
-				System.out.println("@@@@@@@@@@@@@@@@@@@@@ ######################### Antenna: ");
-				//			Thread.sleep(10000000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-*/
 }

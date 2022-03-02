@@ -21,6 +21,8 @@ import { AntennasComponent } from './rfid/reader/antennas/antennas.component';
 import { XspsWarehouseComponent } from './xsps-warehouse/xsps-warehouse.component';
 import { XspsWarehouseDetailComponent } from './xsps-warehouse/xsps-warehouse-detail/xsps-warehouse-detail.component';
 import { LocationsComponent } from './xsps-warehouse/locations/locations.component';
+import { ReceptionCreateComponent } from './reception/reception-create/reception-create.component';
+import { ReceptionItemDeleteComponent } from './reception/reception-item-delete/reception-item-delete.component';
 
 @NgModule({
   declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent, AddItemComponent,
@@ -31,7 +33,9 @@ import { LocationsComponent } from './xsps-warehouse/locations/locations.compone
     AntennasComponent,
     XspsWarehouseComponent,
     XspsWarehouseDetailComponent,
-    LocationsComponent],
+    LocationsComponent,
+    ReceptionCreateComponent,
+    ReceptionItemDeleteComponent],
   imports: [CommonModule, SharedModule, RouterModule.forChild(ihmRoute), OrderModule, UHFRFIDAntennaModule]
 })
 export class IhmModule {}

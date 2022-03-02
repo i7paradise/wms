@@ -4,9 +4,10 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { IOrderContainer } from 'app/entities/order-container/order-container.model';
 import { OrderContainerService } from 'app/entities/order-container/service/order-container.service';
 import { IOrderItem } from 'app/entities/order-item/order-item.model';
-import { map, Observable } from 'rxjs';
+import { map, Observable, EMPTY } from 'rxjs';
 import { TagsList } from 'app/ihm/model/tags-list.model';
 import { IOrderItemProduct } from 'app/entities/order-item-product/order-item-product.model';
+import { OrderItemStatus } from 'app/entities/enumerations/order-item-status.model';
 
 @Injectable({
   providedIn: 'root',
@@ -26,12 +27,12 @@ export class OrderContainerImplService extends OrderContainerService {
       .pipe(map(res => res.body ?? []));
   }
 
-  createOrderContainersWithTags(orderItem: IOrderItem, tagsList: TagsList): void {
+  createOrderContainersWithTags(orderItem: IOrderItem, tagsList: TagsList): Observable<IOrderContainer[]> {
     if (!tagsList.tags || tagsList.tags.length === 0) {
-      return;
+      return EMPTY;
     }
 
-    this.http
+    return this.http
       .post<IOrderContainer[]>(
         `${this.resourceUrl}/create`,
         {
@@ -41,7 +42,12 @@ export class OrderContainerImplService extends OrderContainerService {
         { observe: 'response' }
       )
       .pipe(map(res => res.body ?? []))
-      .subscribe(list => (orderItem.orderContainers = list));
+      .pipe(map(list => {
+          orderItem.orderContainers = list;
+          this.changeNextStatus(orderItem);
+          return list;
+        })
+      );
   }
 
   createOrderItemProducts(container: IOrderContainer, tagsList: TagsList): Observable<IOrderItemProduct[]> {
@@ -70,5 +76,11 @@ export class OrderContainerImplService extends OrderContainerService {
       ids : containers.map(e => e.id!)
     };
     return this.http.post(`${this.resourceUrl}/delete`, request, { observe: 'response' });
+  }
+
+  private changeNextStatus(orderItem: IOrderItem): void {
+    if (orderItem.status === OrderItemStatus.DRAFT) {
+      orderItem.status = OrderItemStatus.IN_PROGRESS;
+    }
   }
 }

@@ -2,7 +2,9 @@ package com.wms.uhfrfid.service;
 
 import com.wms.uhfrfid.domain.UHFRFIDAntenna;
 import com.wms.uhfrfid.repository.UHFRFIDAntennaRepository;
+import com.wms.uhfrfid.service.dto.ScanRequest;
 import com.wms.uhfrfid.service.dto.TagsList;
+import com.wms.uhfrfid.service.rfid.reader.RFIDTag;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -27,19 +28,25 @@ public class TagsService {
         this.antennaRepository = antennaRepository;
     }
 
-    public TagsList scan(Long antennaId) {
+    public TagsList scan(ScanRequest scanRequest) {
         tempSilentSleep();
-        UHFRFIDAntenna antenna = antennaRepository.getById(antennaId);
+        UHFRFIDAntenna antenna = antennaRepository.getById(scanRequest.getAntennaId());
         log.debug("scanning with {}", antenna);
-        List<String> tags = mockRFIDReaderCall();
+        List<String> tags = mockRFIDReaderCall(scanRequest.getCount())
+            .stream()
+            .map(RFIDTag::get_EPC)
+            .collect(Collectors.toList());
         return new TagsList(tags);
     }
 
     @NotNull
-    private List<String> mockRFIDReaderCall() {
-        int packagesCount = new Random().nextInt(20 - 5 + 1) + 5;;
-        return IntStream.range(0, packagesCount)
-            .mapToObj(e -> UUID.randomUUID().toString())
+    private List<RFIDTag> mockRFIDReaderCall(Integer count) {
+        return IntStream.range(0, count)
+            .mapToObj(e -> {
+                RFIDTag rfidTag = new RFIDTag();
+                rfidTag.set_EPC(UUID.randomUUID().toString());
+                return rfidTag;
+            })
             .collect(Collectors.toList());
     }
 

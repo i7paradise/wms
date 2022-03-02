@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { IOrderContainer } from 'app/entities/order-container/order-container.model';
 import { IOrderItem } from 'app/entities/order-item/order-item.model';
 import { IUHFRFIDAntenna } from 'app/entities/uhfrfid-antenna/uhfrfid-antenna.model';
 import { Observable, Subject } from 'rxjs';
@@ -19,6 +20,13 @@ export class UiService {
     this.subjectOrderItem.next(this.orderItem);
   }
 
+  setOrderContainers(orderContainers: IOrderContainer[]):void {
+    if (this.orderItem) {
+      this.orderItem.orderContainers = orderContainers;
+      this.subjectOrderItem.next(this.orderItem);
+    }
+  }
+
   onSetOrderItem(): Observable<IOrderItem> {
     return this.subjectOrderItem.asObservable();
   }
@@ -30,6 +38,8 @@ export class UiService {
   isNoOrderItem(): boolean {
     return this.orderItem === null;
   }
+
+  getOrderItem = (): IOrderItem => this.orderItem!;
 
   setRFIDAntenna(rfidAntenna: IUHFRFIDAntenna): void {
     this.rfidAntenna = rfidAntenna;

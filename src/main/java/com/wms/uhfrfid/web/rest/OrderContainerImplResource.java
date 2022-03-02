@@ -22,7 +22,7 @@ public class OrderContainerImplResource {
 
     private final OrderContainerImplService orderContainerService;
 
-    public OrderContainerImplResource(OrderContainerImplService orderContainerService) {
+    OrderContainerImplResource(OrderContainerImplService orderContainerService) {
         this.orderContainerService = orderContainerService;
     }
 

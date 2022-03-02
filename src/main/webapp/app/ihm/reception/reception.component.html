@@ -1,6 +1,6 @@
 <div>
   <h2 id="page-heading" data-cy="DeliveryOrderHeading">
-    <span jhiTranslate="wmsApp.order.home.title">Reception</span>
+    <span >Reception</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
@@ -9,13 +9,11 @@
       </button>
 
       <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-order"
-        [routerLink]="['/order/new']"
+        [routerLink]="['/mgmt/reception-create']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="wmsApp.order.home.createLabel"> Create a new Delivery Order </span>
+        <span > Create new Receipt</span>
       </button>
     </div>
   </h2>

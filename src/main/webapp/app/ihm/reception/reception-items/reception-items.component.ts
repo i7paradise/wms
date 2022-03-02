@@ -1,11 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CompanyProductService } from 'app/entities/company-product/service/company-product.service';
-import { OrderItemDeleteDialogComponent } from 'app/entities/order-item/delete/order-item-delete-dialog.component';
+import { OrderItemStatus } from 'app/entities/enumerations/order-item-status.model';
+import { OrderStatus } from 'app/entities/enumerations/order-status.model';
 import { IOrderItem } from 'app/entities/order-item/order-item.model';
-import { OrderItemService } from 'app/entities/order-item/service/order-item.service';
 import { Order } from 'app/entities/order/order.model';
+import { ReceptionItemDeleteComponent } from '../reception-item-delete/reception-item-delete.component';
 import { UiService } from '../service/ui.service';
 
 @Component({
@@ -17,12 +16,11 @@ export class ReceptionItemsComponent implements OnInit {
   @Input() order!: Order;
   orderItems: IOrderItem[] = [];
   isSaving = false;
+  readonly orderStatus = OrderStatus;
+  readonly orderItemStatus = OrderItemStatus;
 
   constructor(
     private modalService: NgbModal,
-    private companyProductService: CompanyProductService,
-    private orderItemService: OrderItemService,
-    private fb: FormBuilder,
     public uiService: UiService
   ) {}
 
@@ -31,7 +29,7 @@ export class ReceptionItemsComponent implements OnInit {
   }
 
   delete(orderItem: IOrderItem): void {
-    const modalRef = this.modalService.open(OrderItemDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    const modalRef = this.modalService.open(ReceptionItemDeleteComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.orderItem = orderItem;
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
@@ -43,5 +41,9 @@ export class ReceptionItemsComponent implements OnInit {
 
   onAddOrderItem(orderItem: IOrderItem): void {
     this.orderItems.unshift(orderItem);
+  }
+
+  canEdit(orderItem: IOrderItem): boolean {
+    return orderItem.status === OrderItemStatus.DRAFT;
   }
 }

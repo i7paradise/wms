@@ -11,6 +11,7 @@ import { ReaderComponent } from './rfid/reader/reader.component';
 import { XspsWarehouseComponent} from './xsps-warehouse/xsps-warehouse.component';
 import { XspsWarehouseRoutingResolveService } from './xsps-warehouse/service/xsps-warehouse-routing-resolve.service';
 import { XspsWarehouseDetailComponent } from './xsps-warehouse/xsps-warehouse-detail/xsps-warehouse-detail.component';
+import { ReceptionCreateComponent } from './reception/reception-create/reception-create.component';
 
 export const ihmRoute: Routes = [
   {
@@ -24,6 +25,11 @@ export const ihmRoute: Routes = [
       order: ReceptionRoutingResolveService,
     },
     component: ReceptionDetailComponent,
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'reception-create',
+    component: ReceptionCreateComponent,
     canActivate: [UserRouteAccessService],
   },
   {

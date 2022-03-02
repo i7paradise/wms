@@ -18,22 +18,23 @@ export class ScannerService {
     protected http: HttpClient,
     protected modalService: NgbModal) {}
 
-  scan(rfidAntenna: IUHFRFIDAntenna): Observable<TagsList> {
+  scan(rfidAntenna: IUHFRFIDAntenna, count: number): Observable<TagsList> {
     if (!rfidAntenna.id) {
       throw 'can not call scanner service with null IUHFRFIDAntenna.id';
     }
-    const request = new ScanRequest(rfidAntenna.id);
+    const request = new ScanRequest(rfidAntenna.id, count);
     return this.http
       .post<TagsList>(this.resourceUrl + '/scan', request, { observe: 'response' })
       .pipe(map((res) => res.body ?? {}));
 
   }
 
-  scanWithDialog(rfidAntenna: IUHFRFIDAntenna, tagsObserver: (value: TagsList) => void): void {
+  scanWithDialog(rfidAntenna: IUHFRFIDAntenna, count: number, tagsObserver: (value: TagsList) => void): void {
     const modalRef = this.modalService.open(ScannerDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.loading = true;
     modalRef.componentInstance.rfidAntenna = rfidAntenna;
-    this.scan(rfidAntenna).subscribe(t => {
+    modalRef.componentInstance.count = count;
+    this.scan(rfidAntenna, count).subscribe(t => {
       modalRef.componentInstance.tagsList = t;
       modalRef.componentInstance.loading = false;
     });

@@ -2,11 +2,10 @@
   "wmsApp": {
     "OrderItemStatus": {
       "null": "",
+      "DRAFT": "DRAFT",
       "IN_PROGRESS": "IN_PROGRESS",
-      "VERIFIED": "VERIFIED",
-      "LABELED": "LABELED",
-      "PARTIALLY_PLACED": "PARTIALLY_PLACED",
-      "FULLY_PLACED": "FULLY_PLACED"
+      "COMPLETED": "COMPLETED",
+      "CANCELLED": "CANCELLED"
     }
   }
 }

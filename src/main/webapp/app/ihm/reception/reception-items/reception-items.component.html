@@ -1,6 +1,7 @@
 <div class="reception-items">
 
-  <jhi-add-item [order]="order" (createdOrderItemEvt)="onAddOrderItem($event)"></jhi-add-item>
+  <jhi-add-item [order]="order" *ngIf="order.status !== orderStatus.COMPLETED"
+    (createdOrderItemEvt)="onAddOrderItem($event)"></jhi-add-item>
 
   <div class="alert alert-warning" id="no-result" *ngIf="orderItems?.length === 0">
     <span jhiTranslate="wmsApp.orderItem.home.notFound">No orderItems found</span>
@@ -32,8 +33,8 @@
             <td jhiTranslate="{{ 'wmsApp.OrderItemStatus.' + orderItem.status }}">{{ orderItem.status }}</td>
             <td>
               <div *ngIf="orderItem.companyProduct">
-                <a [routerLink]="['/company-product', orderItem.companyProduct?.id, 'view']">{{
-                  orderItem.companyProduct?.sku
+                <a [routerLink]="['/inventory/product', orderItem.companyProduct?.id]">{{
+                  orderItem.companyProduct?.product?.name + ' (' + orderItem.companyProduct?.quantity + ')'
                 }}</a>
               </div>
             </td>
@@ -56,12 +57,15 @@
                   [routerLink]="['/mgmt/reception-item', orderItem.id, 'edit']"
                   class="btn btn-primary btn-sm"
                   data-cy="entityEditButton"
+                  *ngIf="orderItem.status != orderItemStatus.COMPLETED"
                 >
                   <fa-icon icon="pencil-alt"></fa-icon>
                   <span class="d-none d-md-inline"></span>
                 </button>
   
-                <button type="submit" (click)="delete(orderItem)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <button type="submit" (click)="delete(orderItem)"
+                  *ngIf="orderItem.status != orderItemStatus.COMPLETED"
+                  class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                   <fa-icon icon="times"></fa-icon>
                   <span class="d-none d-md-inline"></span>
                 </button>

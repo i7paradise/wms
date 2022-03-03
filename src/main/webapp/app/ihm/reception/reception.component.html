@@ -1,6 +1,6 @@
 <div>
   <h2 id="page-heading" data-cy="DeliveryOrderHeading">
-    <span jhiTranslate="wmsApp.order.home.title">Reception</span>
+    <span >Reception</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
@@ -9,13 +9,11 @@
       </button>
 
       <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-order"
-        [routerLink]="['/order/new']"
+        [routerLink]="['/mgmt/reception-create']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="wmsApp.order.home.createLabel"> Create a new Delivery Order </span>
+        <span > Create new Receipt</span>
       </button>
     </div>
   </h2>
@@ -33,12 +31,13 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
           <th scope="col" jhiSortBy="transactionNumber">
-            <span jhiTranslate="wmsApp.order.transactionNumber">Do Number</span>
+            <span >Receipt number</span>
           </th>
           <th scope="col" jhiSortBy="placedDate">
-            <span jhiTranslate="wmsApp.order.placedDate">Placed Date</span>
+            <span >Date</span>
           </th>
-          <th scope="col" jhiSortBy="code"><span jhiTranslate="wmsApp.order.code">Code</span></th>
+          <th scope="col" jhiSortBy="code"><span >Purchase number</span></th>
+          <th scope="col" jhiSortBy="code"><span >Status</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -50,6 +49,7 @@
           <td>{{ order.transactionNumber }}</td>
           <td>{{ order.placedDate | formatMediumDatetime }}</td>
           <td>{{ order.code }}</td>
+          <td>{{ order.status }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button
@@ -59,14 +59,6 @@
               >
                 <fa-icon icon="eye"></fa-icon>
                 <span class="d-none d-md-inline"></span>
-              </button>
-              <button
-                type="submit"
-                [routerLink]="['/order', order.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
               </button>
 
               <button type="submit" (click)="delete(order)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">

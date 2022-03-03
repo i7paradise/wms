@@ -1,11 +1,5 @@
-id;quantity;sku;container_stocking_ratio
-1;8288;navigating AGP alarm;70798
-2;41973;Functionality;35923
-3;47290;Auto;64633
-4;13406;vertical AI;96928
-5;87147;New Paradigm;78619
-6;3614;Iowa;48295
-7;20106;motivating withdrawal;88933
-8;63323;Chair;9366
-9;27519;Shirt Turks;70720
-10;37479;Account;13190
+id;company_id;quantity;sku;container_stocking_ratio;product_id
+1;1;8288;azer-123456;30;1
+2;1;41973;4569-slop;90;2
+3;1;47290;987-693-333;20;3
+4;1;13406;aaa-0000-01;100;4

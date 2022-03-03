@@ -15,6 +15,7 @@ export class ScannerDialogComponent {
 
   tagsList!: TagsList | null;
   rfidAntenna!: IUHFRFIDAntenna;
+  count!: number;
   loading = false;
 
   constructor(protected scannerService: ScannerService,
@@ -31,11 +32,13 @@ export class ScannerDialogComponent {
   rescan(): void {
     this.loading = true;
     this.tagsList = null;
-    this.scannerService.scan(this.rfidAntenna)
+    this.scannerService.scan(this.rfidAntenna, this.count)
       .subscribe((tagsList: TagsList) => {
         this.tagsList = tagsList;
         this.loading = false;
       });
   }
+
+  // TODO scanError when the retured tags from backend != request count
 
 }

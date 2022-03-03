@@ -50,7 +50,7 @@ class ReceptionResourceIT {
             .type(OrderType.RECEPTION)
             .transactionNumber(UUID.randomUUID().toString())
             .placedDate(Instant.ofEpochMilli(0L))
-            .status(OrderStatus.PENDING)
+            .status(OrderStatus.IN_PROGRESS)
             .code("AAAAAAAAAA");
     }
 

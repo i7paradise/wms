@@ -1,5 +1,6 @@
 package com.wms.uhfrfid.service;
 
+import com.wms.uhfrfid.domain.Order;
 import com.wms.uhfrfid.domain.User;
 import com.wms.uhfrfid.domain.enumeration.OrderStatus;
 import com.wms.uhfrfid.repository.ReceptionRepository;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -42,7 +44,8 @@ public class ReceptionService {
             .findOneByLogin(userLogin)
             .orElseThrow(() -> new IllegalArgumentException("TODO ReceptionService user not found"));
         //TODO add user to the query
-        return receptionRepository.findOrdersByStatus(OrderStatus.PENDING, pageable).map(orderV2Mapper::toDto);
+        return receptionRepository.findOrdersByStatusIn(Arrays.asList(OrderStatus.DRAFT, OrderStatus.IN_PROGRESS), pageable)
+            .map(orderV2Mapper::toDto);
     }
 
     @Transactional(readOnly = true)
@@ -56,5 +59,20 @@ public class ReceptionService {
                 return e;
             })
             .map(orderV2Mapper::toDto);
+    }
+
+    public void statusForward(Order order) {
+        next(order.getStatus())
+            .ifPresent(e -> {
+                order.setStatus(e);
+                receptionRepository.save(order);
+            });
+    }
+
+    private static Optional<OrderStatus> next(OrderStatus status) {
+        if (status == OrderStatus.DRAFT) {
+            return Optional.of(OrderStatus.IN_PROGRESS);
+        }
+        return Optional.empty();
     }
 }

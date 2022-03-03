@@ -30,17 +30,19 @@ public class OrderContainerImplService {
     private final OrderContainerImplMapper orderContainerMapper;
     private final OrderItemProductRepositoryImpl orderItemProductRepository;
     private final OrderItemProductMapper orderItemProductMapper;
+    private final ReceptionItemService receptionItemService;
 
     public OrderContainerImplService(OrderItemRepository orderItemRepository,
                                      OrderContainerRepositoryImpl orderContainerRepository,
                                      OrderContainerImplMapper orderContainerMapper,
                                      OrderItemProductRepositoryImpl orderItemProductRepository,
-                                     OrderItemProductMapper orderItemProductMapper) {
+                                     OrderItemProductMapper orderItemProductMapper, ReceptionItemService receptionItemService) {
         this.orderItemRepository = orderItemRepository;
         this.orderContainerRepository = orderContainerRepository;
         this.orderContainerMapper = orderContainerMapper;
         this.orderItemProductRepository = orderItemProductRepository;
         this.orderItemProductMapper = orderItemProductMapper;
+        this.receptionItemService = receptionItemService;
     }
 
     @Transactional(readOnly = true)
@@ -72,6 +74,9 @@ public class OrderContainerImplService {
         orderContainerRepository.saveAll(orderContainers);
 
         log.debug("user {} created {} OrderContainer", userLogin, orderContainers.size());
+
+        receptionItemService.statusForward(orderItem);
+
         return findOrderContainers(orderItem.getId());
     }
 
@@ -89,10 +94,14 @@ public class OrderContainerImplService {
                 .rfidTAG(e)
             ).collect(Collectors.toList());
 
-        return orderItemProductRepository.saveAll(orderItemProducts)
+        List<OrderItemProductDTO> dtoList = orderItemProductRepository.saveAll(orderItemProducts)
             .stream()
             .map(orderItemProductMapper::toDto)
             .collect(Collectors.toList());
+
+        receptionItemService.statusForward(orderContainer.getOrderItem());
+
+        return dtoList;
     }
 
     public void deleteItemProducts(IdsDTO ids, String userLogin) {

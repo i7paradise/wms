@@ -37,8 +37,8 @@ class OrderItemResourceIT {
     private static final BigDecimal DEFAULT_QUANTITY = new BigDecimal(0);
     private static final BigDecimal UPDATED_QUANTITY = new BigDecimal(1);
 
-    private static final OrderItemStatus DEFAULT_STATUS = OrderItemStatus.IN_PROGRESS;
-    private static final OrderItemStatus UPDATED_STATUS = OrderItemStatus.VERIFIED;
+    private static final OrderItemStatus DEFAULT_STATUS = OrderItemStatus.DRAFT;
+    private static final OrderItemStatus UPDATED_STATUS = OrderItemStatus.IN_PROGRESS;
 
     private static final Integer DEFAULT_CONTAINERS_COUNT = 0;
     private static final Integer UPDATED_CONTAINERS_COUNT = 1;

@@ -1,5 +1,6 @@
 export class ScanRequest {
     constructor(
-        public antennaId: number
+        public antennaId: number,
+        public count: number
     ) { }
 }

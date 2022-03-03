@@ -69,6 +69,13 @@ public class ReceptionResource {
         return ResponseUtil.wrapOrNotFound(orderItemDTO);
     }
 
+    // @PutMapping
+    // public ResponseEntity<OrderDTO> create(@Valid @RequestBody OrderDTO dto) {
+    //     // TODO status = DRAFT
+    //     // TYPE = RECEPTION
+    //     throw new RuntimeException("TODO");
+    // }
+
     @PutMapping("/order-item/{id}")
     public ResponseEntity<OrderItemDTO> updateOrderItem(
         @PathVariable(value = "id", required = false) final Long id,

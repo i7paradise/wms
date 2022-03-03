@@ -145,7 +145,7 @@ entity Order {
 }
 
 enum OrderStatus {
-	COMPLETED, PENDING, CANCELLED
+	DRAFT, IN_PROGRESS, COMPLETED, CANCELLED
 }
 
 enum OrderType {
@@ -160,7 +160,7 @@ entity OrderItem {
 }
 
 enum OrderItemStatus {
-	IN_PROGRESS, VERIFIED, LABELED, PARTIALLY_PLACED, FULLY_PLACED
+	DRAFT, IN_PROGRESS, COMPLETED, CANCELLED
 }
 
 entity OrderContainer {

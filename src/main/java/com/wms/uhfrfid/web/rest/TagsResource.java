@@ -36,6 +36,6 @@ public class TagsResource {
         if (scanRequest.getAntennaId() == null) {
             throw new BadRequestAlertException("Invalid antenna id", ScanRequest.class.getSimpleName(), "id null");
         }
-        return tagsService.scan(scanRequest.getAntennaId());
+        return tagsService.scan(scanRequest);
     }
 }

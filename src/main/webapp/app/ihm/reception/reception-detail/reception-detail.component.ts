@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+import { OrderItemStatus } from 'app/entities/enumerations/order-item-status.model';
 import { OrderStatus } from 'app/entities/enumerations/order-status.model';
 import { OrderType } from 'app/entities/enumerations/order-type.model';
 import { IOrderItem } from 'app/entities/order-item/order-item.model';
 import { OrderDetailComponent } from 'app/entities/order/detail/order-detail.component';
 import { IOrder, Order } from 'app/entities/order/order.model';
 import { OrderService } from 'app/entities/order/service/order.service';
+import { Arrays } from 'app/ihm/tools/helper';
 import dayjs from 'dayjs/esm';
 import { finalize } from 'rxjs';
 import { UiService } from '../service/ui.service';
@@ -31,7 +33,7 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     public uiService: UiService
-    ) {
+  ) {
     super(activatedRoute);
   }
 
@@ -47,12 +49,12 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
     this.isSaving = true;
     const order = this.createFromForm();
     if (this.isChanged(order)) {
-      
+
       this.orderService
-          .update(order)
-          .pipe(finalize(() => this.onSaveFinalize())).subscribe({
-            next: (response) => this.onSaveSuccess(response.body ?? {}),
-          });
+        .update(order)
+        .pipe(finalize(() => this.onSaveFinalize())).subscribe({
+          next: (response) => this.onSaveSuccess(response.body ?? {}),
+        });
     } else {
       this.isSaving = false;
       this.editMode = false;
@@ -66,6 +68,26 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
 
   cancelEdit(): void {
     this.editMode = false;
+  }
+
+  notCompleted(): boolean {
+    return this.order?.status !== OrderStatus.COMPLETED;
+  }
+
+  toggleComplete(): void {
+    this.order!.status = OrderStatus.COMPLETED;
+    this.orderService.update(this.order!)
+      .subscribe(e => this.order = e.body);
+  }
+
+  btnToggleCompleteDisabled(): boolean {
+    if (!this.order || Arrays.isEmpty(this.order.orderItems)) {
+      return true;
+    }
+
+    return Arrays.size(
+      this.order.orderItems?.filter(e => e.status !== OrderItemStatus.COMPLETED)
+    ) > 0;
   }
 
   protected updateForm(): void {
@@ -92,14 +114,15 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
     };
   }
 
-  private isChanged(order: Order):boolean {
+  private isChanged(order: Order): boolean {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {orderItems, ...originalOrder} = this.order ?? {};
+    const { orderItems, ...originalOrder } = this.order ?? {};
     return JSON.stringify(order) !== JSON.stringify(originalOrder);
   }
 
   private onSaveSuccess(order: IOrder): void {
-    this.order = {...order,
+    this.order = {
+      ...order,
       "orderItems": this.order?.orderItems
     };
     this.cancelEdit();
@@ -108,4 +131,5 @@ export class ReceptionDetailComponent extends OrderDetailComponent implements On
   private onSaveFinalize(): void {
     this.isSaving = false;
   }
+
 }

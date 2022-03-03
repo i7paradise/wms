@@ -19,7 +19,7 @@
       "fieldName": "status",
       "fieldType": "OrderStatus",
       "fieldValidateRules": ["required"],
-      "fieldValues": "COMPLETED,PENDING,CANCELLED"
+      "fieldValues": "DRAFT,IN_PROGRESS,COMPLETED,CANCELLED"
     },
     {
       "fieldName": "code",

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IOrderContainer } from 'app/entities/order-container/order-container.model';
 import { IOrderItem, OrderItem } from 'app/entities/order-item/order-item.model';
 import { IUHFRFIDAntenna } from 'app/entities/uhfrfid-antenna/uhfrfid-antenna.model';
@@ -12,6 +12,9 @@ import { IOrderContainerImpl } from 'app/ihm/model/order-container.impl.model';
 import { OrderContainerEditDialogComponent } from '../order-container-edit-dialog/order-container-edit-dialog.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import MultiSelectTable from 'app/ihm/tools/multi-select-table';
+import { Arrays } from 'app/ihm/tools/helper';
+import { IOrder } from 'app/entities/order/order.model';
+import { OrderStatus } from 'app/entities/enumerations/order-status.model';
 
 @Component({
   selector: 'jhi-reception-tags',
@@ -19,9 +22,9 @@ import MultiSelectTable from 'app/ihm/tools/multi-select-table';
   styleUrls: ['./reception-tags.component.scss'],
 })
 export class ReceptionTagsComponent {
+  @Input() order: IOrder | null = null;
   orderItem!: OrderItem;
   rfidAntenna!: IUHFRFIDAntenna;
-  canEdit = true;
   readonly shippingAreaType = AreaType.SHIPPING;
   readonly multiSelect = new MultiSelectTable<IOrderContainer>(e => e.id!, false);
 
@@ -33,10 +36,21 @@ export class ReceptionTagsComponent {
   ) {
     uiService.onSetOrderItem().subscribe((orderItem: IOrderItem) => {
       this.orderItem = orderItem;
-      this.canEdit = this.evaluateCanEdit();
       orderContainerService.findOrderContainers(orderItem).subscribe((list: IOrderContainer[]) => (this.orderItem.orderContainers = list));
     });
     uiService.onChangeRFIDAntenna().subscribe((value: IUHFRFIDAntenna) => (this.rfidAntenna = value));
+  }
+
+  canEdit(): boolean {
+    return this.orderItem.status !== OrderItemStatus.COMPLETED;
+  }
+
+  canDeleteSomeOrderContainers(): boolean {
+    return this.canEdit() && this.getOrderContainers().filter(this.canDelete).length > 0;
+  }
+
+  canDelete(container: IOrderContainerImpl): boolean {
+    return (!container.countProducts || container.countProducts === 0) && Arrays.isEmpty(container.orderItemProducts);
   }
 
   getOrderContainers(): IOrderContainer[] {
@@ -48,8 +62,9 @@ export class ReceptionTagsComponent {
   }
 
   scanContainer(): void {
-    this.scannerService.scanWithDialog(this.rfidAntenna, (tags: TagsList) => {
-      this.orderContainerService.createOrderContainersWithTags(this.orderItem, tags);
+    this.scannerService.scanWithDialog(this.rfidAntenna, 1, (tags: TagsList) => {
+      this.orderContainerService.createOrderContainersWithTags(this.orderItem, tags)
+        .subscribe(() => this.orderToNextStatus());
     });
   }
 
@@ -62,7 +77,6 @@ export class ReceptionTagsComponent {
     });
   }
 
-  
   deleteSelected(): void {
     const selectedContainers = this.getOrderContainers().filter(e => this.multiSelect.isSelected(e));
     console.warn('selectedContainers', selectedContainers);
@@ -73,7 +87,7 @@ export class ReceptionTagsComponent {
       this.onDeleteDialog(reason, selectedContainers);
     });
   }
-  
+
   private onDeleteDialog(reason: string, listContainers: IOrderContainerImpl[]): void {
     if (reason === OrderContainerEditDialogComponent.DELETED_CONTAINER) {
       this.orderItem.orderContainers = this.getOrderContainers().filter(e => !listContainers.includes(e));
@@ -85,8 +99,10 @@ export class ReceptionTagsComponent {
       });
     }
   }
-  
-  private evaluateCanEdit(): boolean {
-    return this.orderItem.status === OrderItemStatus.IN_PROGRESS;
+
+  private orderToNextStatus(): void {
+    if (this.order && this.order.status === OrderStatus.DRAFT) {
+      this.order.status = OrderStatus.IN_PROGRESS;
+    }
   }
 }

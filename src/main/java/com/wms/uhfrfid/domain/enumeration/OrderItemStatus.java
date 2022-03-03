@@ -4,9 +4,8 @@ package com.wms.uhfrfid.domain.enumeration;
  * The OrderItemStatus enumeration.
  */
 public enum OrderItemStatus {
+    DRAFT,
     IN_PROGRESS,
-    VERIFIED,
-    LABELED,
-    PARTIALLY_PLACED,
-    FULLY_PLACED,
+    COMPLETED,
+    CANCELLED,
 }

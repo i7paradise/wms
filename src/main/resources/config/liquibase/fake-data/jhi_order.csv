@@ -1,11 +1,11 @@
 id;transaction_number;placed_date;status;code;type
-1;portal reboot;2022-02-04T06:10:16;PENDING;payment Marks salmon;INTERNAL
-2;Borders target Cambridgeshire;2022-02-04T03:01:00;COMPLETED;HDD;INTERNAL
-3;RSS;2022-02-04T12:28:40;COMPLETED;e-commerce feed;RECEPTION
-4;online deliverables;2022-02-04T18:41:39;PENDING;Factors multi-tasking;SHIPPING
-5;Direct overriding web-enabled;2022-02-04T05:33:09;PENDING;Awesome initiative tan;RECEPTION
+1;portal reboot;2022-02-04T06:10:16;IN_PROGRESS;payment Marks salmon;INTERNAL
+2;Borders target Cambridgeshire;2022-02-04T03:01:00;IN_PROGRESS;HDD;INTERNAL
+3;RSS;2022-02-04T12:28:40;DRAFT;e-commerce feed;RECEPTION
+4;online deliverables;2022-02-04T18:41:39;IN_PROGRESS;Factors multi-tasking;SHIPPING
+5;Direct overriding web-enabled;2022-02-04T05:33:09;COMPLETED;Awesome initiative tan;RECEPTION
 6;transitional;2022-02-04T21:03:31;CANCELLED;Rapid;INTERNAL
-7;protocol programming Cambridgeshire;2022-02-04T18:24:38;PENDING;Plains;INTERNAL
-8;Hryvnia Games Grocery;2022-02-04T04:03:27;PENDING;Auto intuitive multi-state;RECEPTION
+7;protocol programming Cambridgeshire;2022-02-04T18:24:38;IN_PROGRESS;Plains;INTERNAL
+8;Hryvnia Games Grocery;2022-02-04T04:03:27;COMPLETED;Auto intuitive multi-state;RECEPTION
 9;quantifying Internal Wooden;2022-02-04T20:46:23;CANCELLED;matrix;INTERNAL
-10;Ball Executive;2022-02-04T18:57:45;PENDING;Bacon Tasty Computer;RECEPTION
+10;Ball Executive;2022-02-04T18:57:45;IN_PROGRESS;Bacon Tasty Computer;RECEPTION

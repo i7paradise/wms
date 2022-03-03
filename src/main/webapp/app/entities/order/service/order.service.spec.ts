@@ -29,7 +29,7 @@ describe('Order Service', () => {
       id: 0,
       transactionNumber: 'AAAAAAA',
       placedDate: currentDate,
-      status: OrderStatus.COMPLETED,
+      status: OrderStatus.DRAFT,
       code: 'AAAAAAA',
       type: OrderType.SHIPPING,
     };

@@ -62,6 +62,18 @@ public class ReceptionItemService extends OrderItemService {
         return orderItemMapper.toDto(orderItem);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<OrderItemDTO> findOne(Long id) {
+        log.debug("Request to get OrderItem : {}", id);
+        return orderItemRepository.findById(id)
+            .map(e -> {
+                e.getCompanyProduct().getProduct().getName();
+                return e;
+            })
+            .map(orderItemMapper::toDto);
+    }
+
     public void statusForward(OrderItem orderItem) {
         next(orderItem.getStatus())
             .filter(e -> e == OrderItemStatus.COMPLETED && isAllScanned(orderItem)

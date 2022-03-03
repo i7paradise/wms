@@ -1,12 +1,17 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { ICompanyProduct } from 'app/entities/company-product/company-product.model';
+import { CompanyProductService } from 'app/entities/company-product/service/company-product.service';
 import { OrderItemStatus } from 'app/entities/enumerations/order-item-status.model';
 import { IOrderItem, OrderItem } from 'app/entities/order-item/order-item.model';
+import { OrderItemService } from 'app/entities/order-item/service/order-item.service';
 import { OrderItemUpdateComponent } from 'app/entities/order-item/update/order-item-update.component';
 import { Order } from 'app/entities/order/order.model';
+import { OrderService } from 'app/entities/order/service/order.service';
 import { finalize, map, Observable } from 'rxjs';
+import { ReceptionService } from '../service/reception.service';
 
 @Component({
   selector: 'jhi-add-item',
@@ -19,6 +24,17 @@ export class AddItemComponent extends OrderItemUpdateComponent implements OnInit
   addMode = false;
   private selectedProduct!: ICompanyProduct | null;
   private selectedQuantity!: number;
+
+  constructor(
+    protected orderItemService: OrderItemService,
+    protected orderService: OrderService,
+    protected companyProductService: CompanyProductService,
+    protected activatedRoute: ActivatedRoute,
+    protected fb: FormBuilder,
+    private receptionService: ReceptionService
+  ) {
+    super(orderItemService, orderService, companyProductService, activatedRoute, fb);
+  }
 
   ngOnInit(): void {
     this.addMode = false;
@@ -77,9 +93,13 @@ export class AddItemComponent extends OrderItemUpdateComponent implements OnInit
 
   private onCreateSuccess(orderItem: IOrderItem | null): void {
     this.addMode = false;
-    if (orderItem) {
-      this.createdOrderItemEvt.emit(orderItem);
-    }
+    this.receptionService.findOrderItem(orderItem?.id as number)
+      .subscribe(e => {
+        if (e.body) {
+          this.createdOrderItemEvt.emit(e.body);
+          console.warn('orderItem', e.body);
+        }
+      });
   }
 
   private loadAddOrderElementOptions(): void {

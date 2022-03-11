@@ -56,13 +56,14 @@ public class RFIDConsumer implements Runnable {
             	if (message instanceof ObjectMessage) {
             		ObjectMessage objMessage = (ObjectMessage) message;
             		RFIDTag wmsTag = (RFIDTag) objMessage.getObject();
-                    
+                	synchronized (this) {
             		for (RFIDTagListener rfidListener : rfidListeners) {
                        if (rfidAntenna == wmsTag.get_ANT_NUM())
                     	   rfidListener.onMessage(wmsTag);
                        else
                     	   log.error("RFID Consumer: wrong antenna: " + rfidAntenna + " ### " + wmsTag.get_ANT_NUM());
                    }
+                	}
             	} else {
             		log.error("RFID Consumer: received a broken message");            		
             	}
@@ -73,14 +74,27 @@ public class RFIDConsumer implements Runnable {
     }
 
     public void registerListener(RFIDTagListener _rfidListener) {
-    	rfidListeners.add(_rfidListener);
+    	log.debug(this.toString() + " registering rfidListener: " + _rfidListener.job);
+    	synchronized (this) {
+        	rfidListeners.add(_rfidListener);			
+		}
     }
 
-    public void unregisterListener(RFIDTagListener _rfidListener) {
-    	for (RFIDTagListener rfidListener : rfidListeners)
-    	if (rfidListener == _rfidListener)
-    		rfidListeners.remove(_rfidListener);
-    }
+	public void unregisterListener(RFIDTagListener _rfidListener) {
+		log.debug(this.toString() + " unregistering rfidListener: " + _rfidListener.job);
+		if (rfidListeners == null)
+			return;
+
+    	synchronized (this) {
+    		log.debug(this.toString() + " unregistering rfidListeners: " + rfidListeners.size() + " | " + rfidListeners.toString());
+    		for (int i = 0; i < rfidListeners.size(); i++) {
+    			//TODO use another efficient way to remove items from a vector
+    			RFIDTagListener rfidListener = rfidListeners.get(i);
+    			if (rfidListener == _rfidListener)
+    				rfidListeners.remove(_rfidListener);
+    		}
+    	}
+	}
 
 	public Session getSession() {
 		return session;

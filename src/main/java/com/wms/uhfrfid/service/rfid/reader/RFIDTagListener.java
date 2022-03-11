@@ -36,6 +36,11 @@ public class RFIDTagListener implements AutoCloseable {
 		this.timeout = timeout;
 
 		log.debug(this.toString() + " registring listenners linked to those antenna: " + this.antennaSet.toString());
+		if (this.antennaSet == null)
+			return;
+		if (this.consumers == null)
+			return;
+
 		for (Integer antenna : this.antennaSet)
 			this.consumers.registerListener(antenna, this);
 	}
@@ -48,10 +53,31 @@ public class RFIDTagListener implements AutoCloseable {
 		}
 	}
 
+	public void unregister() {
+		log.debug(this.toString() + " unregistring listenners linked to those antenna: " + this.antennaSet.toString());
+		if (this.antennaSet == null)
+			return;
+		if (this.consumers == null)
+			return;
+
+		log.debug(this.toString() + " unregistring listenners from this consumers " + this.consumers.toString());
+		for (Integer antenna : this.antennaSet) {
+			if (this.consumers != null)
+				this.consumers.unregisterListener(antenna, this);
+		}
+	}
+
 	@Override
 	public void close() throws Exception {
 		log.debug(this.toString() + " unregistring listenners linked to those antenna: " + this.antennaSet.toString());
-		for (Integer antenna : this.antennaSet)
-			this.consumers.unregisterListener(antenna, this);
+		if (this.antennaSet == null)
+			return;
+		if (this.consumers == null)
+			return;
+
+		for (Integer antenna : this.antennaSet) {
+			if (this.consumers != null)
+				this.consumers.unregisterListener(antenna, this);
+		}
 	}
 }

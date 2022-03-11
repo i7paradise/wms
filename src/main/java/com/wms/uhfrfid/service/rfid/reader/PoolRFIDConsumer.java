@@ -31,6 +31,9 @@ public class PoolRFIDConsumer {
 	}
 
 	boolean startRFIDConsumers() {
+		if (antennaSet == null)
+			return false;
+
 		try {
 			antennaConsumers = new HashMap<Integer, Vector<RFIDConsumer>>();
     		for (Map.Entry<Integer, Integer> set : antennaSet.entrySet()) {
@@ -46,12 +49,14 @@ public class PoolRFIDConsumer {
 
 		} catch (JMSException e) {
 			e.printStackTrace();
+			return false;
 		}
 
 		return true;
 	}
 
     public void registerListener(Integer antenna, RFIDTagListener _rfidListener) {
+		log.debug(this.toString() + " registring listenners (" + _rfidListener.toString() + ") linked to those antenna: " + this.antennaSet.toString());
 		for (Map.Entry<Integer, Vector<RFIDConsumer>> set : antennaConsumers.entrySet()) {
 			if (set.getKey() == antenna) {
 				Vector<RFIDConsumer> rfidConsumers = set.getValue();
@@ -63,6 +68,7 @@ public class PoolRFIDConsumer {
     }
 
     public void unregisterListener(Integer antenna, RFIDTagListener _rfidListener) {
+		log.debug(this.toString() + " unregistring listenners (" + _rfidListener.toString() + ") linked to those antenna: " + this.antennaSet.toString());
 		for (Map.Entry<Integer, Vector<RFIDConsumer>> set : antennaConsumers.entrySet()) {
 			if (set.getKey() == antenna) {
 				Vector<RFIDConsumer> rfidConsumers = new Vector<RFIDConsumer>(set.getValue());

@@ -52,6 +52,9 @@ public class RFIDReaderProducer implements IAsynchronousMessage, ISearchDevice {
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         producer = session.createProducer(null);
 
+        if (antennaSet == null)
+        	; //TODO throw exception
+
         destinations = new HashMap<Integer, Destination>(antennaSet.size());
         for (Integer antenna : this.antennaSet)
         	destinations.put(antenna, session.createQueue(this.brokerStorePrefix + String.valueOf(antenna)));

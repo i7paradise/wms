@@ -13,6 +13,13 @@ import { XspsWarehouseRoutingResolveService } from './xsps-warehouse/service/xsp
 import { XspsWarehouseDetailComponent } from './xsps-warehouse/xsps-warehouse-detail/xsps-warehouse-detail.component';
 import { ReceptionCreateComponent } from './reception/reception-create/reception-create.component';
 
+import { ShippingDetailComponent } from './shipping/shipping-detail/shipping-detail.component';
+import { ShippingItemUpdateComponent } from './shipping/shipping-item-update/shipping-item-update.component';
+import { ShippingItemRoutingResolveService } from './shipping/service/shipping-item-routing-resolve.service';
+import { ShippingComponent } from './shipping/shipping.component';
+import { ShippingRoutingResolveService } from './shipping/service/shipping-routing-resolve.service';
+import { ShippingCreateComponent } from './shipping/shipping-create/shipping-create.component';
+
 export const ihmRoute: Routes = [
   {
     path: 'reception',
@@ -64,5 +71,30 @@ export const ihmRoute: Routes = [
     },
     component: XspsWarehouseDetailComponent,
     canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'shipping',
+    component: ShippingComponent,
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'shipping/:id',
+    resolve: {
+      order: ShippingRoutingResolveService,
+    },
+    component: ShippingDetailComponent,
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'shipping-create',
+    component: ShippingCreateComponent,
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'shipping-item/:id/edit',
+    resolve: {
+      orderItem: ShippingItemRoutingResolveService,
+    },
+    component: ShippingItemUpdateComponent,
   },
 ];

@@ -24,6 +24,21 @@ import { LocationsComponent } from './xsps-warehouse/locations/locations.compone
 import { ReceptionCreateComponent } from './reception/reception-create/reception-create.component';
 import { ReceptionItemDeleteComponent } from './reception/reception-item-delete/reception-item-delete.component';
 
+import { ShippingComponent } from './shipping/shipping.component';
+import { ShippingDetailComponent } from './shipping/shipping-detail/shipping-detail.component';
+import { ShippingItemsComponent } from './shipping/shipping-items/shipping-items.component';
+import { ShippingTagsComponent } from './shipping/shipping-tags/shipping-tags.component';
+
+import { AddItemShippingComponent } from './shipping/add-item/add-item.component';
+import { ScanPackagesShippingComponent } from './shipping/scan-packages/scan-packages.component';
+import { OrderContainerEditDialogShippingComponent } from './shipping/order-container-edit-dialog/order-container-edit-dialog.component';
+
+
+import { ShippingItemUpdateComponent } from './shipping/shipping-item-update/shipping-item-update.component';
+import { ShippingCreateComponent } from './shipping/shipping-create/shipping-create.component';
+import { ShippingItemDeleteComponent } from './shipping/shipping-item-delete/shipping-item-delete.component';
+
+
 @NgModule({
   declarations: [ReceptionComponent, ReceptionDetailComponent, ReceptionItemsComponent, ReceptionTagsComponent, AddItemComponent,
     ScannerDialogComponent, AntennaSelectorComponent, ScanPackagesComponent,
@@ -35,7 +50,12 @@ import { ReceptionItemDeleteComponent } from './reception/reception-item-delete/
     XspsWarehouseDetailComponent,
     LocationsComponent,
     ReceptionCreateComponent,
-    ReceptionItemDeleteComponent],
+    ReceptionItemDeleteComponent,
+    ShippingComponent, ShippingDetailComponent, ShippingItemsComponent, ShippingTagsComponent,
+    AddItemShippingComponent, ScanPackagesShippingComponent, OrderContainerEditDialogShippingComponent,
+    ShippingItemUpdateComponent,
+    ShippingCreateComponent,
+    ShippingItemDeleteComponent],
   imports: [CommonModule, SharedModule, RouterModule.forChild(ihmRoute), OrderModule, UHFRFIDAntennaModule]
 })
 export class IhmModule {}

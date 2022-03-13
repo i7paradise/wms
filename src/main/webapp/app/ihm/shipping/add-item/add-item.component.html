@@ -1,0 +1,169 @@
+<div *ngIf="canAddItems()">
+  <div class="add-order-item" *ngIf="!addMode">
+    <button type="submit" (click)="startAddMode()" class="btn btn-primary btn-md" data-cy="entityDeleteButton">
+      <fa-icon icon="plus"></fa-icon>&nbsp;<span>Add receipt item</span>
+    </button>
+  </div>
+
+  <div class="add-order-item-form row justify-content-center border rounded" *ngIf="addMode">
+    <div class="col-10">
+      <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+        <h4 id="jhi-order-item-heading" data-cy="OrderItemCreateUpdateHeading">
+            Add receipt item
+        </h4>
+
+        <div class="row">
+
+
+          <div class="form-group col-5">
+            <label class="form-control-label" jhiTranslate="wmsApp.orderItem.companyProduct" for="field_companyProduct"
+              >Company Product</label
+            >
+            <select
+              class="form-control"
+              id="field_companyProduct"
+              data-cy="companyProduct"
+              name="companyProduct"
+              formControlName="companyProduct"
+              (ngModelChange)="onChangeSelectedProduct($event)"
+            >
+              <option [ngValue]="null"></option>
+              <option
+                [ngValue]="
+                  companyProductOption.id === editForm.get('companyProduct')!.value?.id
+                    ? editForm.get('companyProduct')!.value
+                    : companyProductOption
+                "
+                *ngFor="let companyProductOption of companyProductsSharedCollection; trackBy: trackCompanyProductById"
+              >
+                {{ companyProductOption.product?.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group col-3">
+            <!-- TODO onchange quantity and product , => autocomplete counters -->
+            <label class="form-control-label" jhiTranslate="wmsApp.orderItem.quantity" for="field_quantity">Quantity</label>
+            <input type="number" class="form-control" name="quantity" id="field_quantity" data-cy="quantity" formControlName="quantity"
+              (ngModelChange)="onChangeQuantity($event)"
+            />
+            <div *ngIf="editForm.get('quantity')!.invalid && (editForm.get('quantity')!.dirty || editForm.get('quantity')!.touched)">
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('quantity')?.errors?.required"
+                jhiTranslate="entity.validation.required"
+              >
+                This field is required.
+              </small>
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('quantity')?.errors?.min"
+                jhiTranslate="entity.validation.min"
+                [translateValues]="{ min: 0 }"
+              >
+                This field should be at least 0.
+              </small>
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('quantity')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+              >
+                This field should be a number.
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-4">
+            <span class="input-group-text"><fa-icon icon="truck-loading"></fa-icon>&nbsp;containers</span>
+
+            <input
+              type="number"
+              class="form-control"
+              name="containersCount"
+              id="field_containersCount"
+              data-cy="containersCount"
+              formControlName="containersCount"
+            />
+            <div
+              *ngIf="
+                editForm.get('containersCount')!.invalid &&
+                (editForm.get('containersCount')!.dirty || editForm.get('containersCount')!.touched)
+              "
+            >
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('containersCount')?.errors?.min"
+                jhiTranslate="entity.validation.min"
+                [translateValues]="{ min: 0 }"
+              >
+                This field should be at least 0.
+              </small>
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('containersCount')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+              >
+                This field should be a number.
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group col-4">
+            <span class="input-group-text"><fa-icon icon="boxes"></fa-icon>&nbsp;boxes/container</span>
+
+            <input
+              type="number"
+              class="form-control"
+              name="productsPerContainerCount"
+              id="field_productsPerContainerCount"
+              data-cy="productsPerContainerCount"
+              formControlName="productsPerContainerCount"
+            />
+            <div
+              *ngIf="
+                editForm.get('productsPerContainerCount')!.invalid &&
+                (editForm.get('productsPerContainerCount')!.dirty || editForm.get('productsPerContainerCount')!.touched)
+              "
+            >
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('productsPerContainerCount')?.errors?.min"
+                jhiTranslate="entity.validation.min"
+                [translateValues]="{ min: 0 }"
+              >
+                This field should be at least 0.
+              </small>
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('productsPerContainerCount')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+              >
+                This field should be a number.
+              </small>
+            </div>
+          </div>
+        </div>        
+
+        <div class="row">
+          <div class="col">
+            <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" 
+              (click)="cancel()">
+              <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+            </button>
+  
+            <button
+              type="submit"
+              id="save-entity"
+              data-cy="entityCreateSaveButton"
+              [disabled]="editForm.invalid || isSaving"
+              class="btn btn-primary"
+            >
+              <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

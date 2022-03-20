@@ -3,7 +3,8 @@ package com.wms.uhfrfid.service;
 import com.wms.uhfrfid.domain.Order;
 import com.wms.uhfrfid.domain.User;
 import com.wms.uhfrfid.domain.enumeration.OrderStatus;
-import com.wms.uhfrfid.repository.ReceptionRepository;
+import com.wms.uhfrfid.domain.enumeration.OrderType;
+import com.wms.uhfrfid.repository.OrderRepositoryImpl;
 import com.wms.uhfrfid.repository.UserRepository;
 import com.wms.uhfrfid.service.dto.OrderDTO;
 import com.wms.uhfrfid.service.dto.OrderDTOV2;
@@ -16,24 +17,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 public class ReceptionService {
 
+    private static final List<OrderStatus> STATUS = Arrays.asList(OrderStatus.DRAFT, OrderStatus.IN_PROGRESS);
     private final Logger log = LoggerFactory.getLogger(ReceptionService.class);
 
-    private final ReceptionRepository receptionRepository;
+    private final OrderRepositoryImpl orderRepository;
     private final UserRepository userRepository;
     private final OrderV2Mapper orderV2Mapper;
 
     public ReceptionService(
-        ReceptionRepository receptionRepository,
+        OrderRepositoryImpl orderRepository,
         UserRepository userRepository,
         OrderV2Mapper orderV2Mapper
     ) {
-        this.receptionRepository = receptionRepository;
+        this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.orderV2Mapper = orderV2Mapper;
     }
@@ -44,7 +47,8 @@ public class ReceptionService {
             .findOneByLogin(userLogin)
             .orElseThrow(() -> new IllegalArgumentException("TODO ReceptionService user not found"));
         //TODO add user to the query
-        return receptionRepository.findOrdersByStatusIn(Arrays.asList(OrderStatus.DRAFT, OrderStatus.IN_PROGRESS), pageable)
+        return orderRepository.findOrdersByTypeAndStatusIn(OrderType.RECEPTION,
+                STATUS, pageable)
             .map(orderV2Mapper::toDto);
     }
 
@@ -52,7 +56,7 @@ public class ReceptionService {
     public Optional<OrderDTOV2> findOne(Long id, String userLogin) {
         log.debug("Request to get Order : {}", id);
         //TODO implement find by user
-        return receptionRepository
+        return orderRepository
             .findById(id)
             .map(e -> {
                 e.getOrderItems();
@@ -65,7 +69,7 @@ public class ReceptionService {
         next(order.getStatus())
             .ifPresent(e -> {
                 order.setStatus(e);
-                receptionRepository.save(order);
+                orderRepository.save(order);
             });
     }
 

@@ -4,7 +4,7 @@ import com.wms.uhfrfid.IntegrationTest;
 import com.wms.uhfrfid.domain.Order;
 import com.wms.uhfrfid.domain.enumeration.OrderStatus;
 import com.wms.uhfrfid.domain.enumeration.OrderType;
-import com.wms.uhfrfid.repository.ReceptionRepository;
+import com.wms.uhfrfid.repository.OrderRepositoryImpl;
 import com.wms.uhfrfid.service.dto.OrderDTOV2;
 import com.wms.uhfrfid.service.mapper.v2.OrderV2Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ReceptionResourceIT {
 
     @Autowired
-    private ReceptionRepository receptionRepository;
+    private OrderRepositoryImpl orderRepositoryImpl;
 
     @Autowired
     private OrderV2Mapper orderMapper;
@@ -59,7 +59,7 @@ class ReceptionResourceIT {
     public void initTest() {
         Order order = createEntity();
         order.addOrderItem(OrderItemResourceIT.createEntity(null));
-        receptionRepository.save(order);
+        orderRepositoryImpl.save(order);
         orderDTO = orderMapper.toDto(order);
     }
 

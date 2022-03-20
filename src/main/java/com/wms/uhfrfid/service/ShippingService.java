@@ -3,7 +3,8 @@ package com.wms.uhfrfid.service;
 import com.wms.uhfrfid.domain.Order;
 import com.wms.uhfrfid.domain.User;
 import com.wms.uhfrfid.domain.enumeration.OrderStatus;
-import com.wms.uhfrfid.repository.ShippingRepository;
+import com.wms.uhfrfid.domain.enumeration.OrderType;
+import com.wms.uhfrfid.repository.OrderRepositoryImpl;
 import com.wms.uhfrfid.repository.UserRepository;
 import com.wms.uhfrfid.service.dto.OrderDTO;
 import com.wms.uhfrfid.service.dto.OrderDTOV2;
@@ -16,24 +17,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 public class ShippingService {
 
+    private static final List<OrderStatus> STATUS = Arrays.asList(OrderStatus.DRAFT, OrderStatus.IN_PROGRESS);
+
     private final Logger log = LoggerFactory.getLogger(ShippingService.class);
 
-    private final ShippingRepository shippingRepository;
+    private final OrderRepositoryImpl orderRepository;
     private final UserRepository userRepository;
     private final OrderV2Mapper orderV2Mapper;
 
     public ShippingService(
-    	ShippingRepository shippingRepository,
+        OrderRepositoryImpl orderRepository,
         UserRepository userRepository,
         OrderV2Mapper orderV2Mapper
     ) {
-        this.shippingRepository = shippingRepository;
+        this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.orderV2Mapper = orderV2Mapper;
     }
@@ -44,7 +48,8 @@ public class ShippingService {
             .findOneByLogin(userLogin)
             .orElseThrow(() -> new IllegalArgumentException("TODO ShippingService user not found"));
         //TODO add user to the query
-        return shippingRepository.findOrdersByStatusIn(Arrays.asList(OrderStatus.DRAFT, OrderStatus.IN_PROGRESS), pageable)
+        return orderRepository.findOrdersByTypeAndStatusIn(OrderType.SHIPPING,
+                STATUS, pageable)
             .map(orderV2Mapper::toDto);
     }
 
@@ -52,7 +57,7 @@ public class ShippingService {
     public Optional<OrderDTOV2> findOne(Long id, String userLogin) {
         log.debug("Request to get Order : {}", id);
         //TODO implement find by user
-        return shippingRepository
+        return orderRepository
             .findById(id)
             .map(e -> {
                 e.getOrderItems();
@@ -65,7 +70,7 @@ public class ShippingService {
         next(order.getStatus())
             .ifPresent(e -> {
                 order.setStatus(e);
-                shippingRepository.save(order);
+                orderRepository.save(order);
             });
     }
 

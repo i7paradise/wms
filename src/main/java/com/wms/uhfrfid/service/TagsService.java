@@ -39,7 +39,8 @@ public class TagsService {
         Map<String, RFIDTag> result;
         Vector<Integer> antennaSet = new Vector();
         antennaSet.add(3);
-        RFIDInventory rfidInventory = new RFIDInventory("     RFID LISTENER ==========> ", RFIDReaderStartup.getInstance().getConsumers(),
+        RFIDInventory rfidInventory = new RFIDInventory("     RFID Inventory listener ==========> ",
+        		RFIDReaderStartup.getInstance().getConsumers(),
                 antennaSet, scanRequest.getCount(), TIMEOUT);
 
         Callable<HashMap<String, RFIDTag>> rfidInventoryCallable = rfidInventory; 
